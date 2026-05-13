@@ -99,16 +99,7 @@ const DesktopHeader = () => {
           <div className="header-divider"></div>
 
           {/* Quick Icons */}
-          <motion.button 
-            whileHover={{ scale: 1.08 }} 
-            whileTap={{ scale: 0.92 }} 
-            onClick={() => navigate('/notifications')} 
-            className="header-icon-btn"
-            title="Notifications"
-          >
-            <Bell size={18} />
-            <span className="notification-dot"></span>
-          </motion.button>
+
 
           {/* User Profile / Logout */}
           <div className="header-profile-group">

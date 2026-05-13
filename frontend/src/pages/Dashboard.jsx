@@ -91,9 +91,7 @@ const Dashboard = () => {
           </div>
         </div>
         <div className="flex gap-2">
-          <motion.div whileTap={{ scale: 0.9 }} className="icon-btn" onClick={() => navigate('/notifications')}>
-            <Bell size={20} color="var(--primary)" />
-          </motion.div>
+
           <motion.div whileTap={{ scale: 0.9 }} className="profile-avatar-small" onClick={() => navigate('/profile')}>
             <img src={user.profilePictureUrl || 'https://i.pravatar.cc/150?img=11'} alt="User" />
           </motion.div>

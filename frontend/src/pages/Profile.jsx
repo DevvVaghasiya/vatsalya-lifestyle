@@ -52,15 +52,11 @@ const Profile = () => {
     { icon: ClipboardList, label: 'Platform Inquiries',  path: '/',                          desc: 'View all business inquiries',       color: '#0D9488' },
     { icon: Edit3,         label: 'Edit Profile',        path: '/profile/edit',              desc: 'Update admin details',              color: '#7C3AED' },
     { icon: Lock,          label: 'Security Settings',   path: '/profile/change-password',   desc: 'Update your password',              color: '#D97706' },
-    { icon: Info,          label: 'System Info',         path: '/profile/about-app',         desc: 'App version and system status',     color: '#0EA5E9' },
     { icon: LogOut,        label: 'Sign Out',            isLogout: true,                     desc: 'Exit admin panel',                  color: '#EF4444' },
   ] : [
     { icon: User,     label: 'My Clients',        path: '/clients',                    desc: 'Browse your client list',            color: '#4F46E5' },
     { icon: Edit3,    label: 'Edit Profile',       path: '/profile/edit',               desc: 'Update authorized details',          color: '#7C3AED' },
     { icon: Lock,     label: 'Security Settings',  path: '/profile/change-password',    desc: 'Secure your login credentials',      color: '#D97706' },
-    { icon: Settings, label: 'Business Profile',   path: '/profile/business-settings',  desc: 'Configure company entity',           color: '#0D9488' },
-    { icon: Cloud,    label: 'Cloud Sync',         path: '/profile/backup-sync',        desc: 'Real-time data replication',         color: '#0EA5E9' },
-    { icon: Info,     label: 'Information',        path: '/profile/about-app',          desc: 'Vatsalya Lifestyle Enterprise v1.0', color: '#64748B' },
     { icon: LogOut,   label: 'Sign Out',           isLogout: true,                      desc: 'Terminate current session',          color: '#EF4444' },
   ];
 

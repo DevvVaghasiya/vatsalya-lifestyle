@@ -6,17 +6,9 @@ import AdminDashboard from './pages/AdminDashboard';
 import Deals from './pages/Deals';
 import AddOrder from './pages/AddOrder';
 import Inventory from './pages/Inventory';
-import Payments from './pages/Payments';
-import Invoice from './pages/Invoice';
-import Reports from './pages/Reports';
-import Notifications from './pages/Notifications';
 import Profile from './pages/Profile';
 import EditProfile from './pages/EditProfile';
 import ChangePassword from './pages/ChangePassword';
-import BusinessSettings from './pages/BusinessSettings';
-import BackupSync from './pages/BackupSync';
-import AboutApp from './pages/AboutApp';
-import CustomerDetails from './pages/CustomerDetails';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Inquiries from './pages/Inquiries';
@@ -73,17 +65,9 @@ function App() {
             <Route path="/add-order" element={<ProtectedRoute><AddOrder /></ProtectedRoute>} />
             <Route path="/add-deal" element={<Navigate to="/add-order" replace />} />
             <Route path="/inventory" element={<ProtectedRoute><Inventory /></ProtectedRoute>} />
-            <Route path="/payments" element={<ProtectedRoute><Payments /></ProtectedRoute>} />
-            <Route path="/invoice" element={<ProtectedRoute><Invoice /></ProtectedRoute>} />
-            <Route path="/customer" element={<ProtectedRoute><CustomerDetails /></ProtectedRoute>} />
-            <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
-            <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="/profile/edit" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
             <Route path="/profile/change-password" element={<ProtectedRoute><ChangePassword /></ProtectedRoute>} />
-            <Route path="/profile/business-settings" element={<ProtectedRoute><BusinessSettings /></ProtectedRoute>} />
-            <Route path="/profile/backup-sync" element={<ProtectedRoute><BackupSync /></ProtectedRoute>} />
-            <Route path="/profile/about-app" element={<ProtectedRoute><AboutApp /></ProtectedRoute>} />
             <Route path="/inquiries" element={<ProtectedRoute><Inquiries /></ProtectedRoute>} />
             <Route path="/add-inquiry" element={<ProtectedRoute><AddInquiry /></ProtectedRoute>} />
             <Route path="/inquiry/:id" element={<ProtectedRoute><InquiryDetails /></ProtectedRoute>} />
