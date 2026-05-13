@@ -1,0 +1,1054 @@
+import React, { useState, useEffect } from 'react';
+import {
+  ArrowLeft, ShoppingBag, Clock, CheckCircle, XCircle,
+  User, Package, Calendar, Info, Hash, Palette,
+  Briefcase, Edit3, Save, X, Truck, Layers, Ruler, DollarSign, FileCheck, Download
+} from 'lucide-react';
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
+import { motion } from 'framer-motion';
+import { jsPDF } from 'jspdf';
+import { API_BASE } from '../utils/api';
+
+const formatDisplayDate = (dateStr) => {
+  if (!dateStr) return 'N/A';
+  try {
+    const date = new Date(dateStr);
+    if (isNaN(date.getTime())) return dateStr;
+    return date.toLocaleDateString('en-GB');
+  } catch (e) {
+    return dateStr;
+  }
+};
+
+const DetailItem = ({ label, value, icon: Icon, name, editable = true, isEditing, editData, onChange, type = "text" }) => (
+  <div style={{ flex: 1, display: 'flex', gap: '12px', minWidth: 0 }}>
+    <div style={{ backgroundColor: '#F1F5F9', padding: '10px', borderRadius: '12px', height: 'fit-content', flexShrink: 0 }}>
+      <Icon size={18} color="var(--primary)" />
+    </div>
+    <div style={{ flex: 1, minWidth: 0 }}>
+      <p style={{ margin: 0, fontSize: '0.7rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{label}</p>
+      {isEditing && editable ? (
+        <input
+          type={type}
+          name={name}
+          value={editData[name] ?? ''}
+          onChange={onChange}
+          style={{
+            width: '100%',
+            border: '1px solid #E2E8F0',
+            borderRadius: '8px',
+            padding: '4px 8px',
+            marginTop: '4px',
+            fontSize: '0.9rem',
+            outline: 'none',
+            backgroundColor: '#F8FAFC'
+          }}
+        />
+      ) : (
+        <p style={{
+          margin: '4px 0 0 0',
+          fontSize: '0.95rem',
+          fontWeight: '600',
+          color: '#1E293B',
+          wordBreak: 'break-word'
+        }}>
+          {type === 'date' ? formatDisplayDate(value) : (value || 'N/A')}
+        </p>
+      )}
+    </div>
+  </div>
+);
+
+const SectionWrapper = ({ title, icon: Icon, children, color = "#4F46E5", onDownload }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    style={{
+      backgroundColor: 'white',
+      borderRadius: '32px',
+      padding: '24px',
+      boxShadow: '0 10px 25px rgba(0,0,0,0.03)',
+      border: '1px solid rgba(0,0,0,0.05)',
+      marginBottom: '20px'
+    }}
+  >
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div style={{ backgroundColor: `${color}15`, padding: '10px', borderRadius: '14px', color }}>
+          <Icon size={20} />
+        </div>
+        <h2 style={{ fontSize: '1.1rem', fontWeight: '800', color: '#1E293B', margin: 0 }}>{title}</h2>
+      </div>
+      {onDownload && (
+        <button
+          onClick={onDownload}
+          style={{
+            background: 'transparent',
+            border: 'none',
+            color: '#64748B',
+            cursor: 'pointer',
+            padding: '8px',
+            borderRadius: '10px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            transition: 'all 0.2s'
+          }}
+          title="Download Section PDF"
+          onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#F1F5F9'; e.currentTarget.style.color = color; }}
+          onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#64748B'; }}
+        >
+          <Download size={18} />
+        </button>
+      )}
+    </div>
+    {children}
+  </motion.div>
+);
+
+const OrderDetails = () => {
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const today = new Date().toISOString().split('T')[0];
+  const [order, setOrder] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editData, setEditData] = useState({
+    styleNo: '',
+    dispatchDate: '',
+    fabricName: '',
+    fabricStyle: '',
+    gsm: '',
+    countConst: '',
+    width: '',
+    design: '',
+    notes: '',
+    weaver: '',
+    bookingReferenceNo: '',
+    bookingFabricName: '',
+    bookingQuantity: '',
+    challan: '',
+    price: '',
+    bookingCountConst: '',
+    bookingWidth: '',
+    finishGsm: '',
+    bookingComposition: '',
+    completionDate: '',
+    fabricJobWorkMill: '',
+    dyeMillName: '',
+    dyeJobCharge: '',
+    dyeFinishQuantity: '',
+    dyeWidth: '',
+    dyeColorDesign: '',
+    dyeShortage: '',
+    dyeDeliveryDate: '',
+    digitalMillName: '',
+    digitalJobCharge: '',
+    digitalFinishQuantity: '',
+    digitalWidth: '',
+    digitalDesign: '',
+    digitalShortage: '',
+    digitalDeliveryDate: '',
+    dispatchInvoiceNumber: '',
+    dispatchMeter: '',
+    dispatchDesignColour: '',
+    transportName: '',
+    dyeQuantityReceivedEntries: [],
+    digitalQuantityReceivedEntries: [],
+    dispatchQuantityReceivedEntries: []
+  });
+  const [dyeReceiptDate, setDyeReceiptDate] = useState(today);
+  const [dyeReceiptQuantity, setDyeReceiptQuantity] = useState('');
+  const [dyeReceiptRemark, setDyeReceiptRemark] = useState('');
+  const [digitalReceiptDate, setDigitalReceiptDate] = useState(today);
+  const [digitalReceiptQuantity, setDigitalReceiptQuantity] = useState('');
+  const [digitalReceiptRemark, setDigitalReceiptRemark] = useState('');
+  const [dispatchReceiptDate, setDispatchReceiptDate] = useState(today);
+  const [dispatchReceiptQuantity, setDispatchReceiptQuantity] = useState('');
+  const [dispatchReceiptRemark, setDispatchReceiptRemark] = useState('');
+
+  useEffect(() => {
+    fetchOrderDetails();
+  }, [id]);
+
+  const fetchOrderDetails = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get(`${API_BASE}/api/orders/${id}`);
+      setOrder(res.data);
+      setEditData(prev => ({ ...prev, ...res.data }));
+    } catch (err) {
+      console.error('Error fetching order details:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUpdate = async () => {
+    try {
+      await axios.put(`${API_BASE}/api/orders/${id}`, editData);
+      alert('Order updated successfully!');
+      setIsEditing(false);
+      fetchOrderDetails();
+    } catch (err) {
+      console.error('Error updating order:', err);
+      alert('Failed to update order');
+    }
+  };
+
+  const updateStatus = async (newStatus) => {
+    if (!window.confirm(`Are you sure you want to mark this order as ${newStatus}?`)) return;
+    try {
+      await axios.patch(`${API_BASE}/api/orders/${id}/status?status=${newStatus}`);
+      alert(`Order marked as ${newStatus}`);
+      fetchOrderDetails();
+    } catch (err) {
+      console.error('Error updating status:', err);
+      alert('Failed to update status');
+    }
+  };
+
+  const generatePDF = (type) => {
+    const doc = new jsPDF();
+    const primaryColor = '#4F46E5';
+    const secondaryColor = '#0D9488';
+    const accentColor = '#7C3AED';
+    const warningColor = '#F59E0B';
+
+    doc.setFillColor(79, 70, 229);
+    doc.rect(0, 0, 210, 40, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(22);
+    doc.setFont('helvetica', 'bold');
+    doc.text('VATSALYA LIFESTYLE', 20, 25);
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.text('Textile Manufacturing & Quality Assurance', 20, 32);
+
+    const typeHeaders = {
+      'full': 'FULL ORDER INFORMATION',
+      'client': "CLIENT'S ORDER DETAILS",
+      'booking': 'FABRIC BOOKING RECORD',
+      'jobwork': 'FABRIC JOB WORK DETAILS',
+      'history': 'QUANTITY RECEIVED HISTORY',
+      'dispatch': 'DISPATCH & DELIVERY RECORD'
+    };
+
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(14);
+    doc.text(typeHeaders[type] || 'ORDER INFORMATION', 190, 25, { align: 'right' });
+    doc.setFontSize(10);
+    doc.text(`Ref: ${order.styleNo || 'N/A'}`, 190, 32, { align: 'right' });
+
+    let y = 55;
+
+    const addSection = (title, data, color) => {
+      if (y > 250) { doc.addPage(); y = 25; }
+      doc.setDrawColor(color);
+      doc.setLineWidth(0.5);
+      doc.line(20, y, 190, y);
+      
+      doc.setTextColor(color);
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'bold');
+      doc.text(title.toUpperCase(), 20, y - 2);
+      
+      y += 10;
+      doc.setTextColor(60, 60, 60);
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+
+      data.forEach(item => {
+        if (y > 275) { doc.addPage(); y = 25; }
+        doc.setFont('helvetica', 'bold');
+        doc.text(`${item.label}:`, 20, y);
+        doc.setFont('helvetica', 'normal');
+        doc.text(`${item.value || 'N/A'}`, 75, y);
+        y += 8;
+      });
+      y += 5;
+    };
+
+    const addTable = (title, entries, total, color) => {
+      if (y > 240) { doc.addPage(); y = 25; }
+      doc.setTextColor(color);
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'bold');
+      doc.text(title.toUpperCase(), 20, y);
+      y += 8;
+
+      doc.setFillColor(248, 250, 252);
+      doc.rect(20, y, 170, 8, 'F');
+      doc.setTextColor(71, 85, 105);
+      doc.setFontSize(9);
+      doc.text('DATE', 25, y + 5);
+      doc.text('QUANTITY (MTRS)', 185, y + 5, { align: 'right' });
+      y += 8;
+
+      doc.setTextColor(30, 41, 59);
+      if (!entries || entries.length === 0) {
+        doc.text('No entries recorded.', 25, y + 5);
+        y += 8;
+      } else {
+        entries.forEach(entry => {
+          if (y > 275) { doc.addPage(); y = 25; }
+          doc.text(formatDisplayDate(entry.entryDate) || 'N/A', 25, y + 5);
+          if (entry.remark) {
+            doc.setFontSize(8);
+            doc.setTextColor(100, 100, 100);
+            doc.text(` • ${entry.remark}`, 55, y + 5);
+            doc.setFontSize(9);
+            doc.setTextColor(30, 41, 59);
+          }
+          doc.text((entry.quantity || 0).toString(), 185, y + 5, { align: 'right' });
+          doc.setDrawColor(241, 245, 249);
+          doc.line(20, y + 8, 190, y + 8);
+          y += 8;
+        });
+      }
+
+      doc.setFillColor(241, 245, 249);
+      doc.rect(20, y, 170, 8, 'F');
+      doc.setTextColor(15, 23, 42);
+      doc.setFont('helvetica', 'bold');
+      doc.text('TOTAL RECEIVED', 25, y + 5);
+      doc.text(total.toString(), 185, y + 5, { align: 'right' });
+      doc.setFont('helvetica', 'normal');
+      y += 15;
+    };
+
+    const currentDyeTotal = (order.dyeQuantityReceivedEntries || []).reduce((sum, e) => sum + Number(e.quantity || 0), 0);
+    const currentDigitalTotal = (order.digitalQuantityReceivedEntries || []).reduce((sum, e) => sum + Number(e.quantity || 0), 0);
+    const currentDispatchTotal = (order.dispatchQuantityReceivedEntries || []).reduce((sum, e) => sum + Number(e.quantity || 0), 0);
+
+    if (type === 'full' || type === 'client') {
+      addSection("Client Order Details", [
+        { label: "Customer", value: order.client?.name },
+        { label: "Style No", value: order.styleNo },
+        { label: "Order Date", value: formatDisplayDate(order.dispatchDate) },
+        { label: "Fabric Name", value: order.fabricName },
+        { label: "Fabric Style", value: order.fabricStyle },
+        { label: "GSM", value: order.gsm },
+        { label: "Count/Const", value: order.countConst },
+        { label: "Width", value: order.width },
+        { label: "Design", value: order.design },
+        { label: "Remark", value: order.notes },
+        { label: "Current Status", value: order.status }
+      ], primaryColor);
+    }
+
+    if (type === 'full' || type === 'booking') {
+      addSection("Fabric Booking Info", [
+        { label: "Weaver", value: order.weaver },
+        { label: "Booking Ref No", value: order.bookingReferenceNo },
+        { label: "Booking Fabric", value: order.bookingFabricName },
+        { label: "Quantity", value: order.bookingQuantity },
+        { label: "Challan", value: order.challan },
+        { label: "Price", value: order.price },
+        { label: "Booking Width", value: order.bookingWidth },
+        { label: "Finish GSM", value: order.finishGsm },
+        { label: "Composition", value: order.bookingComposition },
+        { label: "Expected Completion", value: formatDisplayDate(order.completionDate) }
+      ], secondaryColor);
+    }
+
+    if (type === 'full' || type === 'jobwork') {
+      addSection("Dying & Digital Job Work", [
+        { label: "Dye Mill", value: order.dyeMillName },
+        { label: "Dye Charge", value: order.dyeJobCharge },
+        { label: "Dye Qty", value: order.dyeFinishQuantity },
+        { label: "Dye Width", value: order.dyeWidth },
+        { label: "Dye Design", value: order.dyeColorDesign },
+        { label: "Dye Delivery", value: formatDisplayDate(order.dyeDeliveryDate) },
+        { label: "Digital Mill", value: order.digitalMillName },
+        { label: "Digital Charge", value: order.digitalJobCharge },
+        { label: "Digital Qty", value: order.digitalFinishQuantity },
+        { label: "Digital Width", value: order.digitalWidth },
+        { label: "Digital Design", value: order.digitalDesign },
+        { label: "Digital Delivery", value: formatDisplayDate(order.digitalDeliveryDate) }
+      ], accentColor);
+    }
+
+    if (type === 'full' || type === 'history') {
+      addTable("Dying Receipts History", order.dyeQuantityReceivedEntries, currentDyeTotal, secondaryColor);
+      addTable("Digital Receipts History", order.digitalQuantityReceivedEntries, currentDigitalTotal, accentColor);
+    }
+
+    if (type === 'full' || type === 'dispatch') {
+      addSection("Dispatch & Delivery", [
+        { label: "Dispatch Date", value: formatDisplayDate(order.dispatchDate) },
+        { label: "Invoice Number", value: order.dispatchInvoiceNumber },
+        { label: "Total Meters", value: order.dispatchMeter },
+        { label: "Design/Colour", value: order.dispatchDesignColour },
+        { label: "Transport", value: order.transportName }
+      ], warningColor);
+      addTable("Dispatch History", order.dispatchQuantityReceivedEntries, currentDispatchTotal, warningColor);
+    }
+
+    const pageCount = doc.internal.getNumberOfPages();
+    for(let i = 1; i <= pageCount; i++) {
+        doc.setPage(i);
+        doc.setFontSize(8);
+        doc.setTextColor(150, 150, 150);
+        doc.text(`Generated on ${new Date().toLocaleDateString('en-GB')} ${new Date().toLocaleTimeString()} | Vatsalya Lifestyle Management System | Page ${i} of ${pageCount}`, 105, 290, { align: 'center' });
+    }
+
+    doc.save(`${order.styleNo || 'Order'}_${type}_Report.pdf`);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEditData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const addDyeReceiptEntry = () => {
+    if (!dyeReceiptDate || !dyeReceiptQuantity) return;
+    setEditData(prev => ({
+      ...prev,
+      dyeQuantityReceivedEntries: [
+        ...(prev.dyeQuantityReceivedEntries || []),
+        { entryDate: dyeReceiptDate, quantity: Number(dyeReceiptQuantity), remark: dyeReceiptRemark }
+      ]
+    }));
+    setDyeReceiptDate(today);
+    setDyeReceiptQuantity('');
+    setDyeReceiptRemark('');
+  };
+
+  const addDigitalReceiptEntry = () => {
+    if (!digitalReceiptDate || !digitalReceiptQuantity) return;
+    setEditData(prev => ({
+      ...prev,
+      digitalQuantityReceivedEntries: [
+        ...(prev.digitalQuantityReceivedEntries || []),
+        { entryDate: digitalReceiptDate, quantity: Number(digitalReceiptQuantity), remark: digitalReceiptRemark }
+      ]
+    }));
+    setDigitalReceiptDate(today);
+    setDigitalReceiptQuantity('');
+    setDigitalReceiptRemark('');
+  };
+
+  const removeDyeReceiptEntry = (index) => {
+    setEditData(prev => ({
+      ...prev,
+      dyeQuantityReceivedEntries: (prev.dyeQuantityReceivedEntries || []).filter((_, idx) => idx !== index)
+    }));
+  };
+
+  const removeDigitalReceiptEntry = (index) => {
+    setEditData(prev => ({
+      ...prev,
+      digitalQuantityReceivedEntries: (prev.digitalQuantityReceivedEntries || []).filter((_, idx) => idx !== index)
+    }));
+  };
+
+  const addDispatchReceiptEntry = () => {
+    if (!dispatchReceiptDate || !dispatchReceiptQuantity) return;
+    setEditData(prev => ({
+      ...prev,
+      dispatchQuantityReceivedEntries: [
+        ...(prev.dispatchQuantityReceivedEntries || []),
+        { entryDate: dispatchReceiptDate, quantity: Number(dispatchReceiptQuantity), remark: dispatchReceiptRemark }
+      ]
+    }));
+    setDispatchReceiptDate(today);
+    setDispatchReceiptQuantity('');
+    setDispatchReceiptRemark('');
+  };
+
+  const removeDispatchReceiptEntry = (index) => {
+    setEditData(prev => ({
+      ...prev,
+      dispatchQuantityReceivedEntries: (prev.dispatchQuantityReceivedEntries || []).filter((_, idx) => idx !== index)
+    }));
+  };
+
+  if (loading) return (
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: '#F8F9FB' }}>
+      <p style={{ color: '#64748B', fontWeight: '500' }}>Loading order details...</p>
+    </div>
+  );
+
+  if (!order) return (
+    <div style={{ padding: '20px', textAlign: 'center', backgroundColor: '#F8F9FB', minHeight: '100vh' }}>
+      <p>Order not found.</p>
+      <button onClick={() => navigate('/deals')} className="btn btn-primary" style={{ marginTop: '20px' }}>Go Back</button>
+    </div>
+  );
+
+  const currentDyeEntries = isEditing ? editData.dyeQuantityReceivedEntries || [] : order.dyeQuantityReceivedEntries || [];
+  const currentDigitalEntries = isEditing ? editData.digitalQuantityReceivedEntries || [] : order.digitalQuantityReceivedEntries || [];
+  const currentDispatchEntries = isEditing ? editData.dispatchQuantityReceivedEntries || [] : order.dispatchQuantityReceivedEntries || [];
+
+  const currentDyeTotal = currentDyeEntries.reduce((sum, entry) => sum + Number(entry.quantity || 0), 0);
+  const currentDigitalTotal = currentDigitalEntries.reduce((sum, entry) => sum + Number(entry.quantity || 0), 0);
+  const currentDispatchTotal = currentDispatchEntries.reduce((sum, entry) => sum + Number(entry.quantity || 0), 0);
+
+  const getStatusStyle = (status) => {
+    const s = (status || 'PENDING').toUpperCase();
+    switch (s) {
+      case 'PENDING':
+      case 'PROCESSING':
+      case 'ONGOING': return { bg: '#EEF2FF', color: '#4F46E5', icon: <Clock size={16} /> };
+      case 'COMPLETED': return { bg: '#F0FDF4', color: '#16A34A', icon: <CheckCircle size={16} /> };
+      case 'CANCELED':
+      case 'CANCELLED': return { bg: '#FEF2F2', color: '#DC2626', icon: <XCircle size={16} /> };
+      default: return { bg: '#F1F5F9', color: '#64748B', icon: null };
+    }
+  };
+
+  const statusInfo = getStatusStyle(order.status);
+  const isOngoing = ['PENDING', 'PROCESSING', 'ONGOING'].includes((order.status || 'PENDING').toUpperCase());
+
+  return (
+    <div className="page-shell" style={{ backgroundColor: '#F0F2F5', minHeight: '100vh', paddingBottom: '100px' }}>
+      <div className="page-header" style={{ position: 'sticky', top: 0, zIndex: 50, backgroundColor: 'white', boxShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>
+        <div className="flex items-center gap-4">
+          <ArrowLeft onClick={() => navigate('/deals')} style={{ cursor: 'pointer' }} />
+          <h1 style={{ fontSize: '1.2rem', fontWeight: '700' }}>Order Details</h1>
+        </div>
+        <div className="flex gap-2">
+          <div
+            onClick={() => generatePDF('full')}
+            style={{
+              backgroundColor: '#F1F5F9',
+              color: 'var(--primary)',
+              padding: '10px',
+              borderRadius: '14px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
+            }}
+            title="Download Full Report"
+          >
+            <Download size={18} />
+          </div>
+          {isOngoing && (
+            <div
+              onClick={() => isEditing ? handleUpdate() : setIsEditing(true)}
+              style={{
+                backgroundColor: isEditing ? '#10B981' : 'var(--primary)',
+                color: 'white',
+                padding: '10px',
+                borderRadius: '14px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
+            >
+              {isEditing ? <Save size={18} /> : <Edit3 size={18} />}
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="page-container" style={{ padding: '20px' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+          <div style={{
+            backgroundColor: statusInfo.bg,
+            color: statusInfo.color,
+            padding: '8px 20px',
+            borderRadius: '20px',
+            fontSize: '0.85rem',
+            fontWeight: '800',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            textTransform: 'uppercase',
+            letterSpacing: '1px'
+          }}>
+            {statusInfo.icon}
+            {order.status || 'Pending'}
+          </div>
+        </div>
+
+        <SectionWrapper title="Client's Order" icon={User} color="#4F46E5" onDownload={() => generatePDF('client')}>
+          <DetailItem
+            label="Customer Name"
+            value={order.client?.name}
+            icon={User}
+            editable={false}
+            isEditing={isEditing}
+            editData={editData}
+            onChange={handleChange}
+          />
+          <div style={{ display: 'flex', gap: '16px' }}>
+            <DetailItem label="Style No" value={order.styleNo} icon={Hash} name="styleNo" isEditing={isEditing} editData={editData} onChange={handleChange} />
+            <DetailItem label="Order Date" value={order.dispatchDate} icon={Calendar} name="dispatchDate" isEditing={isEditing} editData={editData} onChange={handleChange} type="date" />
+          </div>
+          <div style={{ display: 'flex', gap: '16px' }}>
+            <DetailItem label="Fabric Name" value={order.fabricName} icon={Package} name="fabricName" isEditing={isEditing} editData={editData} onChange={handleChange} />
+            <DetailItem label="Fabric Style" value={order.fabricStyle} icon={Layers} name="fabricStyle" isEditing={isEditing} editData={editData} onChange={handleChange} />
+          </div>
+          <div style={{ display: 'flex', gap: '16px' }}>
+            <DetailItem label="GSM" value={order.gsm} icon={Hash} name="gsm" isEditing={isEditing} editData={editData} onChange={handleChange} />
+            <DetailItem label="Count/Const" value={order.countConst} icon={Hash} name="countConst" isEditing={isEditing} editData={editData} onChange={handleChange} />
+          </div>
+          <div style={{ display: 'flex', gap: '16px' }}>
+            <DetailItem label="Width" value={order.width} icon={Info} name="width" isEditing={isEditing} editData={editData} onChange={handleChange} />
+            <DetailItem label="Design" value={order.design} icon={Palette} name="design" isEditing={isEditing} editData={editData} onChange={handleChange} />
+          </div>
+          <div>
+            <p style={{ margin: '16px 0 8px 0', fontSize: '0.7rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>Client Remark</p>
+            {isEditing ? (
+              <textarea
+                name="notes"
+                value={editData.notes || ''}
+                onChange={handleChange}
+                style={{ width: '100%', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '12px', fontSize: '0.9rem', outline: 'none', minHeight: '80px', backgroundColor: '#F8FAFC' }}
+              />
+            ) : (
+              <div style={{ backgroundColor: '#F8FAFC', padding: '16px', borderRadius: '16px', border: '1px solid #E2E8F0' }}>
+                <p style={{ margin: 0, fontSize: '0.9rem', color: '#475569', lineHeight: '1.5' }}>{order.notes || 'No remarks provided'}</p>
+              </div>
+            )}
+          </div>
+        </SectionWrapper>
+
+        <SectionWrapper title="Fabric Booking" icon={Layers} color="#0D9488" onDownload={() => generatePDF('booking')}>
+          <div style={{ display: 'flex', gap: '16px' }}>
+            <DetailItem label="Weaver" value={order.weaver} icon={User} name="weaver" isEditing={isEditing} editData={editData} onChange={handleChange} />
+            <DetailItem label="Reference No" value={order.bookingReferenceNo} icon={Hash} name="bookingReferenceNo" isEditing={isEditing} editData={editData} onChange={handleChange} />
+          </div>
+          <div style={{ display: 'flex', gap: '16px' }}>
+            <DetailItem label="Fabric Name" value={order.bookingFabricName} icon={Package} name="bookingFabricName" isEditing={isEditing} editData={editData} onChange={handleChange} />
+            <DetailItem label="Quantity" value={order.bookingQuantity} icon={Layers} name="bookingQuantity" isEditing={isEditing} editData={editData} onChange={handleChange} />
+          </div>
+          <div style={{ display: 'flex', gap: '16px' }}>
+            <DetailItem label="Challan" value={order.challan} icon={FileCheck} name="challan" isEditing={isEditing} editData={editData} onChange={handleChange} />
+            <DetailItem label="Price" value={order.price} icon={DollarSign} name="price" isEditing={isEditing} editData={editData} onChange={handleChange} />
+          </div>
+          <div style={{ display: 'flex', gap: '16px' }}>
+            <DetailItem label="Count / Const" value={order.bookingCountConst} icon={Hash} name="bookingCountConst" isEditing={isEditing} editData={editData} onChange={handleChange} />
+            <DetailItem label="Width" value={order.bookingWidth} icon={Ruler} name="bookingWidth" isEditing={isEditing} editData={editData} onChange={handleChange} />
+          </div>
+          <div style={{ display: 'flex', gap: '16px' }}>
+            <DetailItem label="Finish GSM" value={order.finishGsm} icon={Layers} name="finishGsm" isEditing={isEditing} editData={editData} onChange={handleChange} />
+            <DetailItem label="Composition" value={order.bookingComposition} icon={Info} name="bookingComposition" isEditing={isEditing} editData={editData} onChange={handleChange} />
+          </div>
+          <DetailItem label="Completion Date" value={order.completionDate} icon={Calendar} name="completionDate" isEditing={isEditing} editData={editData} onChange={handleChange} type="date" />
+        </SectionWrapper>
+
+        <SectionWrapper title="Fabric Job Work" icon={Briefcase} color="#7C3AED" onDownload={() => generatePDF('jobwork')}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+            {isEditing ? (
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <p style={{ margin: 0, fontSize: '0.7rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Selected Mill</p>
+                <select
+                  name="fabricJobWorkMill"
+                  value={editData.fabricJobWorkMill || ''}
+                  onChange={handleChange}
+                  style={{ width: '100%', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '8px', marginTop: '4px', fontSize: '0.95rem', backgroundColor: '#F8FAFC' }}
+                >
+                  <option value="">Select mill option</option>
+                  <option value="dyingAndPrinting">Dying & Printing Mill</option>
+                  <option value="digitalPrinting">Digital Printing & Value Addition</option>
+                  <option value="both">Both</option>
+                </select>
+              </div>
+            ) : (
+              <DetailItem
+                label="Selected Mill"
+                value={order.fabricJobWorkMill ? (order.fabricJobWorkMill === 'dyingAndPrinting' ? 'Dying & Printing Mill' : order.fabricJobWorkMill === 'digitalPrinting' ? 'Digital Printing & Value Addition' : order.fabricJobWorkMill) : 'N/A'}
+                icon={Layers}
+                editable={false}
+                isEditing={false}
+              />
+            )}
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '16px', marginTop: '16px' }}>
+            <DetailItem label="Dye Mill Name" value={order.dyeMillName} icon={User} name="dyeMillName" isEditing={isEditing} editData={editData} onChange={handleChange} />
+            <DetailItem label="Dye Job Charge" value={order.dyeJobCharge} icon={DollarSign} name="dyeJobCharge" isEditing={isEditing} editData={editData} onChange={handleChange} />
+            <DetailItem label="Dye Finish Quantity" value={order.dyeFinishQuantity} icon={Package} name="dyeFinishQuantity" isEditing={isEditing} editData={editData} onChange={handleChange} />
+            <DetailItem label="Dye Width" value={order.dyeWidth} icon={Ruler} name="dyeWidth" isEditing={isEditing} editData={editData} onChange={handleChange} />
+            <DetailItem label="Dye Colour / Design" value={order.dyeColorDesign} icon={Palette} name="dyeColorDesign" isEditing={isEditing} editData={editData} onChange={handleChange} />
+            <DetailItem label="Dye Shortage" value={order.dyeShortage} icon={Info} name="dyeShortage" isEditing={isEditing} editData={editData} onChange={handleChange} />
+            <DetailItem label="Dye Delivery Date" value={order.dyeDeliveryDate} icon={Calendar} name="dyeDeliveryDate" type="date" isEditing={isEditing} editData={editData} onChange={handleChange} />
+            <DetailItem label="Digital Mill Name" value={order.digitalMillName} icon={User} name="digitalMillName" isEditing={isEditing} editData={editData} onChange={handleChange} />
+            <DetailItem label="Digital Job Charge" value={order.digitalJobCharge} icon={DollarSign} name="digitalJobCharge" isEditing={isEditing} editData={editData} onChange={handleChange} />
+            <DetailItem label="Digital Finish Quantity" value={order.digitalFinishQuantity} icon={Package} name="digitalFinishQuantity" isEditing={isEditing} editData={editData} onChange={handleChange} />
+            <DetailItem label="Digital Width" value={order.digitalWidth} icon={Ruler} name="digitalWidth" isEditing={isEditing} editData={editData} onChange={handleChange} />
+            <DetailItem label="Digital Design" value={order.digitalDesign} icon={Palette} name="digitalDesign" isEditing={isEditing} editData={editData} onChange={handleChange} />
+            <DetailItem label="Digital Shortage" value={order.digitalShortage} icon={Info} name="digitalShortage" isEditing={isEditing} editData={editData} onChange={handleChange} />
+            <DetailItem label="Digital Delivery Date" value={order.digitalDeliveryDate} icon={Calendar} name="digitalDeliveryDate" type="date" isEditing={isEditing} editData={editData} onChange={handleChange} />
+          </div>
+        </SectionWrapper>
+
+        <SectionWrapper title="Quantity Received History" icon={FileCheck} color="#4F46E5" onDownload={() => generatePDF('history')}>
+          <div style={{ display: 'grid', gap: '20px' }}>
+            <div style={{ backgroundColor: '#F8FAFC', borderRadius: '16px', padding: '16px', border: '1px solid #E2E8F0' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px' }}>
+                <p style={{ margin: '0 0 10px 0', fontWeight: '700', color: '#0F172A' }}>Dying & Printing Receipts</p>
+                {isEditing && (
+                  <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                    <input
+                      type="date"
+                      value={dyeReceiptDate}
+                      onChange={(e) => setDyeReceiptDate(e.target.value)}
+                      style={{ border: '1px solid #E2E8F0', borderRadius: '10px', padding: '8px', backgroundColor: 'white' }}
+                    />
+                    <input
+                      type="number"
+                      step="0.01"
+                      placeholder="Qty"
+                      value={dyeReceiptQuantity}
+                      onChange={(e) => setDyeReceiptQuantity(e.target.value)}
+                      style={{ border: '1px solid #E2E8F0', borderRadius: '10px', padding: '8px', width: '90px', backgroundColor: 'white' }}
+                    />
+                    <input
+                      type="text"
+                      placeholder="Remark"
+                      value={dyeReceiptRemark}
+                      onChange={(e) => setDyeReceiptRemark(e.target.value)}
+                      style={{ border: '1px solid #E2E8F0', borderRadius: '10px', padding: '8px', flex: 1, minWidth: '120px', backgroundColor: 'white' }}
+                    />
+                    <button
+                      type="button"
+                      onClick={addDyeReceiptEntry}
+                      className="btn btn-primary"
+                      style={{ padding: '10px 14px', borderRadius: '14px', fontSize: '0.85rem' }}
+                    >
+                      Add
+                    </button>
+                  </div>
+                )}
+              </div>
+              {currentDyeEntries.length > 0 ? (
+                <>
+                  {currentDyeEntries.map((entry, index) => (
+                    <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', padding: '10px 0', borderBottom: index < currentDyeEntries.length - 1 ? '1px solid #E2E8F0' : 'none' }}>
+                      <div style={{ flex: 1 }}>
+                        <span style={{ color: '#475569' }}>{formatDisplayDate(entry.entryDate)}</span>
+                        {entry.remark && <span style={{ color: '#64748B', fontSize: '0.85rem', marginLeft: '12px' }}>• {entry.remark}</span>}
+                      </div>
+                      <span style={{ fontWeight: '700' }}>{entry.quantity}</span>
+                      {isEditing && (
+                        <button
+                          type="button"
+                          onClick={() => removeDyeReceiptEntry(index)}
+                          style={{ background: 'transparent', border: 'none', color: '#EF4444', cursor: 'pointer', fontSize: '0.9rem' }}
+                        >
+                          Remove
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0 0 0', borderTop: '1px solid #E2E8F0', marginTop: '8px' }}>
+                    <span style={{ color: '#475569', fontWeight: '700' }}>Total Received</span>
+                    <span style={{ fontWeight: '700' }}>{currentDyeTotal}</span>
+                  </div>
+                </>
+              ) : (
+                <p style={{ margin: 0, color: '#64748B' }}>No dying/printing receipt entries yet.</p>
+              )}
+            </div>
+            <div style={{ backgroundColor: '#F8FAFC', borderRadius: '16px', padding: '16px', border: '1px solid #E2E8F0' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px' }}>
+                <p style={{ margin: '0 0 10px 0', fontWeight: '700', color: '#0F172A' }}>Digital Printing Receipts</p>
+                {isEditing && (
+                  <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                    <input
+                      type="date"
+                      value={digitalReceiptDate}
+                      onChange={(e) => setDigitalReceiptDate(e.target.value)}
+                      style={{ border: '1px solid #E2E8F0', borderRadius: '10px', padding: '8px', backgroundColor: 'white' }}
+                    />
+                    <input
+                      type="number"
+                      step="0.01"
+                      placeholder="Qty"
+                      value={digitalReceiptQuantity}
+                      onChange={(e) => setDigitalReceiptQuantity(e.target.value)}
+                      style={{ border: '1px solid #E2E8F0', borderRadius: '10px', padding: '8px', width: '90px', backgroundColor: 'white' }}
+                    />
+                    <input
+                      type="text"
+                      placeholder="Remark"
+                      value={digitalReceiptRemark}
+                      onChange={(e) => setDigitalReceiptRemark(e.target.value)}
+                      style={{ border: '1px solid #E2E8F0', borderRadius: '10px', padding: '8px', flex: 1, minWidth: '120px', backgroundColor: 'white' }}
+                    />
+                    <button
+                      type="button"
+                      onClick={addDigitalReceiptEntry}
+                      className="btn btn-primary"
+                      style={{ padding: '10px 14px', borderRadius: '14px', fontSize: '0.85rem' }}
+                    >
+                      Add
+                    </button>
+                  </div>
+                )}
+              </div>
+              {currentDigitalEntries.length > 0 ? (
+                <>
+                  {currentDigitalEntries.map((entry, index) => (
+                    <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', padding: '10px 0', borderBottom: index < currentDigitalEntries.length - 1 ? '1px solid #E2E8F0' : 'none' }}>
+                      <div style={{ flex: 1 }}>
+                        <span style={{ color: '#475569' }}>{formatDisplayDate(entry.entryDate)}</span>
+                        {entry.remark && <span style={{ color: '#64748B', fontSize: '0.85rem', marginLeft: '12px' }}>• {entry.remark}</span>}
+                      </div>
+                      <span style={{ fontWeight: '700' }}>{entry.quantity}</span>
+                      {isEditing && (
+                        <button
+                          type="button"
+                          onClick={() => removeDigitalReceiptEntry(index)}
+                          style={{ background: 'transparent', border: 'none', color: '#EF4444', cursor: 'pointer', fontSize: '0.9rem' }}
+                        >
+                          Remove
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0 0 0', borderTop: '1px solid #E2E8F0', marginTop: '8px' }}>
+                    <span style={{ color: '#475569', fontWeight: '700' }}>Total Received</span>
+                    <span style={{ fontWeight: '700' }}>{currentDigitalTotal}</span>
+                  </div>
+                </>
+              ) : (
+                <p style={{ margin: 0, color: '#64748B' }}>No digital printing receipt entries yet.</p>
+              )}
+            </div>
+          </div>
+        </SectionWrapper>
+
+        <div style={{
+          marginTop: '20px',
+          padding: '24px',
+          borderRadius: '32px',
+          backgroundColor: '#1F2937',
+          border: '1px solid #334155',
+          boxShadow: '0 12px 30px rgba(15, 23, 42, 0.1)',
+          marginBottom: '20px'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
+            <div className="flex items-center gap-3">
+              <div style={{ backgroundColor: 'rgba(251, 191, 36, 0.1)', padding: '10px', borderRadius: '14px', color: '#FBBF24' }}>
+                <Truck size={22} />
+              </div>
+              <h2 style={{ fontSize: '1.2rem', fontWeight: '800', color: '#FBBF24', margin: 0 }}>Dispatch & Delivery</h2>
+            </div>
+            <button
+              onClick={() => generatePDF('dispatch')}
+              style={{
+                background: 'rgba(255, 255, 255, 0.05)',
+                border: '1px solid #334155',
+                color: '#FBBF24',
+                cursor: 'pointer',
+                padding: '8px',
+                borderRadius: '10px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'all 0.2s'
+              }}
+              title="Download Dispatch PDF"
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.05)'; }}
+            >
+              <Download size={18} />
+            </button>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '16px', marginBottom: '24px' }}>
+            {/* Custom DetailItem-like components for dark theme */}
+            {[
+              { label: "Date", value: order.dispatchDate, icon: Calendar, name: "dispatchDate", type: "date" },
+              { label: "Inv Number", value: order.dispatchInvoiceNumber, icon: Hash, name: "dispatchInvoiceNumber" },
+              { label: "Meter", value: order.dispatchMeter, icon: Ruler, name: "dispatchMeter" },
+              { label: "Design / Colour", value: order.dispatchDesignColour, icon: Palette, name: "dispatchDesignColour" },
+              { label: "Transport", value: order.transportName, icon: Truck, name: "transportName" }
+            ].map((item, idx) => (
+              <div key={idx} style={{ display: 'flex', gap: '12px', minWidth: 0 }}>
+                <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.05)', padding: '10px', borderRadius: '12px', height: 'fit-content', flexShrink: 0 }}>
+                  <item.icon size={18} color="#FBBF24" />
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p style={{ margin: 0, fontSize: '0.65rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{item.label}</p>
+                  {isEditing ? (
+                    <input
+                      type={item.type || "text"}
+                      name={item.name}
+                      value={editData[item.name] ?? ''}
+                      onChange={handleChange}
+                      style={{
+                        width: '100%',
+                        border: '1px solid #334155',
+                        borderRadius: '8px',
+                        padding: '4px 8px',
+                        marginTop: '4px',
+                        fontSize: '0.9rem',
+                        outline: 'none',
+                        backgroundColor: '#111827',
+                        color: 'white'
+                      }}
+                    />
+                  ) : (
+                    <p style={{ margin: '4px 0 0 0', fontSize: '0.95rem', fontWeight: '600', color: '#F8FAFC' }}>
+                      {item.type === 'date' ? formatDisplayDate(item.value) : (item.value || 'N/A')}
+                    </p>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Dispatch Quantity History */}
+          <div style={{ backgroundColor: '#111827', borderRadius: '20px', padding: '18px', border: '1px solid #334155' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', marginBottom: '14px' }}>
+              <p style={{ margin: 0, fontWeight: '700', color: '#F8FAFC' }}>Dispatch Receipt History</p>
+              {isEditing && (
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                  <input
+                    type="date"
+                    value={dispatchReceiptDate}
+                    onChange={(e) => setDispatchReceiptDate(e.target.value)}
+                    style={{ border: '1px solid #334155', borderRadius: '10px', padding: '6px 10px', backgroundColor: '#1F2937', color: 'white', fontSize: '0.85rem' }}
+                  />
+                  <input
+                    type="number"
+                    step="0.01"
+                    placeholder="Qty"
+                    value={dispatchReceiptQuantity}
+                    onChange={(e) => setDispatchReceiptQuantity(e.target.value)}
+                    style={{ border: '1px solid #334155', borderRadius: '10px', padding: '6px 10px', width: '80px', backgroundColor: '#1F2937', color: 'white', fontSize: '0.85rem' }}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Remark"
+                    value={dispatchReceiptRemark}
+                    onChange={(e) => setDispatchReceiptRemark(e.target.value)}
+                    style={{ border: '1px solid #334155', borderRadius: '10px', padding: '6px 10px', flex: 1, minWidth: '120px', backgroundColor: '#1F2937', color: 'white', fontSize: '0.85rem' }}
+                  />
+                  <button
+                    type="button"
+                    onClick={addDispatchReceiptEntry}
+                    className="btn btn-primary"
+                    style={{ padding: '6px 12px', borderRadius: '10px', fontSize: '0.8rem', background: '#FBBF24', color: '#111827', fontWeight: '700', border: 'none' }}
+                  >
+                    Add
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {currentDispatchEntries.length > 0 ? (
+              <>
+                {currentDispatchEntries.map((entry, index) => (
+                  <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: index < currentDispatchEntries.length - 1 ? '1px solid #334155' : 'none' }}>
+                    <div style={{ flex: 1 }}>
+                      <span style={{ color: '#94A3B8', fontSize: '0.9rem' }}>{formatDisplayDate(entry.entryDate)}</span>
+                      {entry.remark && <span style={{ color: '#64748B', fontSize: '0.85rem', marginLeft: '12px' }}>• {entry.remark}</span>}
+                    </div>
+                    <span style={{ fontWeight: '700', color: '#F8FAFC' }}>{entry.quantity}</span>
+                    {isEditing && (
+                      <button
+                        type="button"
+                        onClick={() => removeDispatchReceiptEntry(index)}
+                        style={{ background: 'transparent', border: 'none', color: '#F87171', cursor: 'pointer', fontSize: '0.85rem' }}
+                      >
+                        Remove
+                      </button>
+                    )}
+                  </div>
+                ))}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0 0 0', borderTop: '1px solid #334155', marginTop: '8px' }}>
+                  <span style={{ color: '#94A3B8', fontWeight: '700' }}>Total Dispatched</span>
+                  <span style={{ fontWeight: '800', color: '#FBBF24', fontSize: '1.1rem' }}>{currentDispatchTotal}</span>
+                </div>
+              </>
+            ) : (
+              <p style={{ margin: 0, color: '#64748B', fontSize: '0.9rem' }}>No dispatch receipt entries yet.</p>
+            )}
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        {isOngoing && !isEditing && (
+          <div className="flex gap-4 mt-8">
+            <button
+              onClick={() => updateStatus('CANCELLED')}
+              style={{
+                flex: 1,
+                backgroundColor: 'white',
+                color: '#EF4444',
+                border: '1px solid #FEE2E2',
+                padding: '16px',
+                borderRadius: '20px',
+                fontWeight: '700',
+                fontSize: '1rem',
+                boxShadow: '0 4px 12px rgba(239, 68, 68, 0.1)'
+              }}
+            >
+              Cancel Order
+            </button>
+            <button
+              onClick={() => updateStatus('COMPLETED')}
+              className="btn-primary"
+              style={{
+                flex: 1,
+                padding: '16px',
+                borderRadius: '20px',
+                fontWeight: '700',
+                fontSize: '1rem',
+                border: 'none',
+                boxShadow: '0 8px 16px rgba(79, 70, 229, 0.2)'
+              }}
+            >
+              Complete Order
+            </button>
+          </div>
+        )}
+
+        {isEditing && (
+          <div className="flex gap-4 mt-8">
+            <button
+              onClick={() => { setIsEditing(false); setEditData(order); }}
+              style={{
+                flex: 1,
+                backgroundColor: 'white',
+                color: '#64748B',
+                border: '1px solid #E2E8F0',
+                padding: '16px',
+                borderRadius: '20px',
+                fontWeight: '700',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px'
+              }}
+            >
+              <X size={20} /> Cancel Edit
+            </button>
+            <button
+              onClick={handleUpdate}
+              style={{
+                flex: 2,
+                backgroundColor: '#10B981',
+                color: 'white',
+                padding: '16px',
+                borderRadius: '20px',
+                fontWeight: '700',
+                fontSize: '1.1rem',
+                border: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '10px',
+                boxShadow: '0 8px 16px rgba(16, 185, 129, 0.2)'
+              }}
+            >
+              <Save size={22} /> Save Changes
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default OrderDetails;

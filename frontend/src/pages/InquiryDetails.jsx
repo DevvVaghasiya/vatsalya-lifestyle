@@ -1,0 +1,543 @@
+import React, { useState, useEffect } from 'react';
+import {
+  ArrowLeft, MessageSquare, Clock, CheckCircle, XCircle,
+  User, Package, Calendar, Info, Hash, Palette,
+  Briefcase, FileCheck, Edit3, Save, X, Download
+} from 'lucide-react';
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
+import jsPDF from 'jspdf';
+import { API_BASE } from '../utils/api';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
+// Helper components moved outside to prevent focus loss on re-render
+const formatDisplayDate = (dateStr) => {
+  if (!dateStr) return 'N/A';
+  try {
+    const date = new Date(dateStr);
+    if (isNaN(date.getTime())) return dateStr;
+    return date.toLocaleDateString('en-GB');
+  } catch (e) {
+    return dateStr;
+  }
+};
+
+const DetailItem = ({ label, value, icon: Icon, name, editable = true, isEditing, editData, onChange, type = "text" }) => (
+  <div className="detail-item">
+    <div className="detail-icon-box">
+      <Icon size={18} />
+    </div>
+    <div className="detail-content">
+      <p className="detail-label">{label}</p>
+      {isEditing && editable ? (
+        type === 'date' ? (
+          <DatePicker
+            selected={editData[name] ? new Date(editData[name]) : null}
+            onChange={(date) => onChange({ target: { name: name, value: date ? date.toISOString().split('T')[0] : '' } })}
+            dateFormat="dd/MM/yyyy"
+            className="detail-input"
+            placeholderText="dd/mm/yyyy"
+          />
+        ) : (
+          <input
+            type={type}
+            name={name}
+            value={editData[name] || ''}
+            onChange={onChange}
+            className="detail-input"
+          />
+        )
+      ) : (
+        <p className="detail-value">{type === 'date' ? formatDisplayDate(value) : (value || 'N/A')}</p>
+      )}
+    </div>
+  </div>
+);
+
+const SectionWrapper = ({ title, icon: Icon, color, children }) => {
+  const colorMap = {
+    '#4F46E5': 'blue',
+    '#0D9488': 'teal',
+    '#D97706': 'amber'
+  };
+  const sectionClass = colorMap[color] || 'blue';
+  
+  return (
+    <div className={`inquiry-section ${sectionClass}`}>
+      <div className="section-head">
+        <div className="section-icon-box">
+          <Icon size={20} />
+        </div>
+        <h2 className="section-title">{title}</h2>
+      </div>
+      <div className="flex-col gap-4">
+        {children}
+      </div>
+    </div>
+  );
+};
+
+const InquiryDetails = () => {
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const [inquiry, setInquiry] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editData, setEditData] = useState({});
+
+  useEffect(() => {
+    fetchInquiryDetails();
+  }, [id]);
+
+  const fetchInquiryDetails = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get(`${API_BASE}/api/inquiries/${id}`);
+      setInquiry(res.data);
+      setEditData(res.data);
+    } catch (err) {
+      console.error('Error fetching inquiry details:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUpdate = async () => {
+    const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+    try {
+      await axios.put(`${API_BASE}/api/inquiries/${id}`, {
+        ...editData,
+        lastEditedBy: { id: currentUser.id }
+      });
+      alert('Inquiry updated successfully!');
+      setIsEditing(false);
+      fetchInquiryDetails();
+    } catch (err) {
+      console.error('Error updating inquiry:', err);
+      alert('Failed to update inquiry');
+    }
+  };
+
+  const updateStatus = async (newStatus) => {
+    try {
+      await axios.put(`${API_BASE}/api/inquiries/${id}/status?status=${newStatus}`);
+      alert(`Inquiry ${newStatus} successfully!`);
+      fetchInquiryDetails();
+    } catch (err) {
+      console.error('Error updating status:', err);
+      alert('Failed to update inquiry status');
+    }
+  };
+
+  const generatePDF = () => {
+    try {
+      const doc = new jsPDF('p', 'mm', 'a4');
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      let yPosition = 15;
+      
+      const addLine = () => {
+        yPosition += 1;
+      };
+
+      // Header with gradient effect
+      doc.setFillColor(79, 70, 229);
+      doc.rect(0, 0, pageWidth, 35, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(24);
+      doc.setFont(undefined, 'bold');
+      doc.text('INQUIRY DETAILS REPORT', pageWidth / 2, 12, { align: 'center' });
+      
+      doc.setFontSize(10);
+      doc.setFont(undefined, 'normal');
+      const reportDate = new Date().toLocaleDateString('en-GB');
+      doc.text(`Generated: ${reportDate}`, pageWidth / 2, 22, { align: 'center' });
+      
+      yPosition = 45;
+
+      // Status Section
+      doc.setTextColor(0, 0, 0);
+      doc.setFillColor(238, 242, 255);
+      doc.rect(10, yPosition - 4, pageWidth - 20, 12, 'F');
+      doc.setFontSize(11);
+      doc.setFont(undefined, 'bold');
+      doc.text(`Status: ${inquiry.status || 'ONGOING'}`, 15, yPosition + 2);
+      yPosition += 18;
+
+      // Client's Inquiry Section
+      doc.setFillColor(79, 70, 229);
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(12);
+      doc.setFont(undefined, 'bold');
+      doc.rect(10, yPosition - 5, pageWidth - 20, 8, 'F');
+      doc.text("CLIENT'S INQUIRY", 15, yPosition);
+      yPosition += 15;
+
+      doc.setTextColor(0, 0, 0);
+      doc.setFont(undefined, 'normal');
+      doc.setFontSize(10);
+
+      const clientData = [
+        ['Customer Name', inquiry.client?.name || 'N/A'],
+        ['Style No', inquiry.styleNo || 'N/A'],
+        ['Quality', inquiry.quality || 'N/A'],
+        ['GSM', inquiry.gsm || 'N/A'],
+        ['Count/Const', inquiry.countConst || 'N/A'],
+        ['Design', inquiry.design || 'N/A']
+      ];
+
+      clientData.forEach(([label, value]) => {
+        doc.setFont(undefined, 'bold');
+        doc.setTextColor(79, 70, 229);
+        doc.text(`${label}:`, 15, yPosition);
+        doc.setFont(undefined, 'normal');
+        doc.setTextColor(0, 0, 0);
+        const valueText = String(value);
+        const splitValue = doc.splitTextToSize(valueText, pageWidth - 80);
+        doc.text(splitValue, 60, yPosition);
+        yPosition += 7;
+      });
+
+      // Client Remark
+      doc.setFont(undefined, 'bold');
+      doc.setTextColor(79, 70, 229);
+      doc.text('Client Remark:', 15, yPosition);
+      doc.setFont(undefined, 'normal');
+      doc.setTextColor(0, 0, 0);
+      const remarkText = doc.splitTextToSize(inquiry.remark || 'No remarks provided', pageWidth - 30);
+      doc.text(remarkText, 15, yPosition + 5);
+      yPosition += remarkText.length * 5 + 12;
+
+      // What we are doing? Section
+      doc.setFillColor(13, 148, 136);
+      doc.setTextColor(255, 255, 255);
+      doc.setFont(undefined, 'bold');
+      doc.setFontSize(12);
+      doc.rect(10, yPosition - 5, pageWidth - 20, 8, 'F');
+      doc.text("WHAT WE ARE DOING?", 15, yPosition);
+      yPosition += 15;
+
+      doc.setTextColor(0, 0, 0);
+      doc.setFont(undefined, 'normal');
+      doc.setFontSize(10);
+
+      const processingData = [
+        ['Sample Booking', inquiry.sampleBooking || 'N/A'],
+        ['Dying/Printing Mill', inquiry.dyingPrintingMill || 'N/A'],
+        ['Value Addition', inquiry.valueAdditionMill || 'N/A'],
+        ['Redimate', inquiry.redimate || 'N/A']
+      ];
+
+      processingData.forEach(([label, value]) => {
+        doc.setFont(undefined, 'bold');
+        doc.setTextColor(13, 148, 136);
+        doc.text(`${label}:`, 15, yPosition);
+        doc.setFont(undefined, 'normal');
+        doc.setTextColor(0, 0, 0);
+        doc.text(String(value), 60, yPosition);
+        yPosition += 7;
+      });
+
+      yPosition += 5;
+
+      // Check if new page is needed
+      if (yPosition > pageHeight - 40) {
+        doc.addPage();
+        yPosition = 15;
+      }
+
+      // Submission Section
+      doc.setFillColor(217, 119, 6);
+      doc.setTextColor(255, 255, 255);
+      doc.setFont(undefined, 'bold');
+      doc.setFontSize(12);
+      doc.rect(10, yPosition - 5, pageWidth - 20, 8, 'F');
+      doc.text("SUBMISSION SECTION", 15, yPosition);
+      yPosition += 15;
+
+      doc.setTextColor(0, 0, 0);
+      doc.setFont(undefined, 'normal');
+      doc.setFontSize(10);
+
+      const submissionData = [
+        ['Date', formatDisplayDate(inquiry.submissionDate || inquiry.createdAt)],
+        ['Article No', inquiry.articleNo || 'N/A'],
+        ['Fabric Name', inquiry.fabricName || 'N/A'],
+        ['GSN', inquiry.gsn || 'N/A'],
+        ['Width', inquiry.width || 'N/A'],
+        ['Count/Const', inquiry.submissionCountConst || 'N/A'],
+        ['Composition', inquiry.composition || 'N/A']
+      ];
+
+      submissionData.forEach(([label, value]) => {
+        doc.setFont(undefined, 'bold');
+        doc.setTextColor(217, 119, 6);
+        doc.text(`${label}:`, 15, yPosition);
+        doc.setFont(undefined, 'normal');
+        doc.setTextColor(0, 0, 0);
+        doc.text(String(value), 60, yPosition);
+        yPosition += 7;
+      });
+
+      // Feedback
+      doc.setFont(undefined, 'bold');
+      doc.setTextColor(217, 119, 6);
+      doc.text('Feedback:', 15, yPosition);
+      doc.setFont(undefined, 'normal');
+      doc.setTextColor(0, 0, 0);
+      const feedbackText = doc.splitTextToSize(inquiry.feedback || 'No feedback yet', pageWidth - 30);
+      doc.text(feedbackText, 15, yPosition + 5);
+      yPosition += feedbackText.length * 5 + 10;
+
+      // Footer
+      doc.setTextColor(150, 150, 150);
+      doc.setFontSize(9);
+      doc.text('Vatsalya Lifestyle - Textile Management System', pageWidth / 2, pageHeight - 10, { align: 'center' });
+
+      // Save PDF
+      const fileName = `Inquiry_${inquiry.id || id}_${new Date().toISOString().split('T')[0]}.pdf`;
+      doc.save(fileName);
+    } catch (err) {
+      console.error('Error generating PDF:', err);
+      alert('Failed to generate PDF');
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEditData(prev => ({ ...prev, [name]: value }));
+  };
+
+  if (loading) return (
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: '#F8F9FB' }}>
+      <p style={{ color: '#64748B', fontWeight: '500' }}>Loading inquiry details...</p>
+    </div>
+  );
+
+  if (!inquiry) return (
+    <div style={{ padding: '20px', textAlign: 'center', backgroundColor: '#F8F9FB', minHeight: '100vh' }}>
+      <p>Inquiry not found.</p>
+      <button onClick={() => navigate('/inquiries')} className="btn btn-primary" style={{ marginTop: '20px' }}>Go Back</button>
+    </div>
+  );
+
+  const getStatusStyle = (status) => {
+    const s = (status || 'Ongoing').toLowerCase();
+    switch (s) {
+      case 'ongoing': return { bg: '#EEF2FF', color: '#4F46E5', icon: <Clock size={16} /> };
+      case 'completed': return { bg: '#F0FDF4', color: '#16A34A', icon: <CheckCircle size={16} /> };
+      case 'canceled': return { bg: '#FEF2F2', color: '#DC2626', icon: <XCircle size={16} /> };
+      default: return { bg: '#F1F5F9', color: '#64748B', icon: null };
+    }
+  };
+
+  const statusInfo = getStatusStyle(inquiry.status);
+  const isOngoing = (inquiry.status || 'Ongoing').toLowerCase() === 'ongoing';
+
+  return (
+    <div style={{ backgroundColor: '#F8F9FB', minHeight: '100vh', paddingBottom: '100px' }}>
+      <div className="inquiry-header">
+        <div className="inquiry-header-left">
+          <button type="button" className="inquiry-header-back" onClick={() => navigate('/inquiries')}>
+            <ArrowLeft size={20} />
+          </button>
+          <h1 className="inquiry-header-title">Inquiry Details</h1>
+        </div>
+        {isOngoing && (
+          <button
+            type="button"
+            className="inquiry-header-btn"
+            onClick={() => isEditing ? handleUpdate() : setIsEditing(true)}
+            title={isEditing ? 'Save' : 'Edit'}
+          >
+            {isEditing ? <Save size={20} /> : <Edit3 size={20} />}
+          </button>
+        )}
+      </div>
+
+      <div style={{ padding: '20px' }}>
+        {/* Status Badge */}
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
+          <div className={`status-badge ${(inquiry.status || 'Ongoing').toLowerCase()}`}>
+            {statusInfo.icon}
+            {inquiry.status || 'Ongoing'}
+          </div>
+        </div>
+
+        {/* Section 1: Client's Inquiry */}
+        <SectionWrapper title="Client's Inquiry" icon={User} color="#4F46E5">
+          <DetailItem
+            label="Customer Name"
+            value={inquiry.client?.name}
+            icon={User}
+            editable={false}
+            isEditing={isEditing}
+            editData={editData}
+            onChange={handleChange}
+          />
+
+          <div className="detail-row">
+            <DetailItem label="Style No" value={inquiry.styleNo} icon={Hash} name="styleNo" isEditing={isEditing} editData={editData} onChange={handleChange} />
+            <DetailItem label="Quality" value={inquiry.quality} icon={Info} name="quality" isEditing={isEditing} editData={editData} onChange={handleChange} />
+          </div>
+
+          <div className="detail-row">
+            <DetailItem label="GSM" value={inquiry.gsm} icon={Hash} name="gsm" isEditing={isEditing} editData={editData} onChange={handleChange} />
+            <DetailItem label="Count/Const" value={inquiry.countConst} icon={Hash} name="countConst" isEditing={isEditing} editData={editData} onChange={handleChange} />
+          </div>
+
+          <DetailItem label="Design" value={inquiry.design} icon={Palette} name="design" isEditing={isEditing} editData={editData} onChange={handleChange} />
+
+          <div style={{ marginTop: '12px' }}>
+            <p className="detail-label">Client Remark</p>
+            {isEditing ? (
+              <textarea
+                name="remark"
+                value={editData.remark || ''}
+                onChange={handleChange}
+                className="detail-textarea"
+              />
+            ) : (
+              <div className="remark-box">
+                <p>{inquiry.remark || 'No remarks provided'}</p>
+              </div>
+            )}
+          </div>
+        </SectionWrapper>
+
+        {/* Section 2: What we are doing? */}
+        <SectionWrapper title="What we are doing?" icon={Briefcase} color="#0D9488">
+          <div className="detail-row">
+            <DetailItem label="Sample Booking" value={inquiry.sampleBooking} icon={Package} name="sampleBooking" isEditing={isEditing} editData={editData} onChange={handleChange} />
+            <DetailItem label="Dying Mill" value={inquiry.dyingPrintingMill} icon={Briefcase} name="dyingPrintingMill" isEditing={isEditing} editData={editData} onChange={handleChange} />
+          </div>
+          <div className="detail-row">
+            <DetailItem label="Value Addition" value={inquiry.valueAdditionMill} icon={Info} name="valueAdditionMill" isEditing={isEditing} editData={editData} onChange={handleChange} />
+            <DetailItem label="Redimate" value={inquiry.redimate} icon={CheckCircle} name="redimate" isEditing={isEditing} editData={editData} onChange={handleChange} />
+          </div>
+        </SectionWrapper>
+
+        {/* Section 3: Submission Section */}
+        <SectionWrapper title="Submission Section" icon={FileCheck} color="#D97706">
+          <div className="detail-row">
+            <DetailItem label="Date" value={inquiry.submissionDate || inquiry.createdAt} icon={Calendar} name="submissionDate" isEditing={isEditing} editData={editData} onChange={handleChange} type="date" />
+            <DetailItem label="Article No" value={inquiry.articleNo} icon={Hash} name="articleNo" isEditing={isEditing} editData={editData} onChange={handleChange} />
+          </div>
+
+          <div className="detail-row">
+            <DetailItem label="Fabric Name" value={inquiry.fabricName} icon={Package} name="fabricName" isEditing={isEditing} editData={editData} onChange={handleChange} />
+            <DetailItem label="GSN" value={inquiry.gsn} icon={Hash} name="gsn" isEditing={isEditing} editData={editData} onChange={handleChange} />
+          </div>
+
+          <div className="detail-row">
+            <DetailItem label="Width" value={inquiry.width} icon={Info} name="width" isEditing={isEditing} editData={editData} onChange={handleChange} />
+            <DetailItem label="Count/Const" value={inquiry.submissionCountConst} icon={Hash} name="submissionCountConst" isEditing={isEditing} editData={editData} onChange={handleChange} />
+          </div>
+
+          <DetailItem label="Composition" value={inquiry.composition} icon={Info} name="composition" isEditing={isEditing} editData={editData} onChange={handleChange} />
+
+          <div style={{ marginTop: '12px' }}>
+            <p className="detail-label">Feedback</p>
+            {isEditing ? (
+              <textarea
+                name="feedback"
+                value={editData.feedback || ''}
+                onChange={handleChange}
+                className="detail-textarea"
+              />
+            ) : (
+              <div className="feedback-box">
+                <p>{inquiry.feedback || 'No feedback yet'}</p>
+              </div>
+            )}
+          </div>
+        </SectionWrapper>
+
+        {/* Tracking Info Section */}
+        <div className="inquiry-section" style={{ borderLeftColor: '#94A3B8', marginTop: '24px', padding: '16px 24px' }}>
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center gap-3">
+              <div style={{ backgroundColor: '#F1F5F9', padding: '8px', borderRadius: '10px', color: '#64748B' }}>
+                <User size={16} />
+              </div>
+              <div>
+                <p style={{ margin: 0, fontSize: '0.65rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>Added By</p>
+                <p style={{ margin: '2px 0 0 0', fontSize: '0.85rem', fontWeight: '600', color: '#1E293B' }}>
+                  {inquiry.createdBy?.name || 'System'}
+                </p>
+              </div>
+            </div>
+
+            {inquiry.lastEditedBy && (
+              <div className="flex items-center gap-3">
+                <div style={{ backgroundColor: '#F1F5F9', padding: '8px', borderRadius: '10px', color: '#64748B' }}>
+                  <Edit3 size={16} />
+                </div>
+                <div>
+                  <p style={{ margin: 0, fontSize: '0.65rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>Last Edited By</p>
+                  <p style={{ margin: '2px 0 0 0', fontSize: '0.85rem', fontWeight: '600', color: '#1E293B' }}>
+                    {inquiry.lastEditedBy?.name}
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        {isOngoing && !isEditing && (
+          <div className="action-buttons">
+            <button
+              onClick={() => updateStatus('Canceled')}
+              className="action-btn action-btn-cancel"
+            >
+              <XCircle size={18} />
+              Cancel Inquiry
+            </button>
+            <button
+              onClick={() => updateStatus('Completed')}
+              className="action-btn action-btn-success"
+            >
+              <CheckCircle size={18} />
+              Complete Inquiry
+            </button>
+          </div>
+        )}
+
+        {isEditing && (
+          <div className="action-buttons">
+            <button
+              onClick={() => { setIsEditing(false); setEditData(inquiry); }}
+              className="action-btn action-btn-secondary"
+            >
+              <X size={18} /> Cancel
+            </button>
+            <button
+              onClick={handleUpdate}
+              className="action-btn action-btn-green"
+            >
+              <Save size={18} /> Save Changes
+            </button>
+          </div>
+        )}
+
+        {/* PDF Download — always available */}
+        {!isEditing && (
+          <div className="action-buttons" style={{ marginTop: isOngoing ? 0 : 8 }}>
+            <button
+              onClick={generatePDF}
+              className="action-btn action-btn-pdf"
+              style={{ flex: 1 }}
+            >
+              <Download size={20} />
+              Download PDF
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default InquiryDetails;
