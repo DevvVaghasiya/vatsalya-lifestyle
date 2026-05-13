@@ -52,62 +52,7 @@ const Signup = () => {
   const FocusBorder = (e) => { e.target.style.borderColor = 'rgba(79,70,229,0.7)'; };
   const BlurBorder  = (e) => { e.target.style.borderColor = 'rgba(255,255,255,0.12)'; };
 
-          <div>
-            <label style={{ display: 'block', marginBottom: 8, fontSize: '0.78rem', fontWeight: 700, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
-              Full Name
-            </label>
-            <div style={{ position: 'relative' }}>
-              <div style={iconWrap}><User size={17} /></div>
-              <input
-                type="text"
-                placeholder="Enter authorized name"
-                value={name}
-                onChange={e => setName(e.target.value)}
-                required
-                style={fieldStyle}
-                onFocus={FocusBorder}
-                onBlur={BlurBorder}
-              />
-            </div>
-          </div>
 
-          <div>
-            <label style={{ display: 'block', marginBottom: 8, fontSize: '0.78rem', fontWeight: 700, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
-              Enterprise Name
-            </label>
-            <div style={{ position: 'relative' }}>
-              <div style={iconWrap}><Building2 size={17} /></div>
-              <input
-                type="text"
-                placeholder="Enter business entity name"
-                value={businessName}
-                onChange={e => setBusinessName(e.target.value)}
-                required
-                style={fieldStyle}
-                onFocus={FocusBorder}
-                onBlur={BlurBorder}
-              />
-            </div>
-          </div>
-
-          <div>
-            <label style={{ display: 'block', marginBottom: 8, fontSize: '0.78rem', fontWeight: 700, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
-              Contact Number
-            </label>
-            <div style={{ position: 'relative' }}>
-              <div style={iconWrap}><Phone size={17} /></div>
-              <input
-                type="tel"
-                placeholder="Enter 10-digit contact"
-                value={phoneNumber}
-                onChange={e => setPhoneNumber(e.target.value)}
-                required
-                style={fieldStyle}
-                onFocus={FocusBorder}
-                onBlur={BlurBorder}
-              />
-            </div>
-          </div>
 
   const benefits = [
     'Real-time inventory management',
@@ -198,7 +143,62 @@ const Signup = () => {
 
         {/* Form */}
         <form onSubmit={handleSignup} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <div>
+            <label style={{ display: 'block', marginBottom: 8, fontSize: '0.78rem', fontWeight: 700, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
+              Full Name
+            </label>
+            <div style={{ position: 'relative' }}>
+              <div style={iconWrap}><User size={17} /></div>
+              <input
+                type="text"
+                placeholder="Enter authorized name"
+                value={name}
+                onChange={e => setName(e.target.value)}
+                required
+                style={fieldStyle}
+                onFocus={FocusBorder}
+                onBlur={BlurBorder}
+              />
+            </div>
+          </div>
 
+          <div>
+            <label style={{ display: 'block', marginBottom: 8, fontSize: '0.78rem', fontWeight: 700, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
+              Enterprise Name
+            </label>
+            <div style={{ position: 'relative' }}>
+              <div style={iconWrap}><Building2 size={17} /></div>
+              <input
+                type="text"
+                placeholder="Enter business entity name"
+                value={businessName}
+                onChange={e => setBusinessName(e.target.value)}
+                required
+                style={fieldStyle}
+                onFocus={FocusBorder}
+                onBlur={BlurBorder}
+              />
+            </div>
+          </div>
+
+          <div>
+            <label style={{ display: 'block', marginBottom: 8, fontSize: '0.78rem', fontWeight: 700, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
+              Contact Number
+            </label>
+            <div style={{ position: 'relative' }}>
+              <div style={iconWrap}><Phone size={17} /></div>
+              <input
+                type="tel"
+                placeholder="Enter 10-digit contact"
+                value={phoneNumber}
+                onChange={e => setPhoneNumber(e.target.value)}
+                required
+                style={fieldStyle}
+                onFocus={FocusBorder}
+                onBlur={BlurBorder}
+              />
+            </div>
+          </div>
 
           {/* Password field with toggle */}
           <div>
