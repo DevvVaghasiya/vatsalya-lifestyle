@@ -52,32 +52,62 @@ const Signup = () => {
   const FocusBorder = (e) => { e.target.style.borderColor = 'rgba(79,70,229,0.7)'; };
   const BlurBorder  = (e) => { e.target.style.borderColor = 'rgba(255,255,255,0.12)'; };
 
-  const Field = ({ label, icon: Icon, type = 'text', placeholder, value, onChange, children }) => (
-    <div>
-      <label style={{
-        display: 'block', marginBottom: 8,
-        fontSize: '0.78rem', fontWeight: 700,
-        color: 'rgba(255,255,255,0.6)',
-        textTransform: 'uppercase', letterSpacing: '0.6px'
-      }}>
-        {label}
-      </label>
-      <div style={{ position: 'relative' }}>
-        <div style={iconWrap}><Icon size={17} /></div>
-        <input
-          type={type}
-          placeholder={placeholder}
-          value={value}
-          onChange={onChange}
-          required
-          style={fieldStyle}
-          onFocus={FocusBorder}
-          onBlur={BlurBorder}
-        />
-        {children}
-      </div>
-    </div>
-  );
+          <div>
+            <label style={{ display: 'block', marginBottom: 8, fontSize: '0.78rem', fontWeight: 700, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
+              Full Name
+            </label>
+            <div style={{ position: 'relative' }}>
+              <div style={iconWrap}><User size={17} /></div>
+              <input
+                type="text"
+                placeholder="Enter authorized name"
+                value={name}
+                onChange={e => setName(e.target.value)}
+                required
+                style={fieldStyle}
+                onFocus={FocusBorder}
+                onBlur={BlurBorder}
+              />
+            </div>
+          </div>
+
+          <div>
+            <label style={{ display: 'block', marginBottom: 8, fontSize: '0.78rem', fontWeight: 700, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
+              Enterprise Name
+            </label>
+            <div style={{ position: 'relative' }}>
+              <div style={iconWrap}><Building2 size={17} /></div>
+              <input
+                type="text"
+                placeholder="Enter business entity name"
+                value={businessName}
+                onChange={e => setBusinessName(e.target.value)}
+                required
+                style={fieldStyle}
+                onFocus={FocusBorder}
+                onBlur={BlurBorder}
+              />
+            </div>
+          </div>
+
+          <div>
+            <label style={{ display: 'block', marginBottom: 8, fontSize: '0.78rem', fontWeight: 700, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
+              Contact Number
+            </label>
+            <div style={{ position: 'relative' }}>
+              <div style={iconWrap}><Phone size={17} /></div>
+              <input
+                type="tel"
+                placeholder="Enter 10-digit contact"
+                value={phoneNumber}
+                onChange={e => setPhoneNumber(e.target.value)}
+                required
+                style={fieldStyle}
+                onFocus={FocusBorder}
+                onBlur={BlurBorder}
+              />
+            </div>
+          </div>
 
   const benefits = [
     'Real-time inventory management',
@@ -168,9 +198,7 @@ const Signup = () => {
 
         {/* Form */}
         <form onSubmit={handleSignup} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-          <Field label="Full Name" icon={User} placeholder="Enter authorized name" value={name} onChange={e => setName(e.target.value)} />
-          <Field label="Enterprise Name" icon={Building2} placeholder="Enter business entity name" value={businessName} onChange={e => setBusinessName(e.target.value)} />
-          <Field label="Contact Number" icon={Phone} type="tel" placeholder="Enter 10-digit contact" value={phoneNumber} onChange={e => setPhoneNumber(e.target.value)} />
+
 
           {/* Password field with toggle */}
           <div>
