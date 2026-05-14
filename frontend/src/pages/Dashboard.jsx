@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ChevronRight, TrendingUp, Package, DollarSign, FileText, Plus, ArrowRight, Activity, Zap, FileCheck, Clock, CheckCircle } from 'lucide-react';
+import { Plus, ArrowRight, Activity, Zap, FileCheck, Clock, CheckCircle } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -211,42 +211,76 @@ const Dashboard = () => {
           </div>
         </motion.div>
 
+        {/* Stats Grid — shimmer skeleton while loading, real cards after */}
         <div className="stats-grid" style={{ marginTop: 24, gap: '20px' }}>
-          {[
-            { label: 'Completed Orders', value: stats.completedOrders, icon: FileCheck, color: '#10B981', bg: '#ECFDF5', path: '/deals', tab: 'completed' },
-            { label: 'Delayed Orders', value: stats.delayedOrders, icon: Clock, color: '#EF4444', bg: '#FEF2F2', path: '/deals', tab: 'delayed' },
-            { label: 'Ongoing Inquiries', value: stats.ongoingInquiries, icon: Activity, color: '#4F46E5', bg: '#EEF2FF', path: '/inquiries', tab: 'ongoing' },
-            { label: 'Completed Inquiries', value: stats.completedInquiries, icon: CheckCircle, color: '#06B6D4', bg: '#ECFEFF', path: '/inquiries', tab: 'completed' }
-          ].map((stat, i) => (
-            <motion.div
-              key={i}
-              variants={item}
-              whileHover={{ y: -5, scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => navigate(stat.path, { state: { tab: stat.tab } })}
-              className="card"
-              style={{
-                border: '1px solid rgba(255,255,255,0.5)',
-                boxShadow: '0 10px 25px rgba(0,0,0,0.02)',
-                background: 'rgba(255,255,255,0.7)',
-                backdropFilter: 'blur(10px)',
+          {loading ? (
+            // ── Shimmer Skeleton Cards ──
+            [0,1,2,3].map(i => (
+              <div key={i} style={{
                 borderRadius: '24px',
                 padding: '20px',
-                cursor: 'pointer'
-              }}
-            >
-              <div className="flex justify-between items-start mb-4">
-                <div className="card-icon" style={{ background: stat.bg, color: stat.color, width: '40px', height: '40px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <stat.icon size={20} />
+                background: 'rgba(255,255,255,0.7)',
+                backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(255,255,255,0.5)',
+                boxShadow: '0 10px 25px rgba(0,0,0,0.02)',
+                overflow: 'hidden',
+                position: 'relative',
+              }}>
+                {/* shimmer sweep */}
+                <div style={{
+                  position: 'absolute', inset: 0,
+                  background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.7) 50%, transparent 100%)',
+                  animation: 'shimmer 1.6s infinite',
+                  zIndex: 1,
+                }} />
+                <div style={{ display:'flex', justifyContent:'space-between', marginBottom:16 }}>
+                  <div style={{ width:40, height:40, borderRadius:12, background:'#E2E8F0' }} />
+                  <div style={{ width:48, height:20, borderRadius:6, background:'#E2E8F0' }} />
                 </div>
-                <div style={{ fontSize: '10px', fontWeight: '800', color: stat.color, background: `${stat.color}15`, padding: '4px 8px', borderRadius: '6px' }}></div>
+                <div style={{ width:'60%', height:12, borderRadius:6, background:'#E2E8F0', marginBottom:8 }} />
+                <div style={{ width:'40%', height:28, borderRadius:6, background:'#E2E8F0' }} />
               </div>
-              <div>
-                <p style={{ fontSize: '11px', fontWeight: '800', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.5px', margin: 0 }}>{stat.label}</p>
-                <h3 style={{ fontSize: '1.5rem', fontWeight: '900', color: '#1E293B', margin: '4px 0 0' }}>{loading ? '...' : stat.value}</h3>
-              </div>
-            </motion.div>
-          ))}
+            ))
+          ) : (
+            [
+              { label: 'Completed Orders',   value: stats.completedOrders,    icon: FileCheck,   color: '#10B981', bg: '#ECFDF5', path: '/deals',     tab: 'completed' },
+              { label: 'Delayed Orders',     value: stats.delayedOrders,      icon: Clock,       color: '#EF4444', bg: '#FEF2F2', path: '/deals',     tab: 'delayed'   },
+              { label: 'Ongoing Inquiries',  value: stats.ongoingInquiries,   icon: Activity,    color: '#4F46E5', bg: '#EEF2FF', path: '/inquiries', tab: 'ongoing'   },
+              { label: 'Completed Inquiries',value: stats.completedInquiries, icon: CheckCircle, color: '#06B6D4', bg: '#ECFEFF', path: '/inquiries', tab: 'completed' },
+            ].map((stat, i) => (
+              <motion.div
+                key={i}
+                variants={item}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.08 }}
+                whileHover={{ y: -5, scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => navigate(stat.path, { state: { tab: stat.tab } })}
+                className="card"
+                style={{
+                  border: '1px solid rgba(255,255,255,0.5)',
+                  boxShadow: '0 10px 25px rgba(0,0,0,0.02)',
+                  background: 'rgba(255,255,255,0.7)',
+                  backdropFilter: 'blur(10px)',
+                  borderRadius: '24px',
+                  padding: '20px',
+                  cursor: 'pointer',
+                }}
+              >
+                <div className="flex justify-between items-start mb-4">
+                  <div className="card-icon" style={{ background: stat.bg, color: stat.color, width: '40px', height: '40px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <stat.icon size={20} />
+                  </div>
+                  <div style={{ fontSize: '10px', fontWeight: '800', color: stat.color, background: `${stat.color}15`, padding: '4px 8px', borderRadius: '6px' }} />
+                </div>
+                <div>
+                  <p style={{ fontSize: '11px', fontWeight: '800', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.5px', margin: 0 }}>{stat.label}</p>
+                  <h3 style={{ fontSize: '1.5rem', fontWeight: '900', color: '#1E293B', margin: '4px 0 0' }}>{stat.value}</h3>
+                </div>
+              </motion.div>
+            ))
+          )}
         </div>
 
         <motion.div variants={item} className="section-group" style={{ marginTop: 24 }}>
@@ -290,6 +324,8 @@ const Dashboard = () => {
                       <img
                         src={src}
                         alt="fabric"
+                        loading="lazy"
+                        decoding="async"
                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                       />
                     </motion.div>
@@ -322,6 +358,8 @@ const Dashboard = () => {
                       <img
                         src={src}
                         alt="fabric"
+                        loading="lazy"
+                        decoding="async"
                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                       />
                     </motion.div>
