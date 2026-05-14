@@ -387,7 +387,7 @@ const Inventory = () => {
 
         {!isFabricEntry && isExpanded && (
           <div className="dispatch-section" style={{ borderTopColor: currentTab.color }}>
-            <h4 style={{ margin: '0 0 14px', color: '#FBBF24', fontWeight: '800', fontSize: '0.95rem' }}>Dispatch Mtr</h4>
+            <h4 style={{ margin: '0 0 14px', color: currentTab.color, fontWeight: '800', fontSize: '0.95rem' }}>Dispatch Mtr</h4>
             <div className="dispatch-form">
               <div className="dispatch-input-group">
                 <p style={{ margin: '0 0 4px', fontSize: '0.7rem', color: '#94A3B8', fontWeight: '700' }}>Entry Date</p>
@@ -396,7 +396,7 @@ const Inventory = () => {
                   onChange={(date) => setDispatchDate(date || new Date())}
                   dateFormat="dd/MM/yyyy"
                   className="form-input"
-                  style={{ backgroundColor: '#111827', color: 'white', border: '1px solid #475569', borderRadius: '10px', padding: '8px 10px', fontSize: '0.85rem', width: '100%' }}
+                  style={{ backgroundColor: '#F8FAFC', color: '#1E293B', border: '1px solid #E2E8F0', borderRadius: '10px', padding: '8px 10px', fontSize: '0.85rem', width: '100%' }}
                 />
               </div>
               <div className="dispatch-input-group-small">
@@ -407,7 +407,7 @@ const Inventory = () => {
                   placeholder="Enter quantity"
                   value={dispatchQty}
                   onChange={(e) => setDispatchQty(e.target.value)}
-                  style={{ width: '100%', backgroundColor: '#111827', color: 'white', border: '1px solid #475569', borderRadius: '10px', padding: '8px 10px', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box' }}
+                  style={{ width: '100%', backgroundColor: '#F8FAFC', color: '#1E293B', border: '1px solid #E2E8F0', borderRadius: '10px', padding: '8px 10px', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box' }}
                 />
               </div>
               <div className="dispatch-input-group">
@@ -417,7 +417,7 @@ const Inventory = () => {
                   placeholder="Enter remark"
                   value={dispatchRemark}
                   onChange={(e) => setDispatchRemark(e.target.value)}
-                  style={{ width: '100%', backgroundColor: '#111827', color: 'white', border: '1px solid #475569', borderRadius: '10px', padding: '8px 10px', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box' }}
+                  style={{ width: '100%', backgroundColor: '#F8FAFC', color: '#1E293B', border: '1px solid #E2E8F0', borderRadius: '10px', padding: '8px 10px', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box' }}
                 />
               </div>
             </div>
@@ -432,8 +432,8 @@ const Inventory = () => {
               Add Dispatch Receipt
             </button>
 
-            <div style={{ borderTop: '1px solid #334155', paddingTop: '14px' }}>
-              <h4 style={{ margin: '0 0 10px', color: '#F8FAFC', fontWeight: '700', fontSize: '0.9rem' }}>Received Quantity History</h4>
+            <div style={{ borderTop: '1px solid #E2E8F0', paddingTop: '14px' }}>
+              <h4 style={{ margin: '0 0 10px', color: '#1E293B', fontWeight: '700', fontSize: '0.9rem' }}>Received Quantity History</h4>
               {entries.length === 0 ? (
                 <p style={{ color: '#64748B', fontSize: '0.85rem', margin: 0 }}>No dispatch receipt entries yet.</p>
               ) : (
@@ -443,19 +443,19 @@ const Inventory = () => {
                       key={idx}
                       style={{
                         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                        padding: '10px 0', borderBottom: idx < entries.length - 1 ? '1px solid #334155' : 'none'
+                        padding: '10px 0', borderBottom: idx < entries.length - 1 ? '1px solid #E2E8F0' : 'none'
                       }}
                     >
                       <div style={{ flex: 1 }}>
-                        <span style={{ color: '#94A3B8', fontSize: '0.85rem' }}>{formatDate(entry.entryDate)}</span>
-                        {entry.remark && <span style={{ color: '#64748B', fontSize: '0.8rem', marginLeft: '12px' }}>• {entry.remark}</span>}
+                        <span style={{ color: '#64748B', fontSize: '0.85rem' }}>{formatDate(entry.entryDate)}</span>
+                        {entry.remark && <span style={{ color: '#475569', fontSize: '0.8rem', marginLeft: '12px' }}>• {entry.remark}</span>}
                       </div>
-                      <span style={{ fontWeight: '700', color: '#F8FAFC' }}>{entry.quantity} Mtr</span>
+                      <span style={{ fontWeight: '700', color: '#1E293B' }}>{entry.quantity} Mtr</span>
                     </div>
                   ))}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '10px', borderTop: '1px solid #475569', marginTop: '6px' }}>
-                    <span style={{ color: '#94A3B8', fontWeight: '700' }}>Dispatch Qty</span>
-                    <span style={{ color: '#FBBF24', fontWeight: '800' }}>{dispatched} Mtr</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '10px', borderTop: '1px solid #E2E8F0', marginTop: '6px' }}>
+                    <span style={{ color: '#64748B', fontWeight: '700' }}>Dispatch Qty</span>
+                    <span style={{ color: '#D97706', fontWeight: '800' }}>{dispatched} Mtr</span>
                   </div>
                 </>
               )}
