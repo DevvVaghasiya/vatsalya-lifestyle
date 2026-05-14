@@ -454,7 +454,7 @@ const Inventory = () => {
                     </div>
                   ))}
                   <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '10px', borderTop: '1px solid #475569', marginTop: '6px' }}>
-                    <span style={{ color: '#94A3B8', fontWeight: '700' }}>Total received</span>
+                    <span style={{ color: '#94A3B8', fontWeight: '700' }}>Dispatch Qty</span>
                     <span style={{ color: '#FBBF24', fontWeight: '800' }}>{dispatched} Mtr</span>
                   </div>
                 </>
