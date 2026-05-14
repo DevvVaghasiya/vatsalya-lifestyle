@@ -14,8 +14,5 @@ RUN npm run build
 # Production stage
 FROM nginx:stable-alpine
 COPY --from=build-stage /app/dist /usr/share/nginx/html
-# Copy a custom nginx config if needed, but default is usually fine for SPAs with simple routing
-# If you have React Router, you might need a custom nginx config to handle client-side routing.
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+COPY nginx.conf /etc/nginx/conf.d/default.conf.template
+CMD ["/bin/sh", "-c", "envsubst '${PORT}' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
