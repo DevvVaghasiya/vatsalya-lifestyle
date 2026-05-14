@@ -73,12 +73,12 @@ public class InquiryController {
                     inquiry.setSampleBooking(details.getSampleBooking());
                     inquiry.setDyingPrintingMill(details.getDyingPrintingMill());
                     inquiry.setValueAdditionMill(details.getValueAdditionMill());
-                    inquiry.setRedimate(details.getRedimate());
+                    inquiry.setReadymade(details.getReadymade());
                     
                     inquiry.setSubmissionDate(details.getSubmissionDate());
                     inquiry.setArticleNo(details.getArticleNo());
                     inquiry.setFabricName(details.getFabricName());
-                    inquiry.setGsn(details.getGsn());
+                    inquiry.setSubmissionGsm(details.getSubmissionGsm());
                     inquiry.setWidth(details.getWidth());
                     inquiry.setSubmissionCountConst(details.getSubmissionCountConst());
                     inquiry.setComposition(details.getComposition());

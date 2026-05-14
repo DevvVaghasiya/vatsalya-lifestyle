@@ -100,7 +100,7 @@ const generateInquiryPDF = (item) => {
     row("Sample Booking", item.sampleBooking);
     row("Dying / Printing Mill", item.dyingPrintingMill);
     row("Value Addition Mill", item.valueAdditionMill);
-    row("Redimate", item.redimate);
+    row("Readymade", item.readymade);
     gap();
 
     if (y > 200) { doc.addPage(); y = 20; }
@@ -110,7 +110,7 @@ const generateInquiryPDF = (item) => {
     row("Submission Date", formatDateShort(item.submissionDate || item.createdAt));
     row("Article No", item.articleNo);
     row("Fabric Name", item.fabricName);
-    row("GSN", item.gsn);
+    row("GSM", item.submissionGsm);
     row("Width", item.width);
     row("Count / Const", item.submissionCountConst);
     row("Composition", item.composition);

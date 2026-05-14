@@ -237,7 +237,7 @@ const InquiryDetails = () => {
         ['Sample Booking', inquiry.sampleBooking || 'N/A'],
         ['Dying/Printing Mill', inquiry.dyingPrintingMill || 'N/A'],
         ['Value Addition', inquiry.valueAdditionMill || 'N/A'],
-        ['Redimate', inquiry.redimate || 'N/A']
+        ['Readymade', inquiry.readymade || 'N/A']
       ];
 
       processingData.forEach(([label, value]) => {
@@ -275,7 +275,7 @@ const InquiryDetails = () => {
         ['Date', formatDisplayDate(inquiry.submissionDate || inquiry.createdAt)],
         ['Article No', inquiry.articleNo || 'N/A'],
         ['Fabric Name', inquiry.fabricName || 'N/A'],
-        ['GSN', inquiry.gsn || 'N/A'],
+        ['GSM', inquiry.submissionGsm || 'N/A'],
         ['Width', inquiry.width || 'N/A'],
         ['Count/Const', inquiry.submissionCountConst || 'N/A'],
         ['Composition', inquiry.composition || 'N/A']
@@ -425,7 +425,7 @@ const InquiryDetails = () => {
           </div>
           <div className="detail-row">
             <DetailItem label="Value Addition" value={inquiry.valueAdditionMill} icon={Info} name="valueAdditionMill" isEditing={isEditing} editData={editData} onChange={handleChange} />
-            <DetailItem label="Redimate" value={inquiry.redimate} icon={CheckCircle} name="redimate" isEditing={isEditing} editData={editData} onChange={handleChange} />
+            <DetailItem label="Readymade" value={inquiry.readymade} icon={CheckCircle} name="readymade" isEditing={isEditing} editData={editData} onChange={handleChange} />
           </div>
         </SectionWrapper>
 
@@ -438,7 +438,7 @@ const InquiryDetails = () => {
 
           <div className="detail-row">
             <DetailItem label="Fabric Name" value={inquiry.fabricName} icon={Package} name="fabricName" isEditing={isEditing} editData={editData} onChange={handleChange} />
-            <DetailItem label="GSN" value={inquiry.gsn} icon={Hash} name="gsn" isEditing={isEditing} editData={editData} onChange={handleChange} />
+            <DetailItem label="GSM" value={inquiry.submissionGsm} icon={Hash} name="submissionGsm" isEditing={isEditing} editData={editData} onChange={handleChange} />
           </div>
 
           <div className="detail-row">

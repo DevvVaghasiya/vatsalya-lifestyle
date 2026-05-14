@@ -19,11 +19,11 @@ const AddInquiry = () => {
     sampleBooking: '',
     dyingPrintingMill: '',
     valueAdditionMill: '',
-    redimate: '',
+    readymade: '',
     submissionDate: new Date().toISOString().split('T')[0],
     articleNo: '',
     fabricName: '',
-    gsn: '',
+    submissionGsm: '',
     width: '',
     submissionCountConst: '',
     composition: '',
@@ -233,8 +233,8 @@ const AddInquiry = () => {
                     <input type="text" className="form-input" name="valueAdditionMill" placeholder="Enter details" value={formData.valueAdditionMill} onChange={handleChange} />
                   </div>
                   <div className="form-group">
-                    <label className="form-label">Redimate</label>
-                    <input type="text" className="form-input" name="redimate" placeholder="Enter details" value={formData.redimate} onChange={handleChange} />
+                    <label className="form-label">Readymade</label>
+                    <input type="text" className="form-input" name="readymade" placeholder="Enter details" value={formData.readymade} onChange={handleChange} />
                   </div>
                 </div>
               </div>
@@ -273,8 +273,8 @@ const AddInquiry = () => {
                     <input type="text" className="form-input" name="fabricName" placeholder="Enter fabric name" value={formData.fabricName} onChange={handleChange} />
                   </div>
                   <div className="form-group">
-                    <label className="form-label">GSN</label>
-                    <input type="text" className="form-input" name="gsn" placeholder="Enter GSN" value={formData.gsn} onChange={handleChange} />
+                    <label className="form-label">GSM</label>
+                    <input type="text" className="form-input" name="submissionGsm" placeholder="Enter GSM" value={formData.submissionGsm} onChange={handleChange} />
                   </div>
                 </div>
 

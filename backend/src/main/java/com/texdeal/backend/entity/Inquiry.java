@@ -2,7 +2,6 @@ package com.texdeal.backend.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -35,13 +34,13 @@ public class Inquiry {
     private String sampleBooking;
     private String dyingPrintingMill;
     private String valueAdditionMill;
-    private String redimate;
+    private String readymade;
 
     // Submission Section
     private String submissionDate;
     private String articleNo;
     private String fabricName;
-    private String gsn;
+    private String submissionGsm;
     private String width;
     private String submissionCountConst;
     private String composition;
@@ -84,16 +83,16 @@ public class Inquiry {
     public void setDyingPrintingMill(String dyingPrintingMill) { this.dyingPrintingMill = dyingPrintingMill; }
     public String getValueAdditionMill() { return valueAdditionMill; }
     public void setValueAdditionMill(String valueAdditionMill) { this.valueAdditionMill = valueAdditionMill; }
-    public String getRedimate() { return redimate; }
-    public void setRedimate(String redimate) { this.redimate = redimate; }
+    public String getReadymade() { return readymade; }
+    public void setReadymade(String readymade) { this.readymade = readymade; }
     public String getSubmissionDate() { return submissionDate; }
     public void setSubmissionDate(String submissionDate) { this.submissionDate = submissionDate; }
     public String getArticleNo() { return articleNo; }
     public void setArticleNo(String articleNo) { this.articleNo = articleNo; }
     public String getFabricName() { return fabricName; }
     public void setFabricName(String fabricName) { this.fabricName = fabricName; }
-    public String getGsn() { return gsn; }
-    public void setGsn(String gsn) { this.gsn = gsn; }
+    public String getSubmissionGsm() { return submissionGsm; }
+    public void setSubmissionGsm(String submissionGsm) { this.submissionGsm = submissionGsm; }
     public String getWidth() { return width; }
     public void setWidth(String width) { this.width = width; }
     public String getSubmissionCountConst() { return submissionCountConst; }
