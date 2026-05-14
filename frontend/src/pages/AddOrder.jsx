@@ -44,6 +44,8 @@ const AddOrder = () => {
     countConst: '',
     design: '',
     remark: '',
+    days: '',
+    expectedCompletionDate: '',
     // Fabric Booking fields
     weaver: '',
     bookingReferenceNo: '',
@@ -110,7 +112,19 @@ const AddOrder = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
+    setFormData(prev => {
+      const updated = { ...prev, [name]: type === 'checkbox' ? checked : value };
+
+      // Auto-calculate completion date if orderDate or days change
+      if (name === 'orderDate' || name === 'days') {
+        if (updated.orderDate && updated.days) {
+          const date = new Date(updated.orderDate);
+          date.setDate(date.getDate() + parseInt(updated.days || 0));
+          updated.expectedCompletionDate = date.toISOString().split('T')[0];
+        }
+      }
+      return updated;
+    });
   };
 
   const addDyeQuantityReceipt = () => {
@@ -213,7 +227,7 @@ const AddOrder = () => {
       bookingWidth: formData.bookingWidth,
       finishGsm: formData.finishGsm,
       bookingComposition: formData.bookingComposition,
-      completionDate: formData.completionDate,
+      completionDate: formData.expectedCompletionDate || formData.completionDate,
       fabricJobWorkMill: formData.fabricJobWorkMill,
       dyeMillName: formData.dyeMillName,
       dyeJobCharge: formData.dyeJobCharge,
@@ -319,16 +333,32 @@ const AddOrder = () => {
               </select>
             </div>
 
+            <div className="form-group" style={{ marginBottom: '16px' }}>
+              <label className="form-label">Style No</label>
+              <input type="text" className="form-input" name="styleNo" placeholder="ART-5001" value={formData.styleNo} onChange={handleChange} style={{ backgroundColor: '#F8FAFC', borderRadius: '16px' }} />
+            </div>
+
             <div className="flex gap-4 mb-4">
-              <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
-                <label className="form-label">Style No</label>
-                <input type="text" className="form-input" name="styleNo" placeholder="ART-5001" value={formData.styleNo} onChange={handleChange} style={{ backgroundColor: '#F8FAFC', borderRadius: '16px' }} />
-              </div>
               <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
                 <label className="form-label">Order Date</label>
                 <DatePicker
                   selected={formData.orderDate ? new Date(formData.orderDate) : null}
                   onChange={(date) => handleChange({ target: { name: 'orderDate', value: date ? date.toISOString().split('T')[0] : '' } })}
+                  dateFormat="dd/MM/yyyy"
+                  className="form-input"
+                  placeholderText="dd/mm/yyyy"
+                  style={{ backgroundColor: '#F8FAFC', borderRadius: '16px' }}
+                />
+              </div>
+              <div className="form-group" style={{ flex: 0.4, marginBottom: 0 }}>
+                <label className="form-label">Days</label>
+                <input type="number" className="form-input" name="days" placeholder="0" value={formData.days} onChange={handleChange} style={{ backgroundColor: '#F8FAFC', borderRadius: '16px' }} />
+              </div>
+              <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
+                <label className="form-label">Complete Date</label>
+                <DatePicker
+                  selected={formData.expectedCompletionDate ? new Date(formData.expectedCompletionDate) : null}
+                  onChange={(date) => handleChange({ target: { name: 'expectedCompletionDate', value: date ? date.toISOString().split('T')[0] : '' } })}
                   dateFormat="dd/MM/yyyy"
                   className="form-input"
                   placeholderText="dd/mm/yyyy"
