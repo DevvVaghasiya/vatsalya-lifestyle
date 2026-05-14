@@ -140,7 +140,7 @@ const Dashboard = () => {
             </div>
           </div>
           <p className="mb-8 font-semibold text-[#64748B]" style={{ fontSize: '1.05rem', lineHeight: 1.6, maxWidth: '400px' }}>
-             Manage your textile empire with precision. Let your business flow like fabric.
+             Textiles That Define Your Vision.
           </p>
 
           <div className="flex gap-4">
