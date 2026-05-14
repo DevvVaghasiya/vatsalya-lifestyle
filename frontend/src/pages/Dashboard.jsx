@@ -334,25 +334,97 @@ const Dashboard = () => {
           </div>
         </motion.div>
 
-        {/* Logo below carousel */}
-        <motion.div variants={item} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 32, marginBottom: 40, gap: 0 }}>
-          <img src={logo3} alt="Vatsalya Logo" style={{ maxWidth: '480px', width: '100%', objectFit: 'contain' }} />
-          <a
-            href="https://www.vatsalyalifestyle.co.in"
-            target="_blank"
-            rel="noopener noreferrer"
+        {/* Logo + URL below carousel */}
+        <motion.div
+          variants={item}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            marginTop: 32,
+            marginBottom: 40,
+            gap: 16,
+          }}
+        >
+          {/* Logo card */}
+          <motion.div
+            whileHover={{ scale: 1.02, y: -4 }}
+            transition={{ type: 'spring', stiffness: 260, damping: 20 }}
             style={{
-              fontSize: '11px',
-              fontWeight: '600',
-              color: '#4B47A8',
-              textDecoration: 'none',
-              letterSpacing: '0.8px',
-              marginTop: '-10px',
-              marginLeft: '-30px',
+              background: 'rgba(255,255,255,0.6)',
+              backdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255,255,255,0.7)',
+              borderRadius: '28px',
+              padding: '28px 40px 20px',
+              boxShadow: '0 20px 60px rgba(79,70,229,0.08), 0 4px 16px rgba(0,0,0,0.04)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 14,
+              maxWidth: '420px',
+              width: '100%',
             }}
           >
-            www.vatsalyalifestyle.co.in
-          </a>
+            <img
+              src={logo3}
+              alt="Vatsalya Lifestyle LLP"
+              style={{
+                maxWidth: '320px',
+                width: '100%',
+                objectFit: 'contain',
+                filter: 'drop-shadow(0 8px 24px rgba(79,70,229,0.15))',
+              }}
+            />
+
+            {/* Divider */}
+            <div style={{
+              width: '60px',
+              height: '2px',
+              borderRadius: '2px',
+              background: 'linear-gradient(90deg, #4F46E5, #818CF8)',
+              opacity: 0.4,
+            }} />
+
+            {/* URL link */}
+            <motion.a
+              href="https://www.vatsalyalifestyle.co.in"
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.04 }}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+                fontSize: '12px',
+                fontWeight: '700',
+                color: '#4F46E5',
+                textDecoration: 'none',
+                letterSpacing: '0.6px',
+                padding: '8px 18px',
+                borderRadius: '100px',
+                background: 'rgba(79,70,229,0.07)',
+                border: '1px solid rgba(79,70,229,0.15)',
+                transition: 'all 0.2s ease',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = 'rgba(79,70,229,0.12)';
+                e.currentTarget.style.boxShadow = '0 4px 16px rgba(79,70,229,0.15)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = 'rgba(79,70,229,0.07)';
+                e.currentTarget.style.boxShadow = 'none';
+              }}
+            >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+              www.vatsalyalifestyle.co.in
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.6 }}>
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+              </svg>
+            </motion.a>
+          </motion.div>
         </motion.div>
       </motion.div>
       </div>
