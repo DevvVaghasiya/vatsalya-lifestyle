@@ -17,8 +17,15 @@ import fab8  from '../assets/fabric8.jpeg';
 import fab9  from '../assets/fabric9.jpeg';
 import fab10 from '../assets/fabric10.jpeg';
 import fab11 from '../assets/fabric11.jpeg';
+import fab12 from '../assets/fabric12.jpeg';
+import fab13 from '../assets/fabric13.jpeg';
+import fab14 from '../assets/fabric14.jpeg';
+import fab15 from '../assets/fabric15.jpeg';
+import fab16 from '../assets/fabric16.jpeg';
 
-const fabricImages = [fab1, fab2, fab3, fab4, fab5, fab6, fab7, fab8, fab9, fab10, fab11];
+// Row 1: fab1–fab8, Row 2: fab9–fab16 (no overlap between rows)
+const row1Images = [fab1, fab2, fab3, fab4, fab5, fab6, fab7, fab8];
+const row2Images = [fab9, fab10, fab11, fab12, fab13, fab14, fab15, fab16];
 
 const data = [
   { name: '1 May', sales: 22000 },
@@ -260,7 +267,7 @@ const Dashboard = () => {
                   transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
                   className="flex gap-6 px-4"
                 >
-                  {[...fabricImages, ...fabricImages].map((src, i) => (
+                  {[...row1Images, ...row1Images].map((src, i) => (
                     <motion.div
                       key={i}
                       whileHover={{ scale: 1.05, y: -5 }}
@@ -292,7 +299,7 @@ const Dashboard = () => {
                   transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
                   className="flex gap-6 px-4"
                 >
-                  {[...fabricImages].reverse().concat([...fabricImages].reverse()).map((src, i) => (
+                  {[...row2Images, ...row2Images].map((src, i) => (
                     <motion.div
                       key={i}
                       whileHover={{ scale: 1.05, y: -5 }}
