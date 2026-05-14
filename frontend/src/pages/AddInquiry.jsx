@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Send, Plus, User, Info, Hash, Palette, MessageSquare, Briefcase, FileCheck, Calendar, Ruler, Layers } from 'lucide-react';
+/* eslint-disable react-hooks/set-state-in-effect */
+import { useState, useEffect } from 'react';
+import { ArrowLeft, Send, Plus, User, Briefcase, FileCheck } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { API_BASE } from '../utils/api';
+import api from '../utils/api';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -31,35 +31,35 @@ const AddInquiry = () => {
   });
   const [clients, setClients] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
-    setLoading(true);
-    axios.get(`${API_BASE}/api/clients`)
-      .then(async (res) => {
+    const fetchClients = async () => {
+      setLoading(true);
+      try {
+        let res = await api.get(`/api/clients`);
         let dbClients = res.data;
         if (dbClients.length === 0) {
           const localClients = JSON.parse(localStorage.getItem('clients') || '[]');
           if (localClients.length > 0) {
             for (const local of localClients) {
-              await axios.post(`${API_BASE}/api/clients`, {
+              await api.post(`/api/clients`, {
                 name: local.name,
                 gstIn: local.gstNumber || local.gstIn
               });
             }
-            const updatedRes = await axios.get(`${API_BASE}/api/clients`);
+            const updatedRes = await api.get(`/api/clients`);
             dbClients = updatedRes.data;
             localStorage.removeItem('clients');
           }
         }
         setClients(dbClients);
-        setError(null);
-      })
-      .catch(err => {
+      } catch (err) {
         console.error('Error fetching clients:', err);
-        setError('Failed to load clients. Please check if backend is running.');
-      })
-      .finally(() => setLoading(false));
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchClients();
 
     const draft = localStorage.getItem('inquiry_draft');
     if (draft) {
@@ -89,7 +89,7 @@ const AddInquiry = () => {
         ...formData
       };
 
-      await axios.post(`${API_BASE}/api/inquiries`, payload);
+      await api.post(`/api/inquiries`, payload);
       localStorage.removeItem('inquiry_draft');
       alert('Inquiry submitted successfully!');
       navigate('/inquiries');
@@ -106,17 +106,7 @@ const AddInquiry = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const SectionHeader = ({ icon: Icon, title, color, bgColor }) => (
-    <div className="flex items-center gap-3 mb-6">
-      <div style={{ backgroundColor: bgColor, padding: '12px', borderRadius: '16px', color: color }}>
-        <Icon size={24} />
-      </div>
-      <div>
-        <h2 style={{ fontSize: '1.2rem', fontWeight: '800', color: '#1E293B', margin: 0 }}>{title}</h2>
-        <div style={{ height: '3px', width: '30px', backgroundColor: color, borderRadius: '2px', marginTop: '4px' }}></div>
-      </div>
-    </div>
-  );
+
 
   return (
     <div className="page-shell">

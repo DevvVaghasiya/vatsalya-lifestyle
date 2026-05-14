@@ -1,9 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
-import { API_BASE } from '../utils/api';
+import api from '../utils/api';
 
-const API = `${API_BASE}/api/inventory`;
+
+const Item = ({ label, value }) => (
+  <div style={{ marginBottom: 12 }}>
+    <p style={{ margin: 0, fontSize: 12, color: '#64748B', fontWeight: 700 }}>{label}</p>
+    <p style={{ margin: '4px 0 0', fontSize: 16, color: '#1E293B', fontWeight: 600 }}>{value || 'N/A'}</p>
+  </div>
+);
 
 const FabricEntryPublic = () => {
   const { id } = useParams();
@@ -16,7 +21,7 @@ const FabricEntryPublic = () => {
       setLoading(true);
       setError('');
       try {
-        const res = await axios.get(`${API}/${id}`);
+        const res = await api.get(`/api/inventory/${id}`);
         setEntry(res.data || null);
       } catch {
         setError('Fabric entry not found');
@@ -30,12 +35,6 @@ const FabricEntryPublic = () => {
   if (loading) return <div style={{ padding: 24 }}>Loading...</div>;
   if (error || !entry) return <div style={{ padding: 24 }}>{error || 'No data found'}</div>;
 
-  const Item = ({ label, value }) => (
-    <div style={{ marginBottom: 12 }}>
-      <p style={{ margin: 0, fontSize: 12, color: '#64748B', fontWeight: 700 }}>{label}</p>
-      <p style={{ margin: '4px 0 0', fontSize: 16, color: '#1E293B', fontWeight: 600 }}>{value || 'N/A'}</p>
-    </div>
-  );
 
   return (
     <div style={{ minHeight: '100vh', background: '#F8FAFC', padding: 16 }}>

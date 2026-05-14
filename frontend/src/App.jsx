@@ -1,4 +1,3 @@
-import React from 'react';
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import DesktopHeader from './components/DesktopHeader';
 import Dashboard from './pages/Dashboard';
@@ -19,6 +18,7 @@ import Clients from './pages/Clients';
 import AddClient from './pages/AddClient';
 import FabricEntryPublic from './pages/FabricEntryPublic';
 import FabricEntryPublicPdf from './pages/FabricEntryPublicPdf';
+import PublicInventoryView from './pages/PublicInventoryView';
 
 const ProtectedRoute = ({ children }) => {
   const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
@@ -38,7 +38,6 @@ const HomeRoute = () => {
 
 function App() {
   const location = useLocation();
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
 
   // Auth pages don't show the navigation header
   const isAuthPage = ['/login', '/signup'].some(path => location.pathname.includes(path));
@@ -58,6 +57,7 @@ function App() {
             <Route path="/public/fabric-entry/:id" element={<FabricEntryPublic />} />
             <Route path="/public/fabric-entry/:id/pdf" element={<FabricEntryPublicPdf />} />
             <Route path="/f/:id/p" element={<FabricEntryPublicPdf />} />
+            <Route path="/public/inventory/:id" element={<PublicInventoryView />} />
 
             <Route path="/" element={<ProtectedRoute><HomeRoute /></ProtectedRoute>} />
             <Route path="/deals" element={<ProtectedRoute><Deals /></ProtectedRoute>} />

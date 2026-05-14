@@ -2,6 +2,25 @@
 
 Full-stack enterprise textile management portal for managing orders, inquiries, inventory, clients, and dispatch operations.
 
+## Deployment (Docker)
+
+The project is containerized using Docker. This is the recommended way to deploy the entire stack.
+
+### Prerequisites
+- Docker and Docker Compose installed.
+
+### Run with Docker Compose
+```bash
+docker-compose up --build
+```
+
+This will start:
+- **MySQL** on port `3307` (mapped from 3306)
+- **Backend** on port `8080`
+- **Frontend** on port `80`
+
+Access the app at `http://localhost`.
+
 ## Tech Stack
 
 | Layer | Technology |

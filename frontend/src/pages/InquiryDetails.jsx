@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
-  ArrowLeft, MessageSquare, Clock, CheckCircle, XCircle,
+  ArrowLeft, Clock, CheckCircle, XCircle,
   User, Package, Calendar, Info, Hash, Palette,
   Briefcase, FileCheck, Edit3, Save, X, Download
 } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
+import api from '../utils/api';
 import jsPDF from 'jspdf';
-import { API_BASE } from '../utils/api';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -18,7 +17,7 @@ const formatDisplayDate = (dateStr) => {
     const date = new Date(dateStr);
     if (isNaN(date.getTime())) return dateStr;
     return date.toLocaleDateString('en-GB');
-  } catch (e) {
+  } catch {
     return dateStr;
   }
 };
@@ -87,13 +86,25 @@ const InquiryDetails = () => {
   const [editData, setEditData] = useState({});
 
   useEffect(() => {
+    const fetchInquiryDetails = async () => {
+      setLoading(true);
+      try {
+        const res = await api.get(`/api/inquiries/${id}`);
+        setInquiry(res.data);
+        setEditData(res.data);
+      } catch (err) {
+        console.error('Error fetching inquiry details:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchInquiryDetails();
   }, [id]);
 
   const fetchInquiryDetails = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`${API_BASE}/api/inquiries/${id}`);
+      const res = await api.get(`/api/inquiries/${id}`);
       setInquiry(res.data);
       setEditData(res.data);
     } catch (err) {
@@ -106,7 +117,7 @@ const InquiryDetails = () => {
   const handleUpdate = async () => {
     const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
     try {
-      await axios.put(`${API_BASE}/api/inquiries/${id}`, {
+      await api.put(`/api/inquiries/${id}`, {
         ...editData,
         lastEditedBy: { id: currentUser.id }
       });
@@ -121,7 +132,7 @@ const InquiryDetails = () => {
 
   const updateStatus = async (newStatus) => {
     try {
-      await axios.put(`${API_BASE}/api/inquiries/${id}/status?status=${newStatus}`);
+      await api.put(`/api/inquiries/${id}/status?status=${newStatus}`);
       alert(`Inquiry ${newStatus} successfully!`);
       fetchInquiryDetails();
     } catch (err) {
@@ -137,9 +148,7 @@ const InquiryDetails = () => {
       const pageHeight = doc.internal.pageSize.getHeight();
       let yPosition = 15;
       
-      const addLine = () => {
-        yPosition += 1;
-      };
+
 
       // Header with gradient effect
       doc.setFillColor(79, 70, 229);

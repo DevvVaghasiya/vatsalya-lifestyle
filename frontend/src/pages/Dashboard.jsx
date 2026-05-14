@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Bell, ChevronDown, ChevronRight, TrendingUp, Package, DollarSign, FileText, Menu, Plus, ArrowRight, Clock, Activity, Zap } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { ChevronRight, TrendingUp, Package, DollarSign, FileText, Plus, ArrowRight, Activity, Zap } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import axios from 'axios';
-import { API_BASE } from '../utils/api';
+import api from '../utils/api';
 
 const data = [
   { name: '1 May', sales: 22000 },
@@ -28,17 +27,17 @@ const Dashboard = () => {
   }, []);
 
 
-  const [stats, setStats] = React.useState({
+  const [stats, setStats] = useState({
     totalDeals: 0,
     pendingDues: 0,
     sales: 0,
     lowStock: 0,
   });
-  const [loading, setLoading] = React.useState(true);
+  const [loading, setLoading] = useState(true);
 
-  React.useEffect(() => {
-    axios
-      .get(`${API_BASE}/api/dashboard/stats`)
+  useEffect(() => {
+    api
+      .get(`/api/dashboard/stats`)
       .then((res) => {
         setStats(res.data);
         setLoading(false);

@@ -1,14 +1,13 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import {
-  ArrowLeft, User, Edit3, Lock, Settings, Cloud, Info,
+  ArrowLeft, User, Edit3, Lock,
   LogOut, ChevronRight, Camera, Users, ClipboardList, ShieldCheck,
   Loader2, CheckCircle2
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import axios from 'axios';
+import api from '../utils/api';
 import { uploadToCloudinary } from '../utils/cloudinary';
-import { API_BASE } from '../utils/api';
 
 /**
  * Persist profile picture URL to:
@@ -26,8 +25,8 @@ const saveProfilePicture = async (user, url) => {
   // 3. Sync to backend
   if (user.id) {
     try {
-      await axios.put(
-        `${API_BASE}/api/users/${user.id}`,
+      await api.put(
+        `/api/users/${user.id}`,
         { ...user, profilePictureUrl: url }
       );
     } catch (err) {

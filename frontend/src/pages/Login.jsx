@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Phone, Lock, Eye, EyeOff, Loader2, ArrowRight, ShieldCheck, Zap } from 'lucide-react';
+import { Phone, Lock, Eye, EyeOff, Loader2, ArrowRight, ShieldCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import axios from 'axios';
-import { API_BASE } from '../utils/api';
+import api from '../utils/api';
 
 const Login = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -18,7 +17,7 @@ const Login = () => {
     setLoading(true);
     setError('');
     try {
-      const response = await axios.post(`${API_BASE}/api/auth/login`, { phoneNumber, password });
+      const response = await api.post(`/api/auth/login`, { phoneNumber, password });
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
       localStorage.setItem('isAuthenticated', 'true');

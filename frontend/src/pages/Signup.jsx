@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { User, Phone, Lock, Eye, EyeOff, Building2, ArrowLeft, Loader2, ShieldCheck, CheckCircle2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import axios from 'axios';
-import { API_BASE } from '../utils/api';
+import api from '../utils/api';
 
 const fieldStyle = {
   width: '100%', padding: '14px 16px 14px 44px',
@@ -35,7 +34,7 @@ const Signup = () => {
     setLoading(true);
     setError('');
     try {
-      const response = await axios.post(`${API_BASE}/api/auth/signup`, {
+      const response = await api.post(`/api/auth/signup`, {
         name, phoneNumber, businessName, password, role: 'USER'
       });
       localStorage.setItem('token', response.data.token);

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
-import { Plus, Package, MessageSquare, Home, Users, Bell, LogOut, Layers } from 'lucide-react';
+import { Plus, Package, MessageSquare, Home, Users, LogOut, Layers } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const DesktopHeader = () => {

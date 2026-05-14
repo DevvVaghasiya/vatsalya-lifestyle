@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Plus, Search, ChevronRight, Building2, Hash, Briefcase } from 'lucide-react';
+/* eslint-disable react-hooks/set-state-in-effect */
+import { useState, useEffect } from 'react';
+import { ArrowLeft, Plus, Search, Building2, Hash, Briefcase, RefreshCw, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import axios from 'axios';
-import { API_BASE } from '../utils/api';
+import api from '../utils/api';
 
 const AVATAR_COLORS = [
   ['#4F46E5', '#EEF2FF'],
@@ -15,9 +15,11 @@ const AVATAR_COLORS = [
   ['#16A34A', '#F0FDF4'],
 ];
 
-const getAvatarColor = (name = '') => {
-  const idx = name.charCodeAt(0) % AVATAR_COLORS.length;
-  return AVATAR_COLORS[idx];
+const getAvatarColor = (name) => {
+  const str = name || '';
+  if (!str) return AVATAR_COLORS[0];
+  const idx = str.charCodeAt(0) % AVATAR_COLORS.length;
+  return AVATAR_COLORS[idx] || AVATAR_COLORS[0];
 };
 
 const container = {
@@ -34,23 +36,23 @@ const Clients = () => {
   const [clients, setClients] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => { fetchClients(); }, []);
+  const [error, setError] = useState(null);
 
   const fetchClients = async () => {
     setLoading(true);
+    setError(null);
     try {
-      const res = await axios.get(`${API_BASE}/api/clients`);
+      const res = await api.get('/api/clients');
       if (res.data.length === 0) {
         const localClients = JSON.parse(localStorage.getItem('clients') || '[]');
         if (localClients.length > 0) {
           for (const local of localClients) {
-            await axios.post(`${API_BASE}/api/clients`, {
+            await api.post('/api/clients', {
               name: local.name,
               gstIn: local.gstNumber || local.gstIn
             });
           }
-          const updatedRes = await axios.get(`${API_BASE}/api/clients`);
+          const updatedRes = await api.get('/api/clients');
           setClients(updatedRes.data);
           localStorage.removeItem('clients');
           return;
@@ -59,8 +61,26 @@ const Clients = () => {
       setClients(res.data);
     } catch (err) {
       console.error('Error fetching clients:', err);
+      setError('Unable to connect to server. The backend may be starting up — please retry in a moment.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  useEffect(() => { fetchClients(); }, []);
+
+  const handleDeleteClient = async (e, id, name) => {
+    e.stopPropagation();
+    if (!window.confirm(`Are you sure you want to remove client "${name || 'Unknown'}"?`)) {
+      return;
+    }
+    try {
+      await api.delete(`/api/clients/${id}`);
+      setClients(prev => prev.filter(c => c.id !== id));
+    } catch (err) {
+      console.error('Error deleting client:', err);
+      const msg = err.response?.data?.error || 'Unable to delete client. They may have active orders or inquiries associated with them.';
+      alert(msg);
     }
   };
 
@@ -190,7 +210,48 @@ const Clients = () => {
         </motion.div>
 
         {/* ── Client List ── */}
-        {loading ? (
+        {error ? (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            style={{
+              textAlign: 'center', padding: '52px 32px',
+              background: 'white', borderRadius: 24,
+              border: '2px dashed #FCA5A5'
+            }}
+          >
+            <div style={{
+              width: 64, height: 64, borderRadius: '50%',
+              background: '#FEF2F2',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              margin: '0 auto 16px'
+            }}>
+              <RefreshCw size={28} color="#EF4444" />
+            </div>
+            <h3 style={{ fontWeight: 800, fontSize: '1.05rem', color: 'var(--text)', margin: '0 0 8px' }}>
+              Connection Issue
+            </h3>
+            <p style={{ fontSize: '0.85rem', color: 'var(--muted)', margin: '0 0 20px', maxWidth: 360, marginLeft: 'auto', marginRight: 'auto' }}>
+              {error}
+            </p>
+            <motion.button
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.96 }}
+              onClick={fetchClients}
+              style={{
+                background: 'linear-gradient(135deg, var(--primary), var(--accent))',
+                color: 'white', border: 'none',
+                padding: '12px 28px', borderRadius: 14,
+                fontWeight: 800, fontSize: '0.9rem',
+                cursor: 'pointer', display: 'inline-flex',
+                alignItems: 'center', gap: 8,
+                boxShadow: '0 8px 20px var(--primary-glow)'
+              }}
+            >
+              <RefreshCw size={16} /> Retry
+            </motion.button>
+          </motion.div>
+        ) : loading ? (
           <div style={{ textAlign: 'center', padding: '60px 0' }}>
             <div className="spinner" style={{ marginBottom: 12 }} />
             <p style={{ color: 'var(--muted)', fontWeight: 600 }}>Loading clients...</p>
@@ -254,7 +315,7 @@ const Clients = () => {
               style={{ display: 'flex', flexDirection: 'column', gap: 12 }}
             >
               <AnimatePresence>
-                {filtered.map((client, idx) => {
+                {filtered.map((client) => {
                   const [fg, bg] = getAvatarColor(client.name);
                   const initials = (client.name || '?')
                     .split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
@@ -265,15 +326,12 @@ const Clients = () => {
                       variants={cardAnim}
                       layout
                       whileHover={{ y: -2, boxShadow: '0 12px 32px rgba(15,23,42,0.08)' }}
-                      whileTap={{ scale: 0.99 }}
-                      onClick={() => navigate(`/customer/${client.id}`)}
                       style={{
                         background: 'white',
                         borderRadius: 20,
                         padding: '18px 20px',
                         border: '1px solid var(--border)',
                         boxShadow: 'var(--shadow-sm)',
-                        cursor: 'pointer',
                         display: 'flex',
                         alignItems: 'center',
                         gap: 16,
@@ -335,14 +393,23 @@ const Clients = () => {
                         </div>
                       </div>
 
-                      {/* Arrow */}
-                      <div style={{
-                        width: 32, height: 32, borderRadius: 10,
-                        background: 'var(--bg)',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        color: '#94A3B8', flexShrink: 0
-                      }}>
-                        <ChevronRight size={16} />
+                      {/* Actions */}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+                        <motion.button
+                          whileHover={{ scale: 1.1, background: '#FEE2E2', color: '#EF4444' }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={(e) => handleDeleteClient(e, client.id, client.name)}
+                          style={{
+                            width: 32, height: 32, borderRadius: 10,
+                            background: 'var(--bg)', border: 'none',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            color: '#94A3B8', cursor: 'pointer',
+                            transition: 'all 0.2s'
+                          }}
+                          title="Remove Client"
+                        >
+                          <Trash2 size={15} />
+                        </motion.button>
                       </div>
                     </motion.div>
                   );

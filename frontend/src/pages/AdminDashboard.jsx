@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
-  Users, ClipboardList, Search, Filter, User as UserIcon,
+  Users, ClipboardList, Search,
   Clock, CheckCircle, XCircle, ChevronRight,
-  TrendingUp, Activity, ShieldCheck, Download
+  Activity, ShieldCheck, Download
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import axios from 'axios';
+import api from '../utils/api';
 import jsPDF from 'jspdf';
-import { API_BASE } from '../utils/api';
 
 /* ─── Status helpers ─── */
 const STATUS_MAP = {
@@ -19,7 +18,11 @@ const STATUS_MAP = {
 const getStatus = (s) => STATUS_MAP[(s || '').toLowerCase()] || STATUS_MAP.ongoing;
 
 const AVATAR_COLORS = ['#4F46E5','#0D9488','#D97706','#7C3AED','#DC2626','#0EA5E9','#16A34A'];
-const getAvatarColor = (name = '') => AVATAR_COLORS[name.charCodeAt(0) % AVATAR_COLORS.length];
+const getAvatarColor = (name) => {
+  const str = name || '';
+  if (!str) return AVATAR_COLORS[0];
+  return AVATAR_COLORS[str.charCodeAt(0) % AVATAR_COLORS.length] || AVATAR_COLORS[0];
+};
 
 /* ─── Quick PDF export for all inquiries ─── */
 const exportInquiriesPDF = (inquiries) => {
@@ -35,7 +38,6 @@ const exportInquiriesPDF = (inquiries) => {
 
   let y = 42;
   const headers = ['Client', 'Style No', 'Quality', 'Status', 'Date'];
-  const colW = [55, 35, 40, 28, 28];
   const xs = [14, 69, 104, 144, 172];
 
   // Header row
@@ -82,21 +84,22 @@ const AdminDashboard = () => {
 
   const adminUser = JSON.parse(localStorage.getItem('user') || '{}');
 
-  useEffect(() => { fetchData(); }, [activeTab]);
-
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      if (activeTab === 'users') {
-        const res = await axios.get(`${API_BASE}/api/admin/users`);
-        setUsers(res.data);
-      } else {
-        const res = await axios.get(`${API_BASE}/api/inquiries`);
-        setInquiries(res.data);
-      }
-    } catch (err) { console.error('Error fetching admin data:', err); }
-    finally { setLoading(false); }
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        if (activeTab === 'users') {
+          const res = await api.get(`/api/admin/users`);
+          setUsers(res.data);
+        } else {
+          const res = await api.get(`/api/inquiries`);
+          setInquiries(res.data);
+        }
+      } catch (err) { console.error('Error fetching admin data:', err); }
+      finally { setLoading(false); }
+    };
+    fetchData(); 
+  }, [activeTab]);
 
   const filteredUsers = users.filter(u =>
     (u.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -262,7 +265,7 @@ const AdminDashboard = () => {
                 key={s}
                 onClick={() => setFilterStatus(s)}
                 style={{
-                  padding: '8px 18px', borderRadius: 20, border: 'none',
+                  padding: '8px 18px', borderRadius: 20,
                   cursor: 'pointer', fontWeight: 800, fontSize: '0.8rem',
                   whiteSpace: 'nowrap', flexShrink: 0,
                   background: filterStatus === s ? 'var(--primary)' : 'white',

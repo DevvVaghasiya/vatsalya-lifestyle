@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ArrowLeft, User, Mail, Phone, Building2, Save, Loader } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { API_BASE } from '../utils/api';
+import api from '../utils/api';
 
 const EditProfile = () => {
   const navigate = useNavigate();
@@ -31,7 +30,7 @@ const EditProfile = () => {
 
     setLoading(true);
     try {
-      const res = await axios.put(`${API_BASE}/api/users/${user.id}`, {
+      const res = await api.put(`/api/users/${user.id}`, {
         name: formData.name,
         phoneNumber: formData.phoneNumber,
         email: formData.email,

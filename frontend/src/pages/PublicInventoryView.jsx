@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
-import { API_BASE } from '../utils/api';
-import { Package, ShieldCheck, Calendar, Info, Ruler, Layers } from 'lucide-react';
+import api from '../utils/api';
+import { Package, ShieldCheck, Info, Ruler, Layers } from 'lucide-react';
 
 const PublicInventoryView = () => {
   const { id } = useParams();
@@ -13,7 +12,7 @@ const PublicInventoryView = () => {
   useEffect(() => {
     const fetchItem = async () => {
       try {
-        const res = await axios.get(`${API_BASE}/api/inventory/${id}`);
+        const res = await api.get(`/api/inventory/${id}`);
         setItem(res.data);
       } catch (err) {
         console.error('Error fetching inventory item:', err);

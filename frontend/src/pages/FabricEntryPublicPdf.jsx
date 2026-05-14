@@ -1,10 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import api from '../utils/api';
 import { jsPDF } from 'jspdf';
-import { API_BASE } from '../utils/api';
-
-const API = `${API_BASE}/api/inventory`;
 
 const safePdfText = (v) => {
   const s = (v ?? '').toString().trim();
@@ -15,7 +12,7 @@ const buildFabricPdf = (item) => {
   const doc = new jsPDF({ unit: 'pt', format: 'a4' });
   const pageWidth = doc.internal.pageSize.getWidth();
   const marginX = 40;
-  let currentY = 60;
+  let currentY;
   const rowH = 34;
   const tableWidth = pageWidth - marginX * 2;
   const col1W = Math.floor(tableWidth * 0.40);
@@ -80,7 +77,7 @@ const FabricEntryPublicPdf = () => {
     let objectUrl = '';
     const run = async () => {
       try {
-        const res = await axios.get(`${API}/${id}`);
+        const res = await api.get(`/api/inventory/${id}`);
         const doc = buildFabricPdf(res.data || {});
         const blob = doc.output('blob');
         objectUrl = URL.createObjectURL(blob);

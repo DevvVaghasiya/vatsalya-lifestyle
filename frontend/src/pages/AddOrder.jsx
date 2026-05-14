@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Plus, User, FileCheck, Briefcase, Hash, ShoppingBag, Layers, Ruler, Info } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { ArrowLeft, Plus, User, FileCheck, Briefcase, Layers } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { API_BASE } from '../utils/api';
+import api from '../utils/api';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -12,10 +11,22 @@ const formatDisplayDate = (dateStr) => {
     const date = new Date(dateStr);
     if (isNaN(date.getTime())) return dateStr;
     return date.toLocaleDateString('en-GB');
-  } catch (e) {
+  } catch {
     return dateStr;
   }
 };
+
+const SectionHeader = ({ icon: Icon, title, color, bgColor }) => (
+  <div className="flex items-center gap-3 mb-6">
+    <div style={{ backgroundColor: bgColor, padding: '12px', borderRadius: '16px', color: color }}>
+      <Icon size={24} />
+    </div>
+    <div>
+      <h2 style={{ fontSize: '1.2rem', fontWeight: '800', color: '#1E293B', margin: 0 }}>{title}</h2>
+      <div style={{ height: '3px', width: '30px', backgroundColor: color, borderRadius: '2px', marginTop: '4px' }}></div>
+    </div>
+  </div>
+);
 
 const AddOrder = () => {
   const navigate = useNavigate();
@@ -79,20 +90,20 @@ const AddOrder = () => {
   });
   const [clients, setClients] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
-    setLoading(true);
-    axios.get(`${API_BASE}/api/clients`)
-      .then(res => {
+    const fetchClients = async () => {
+      setLoading(true);
+      try {
+        const res = await api.get(`/api/clients`);
         setClients(res.data || []);
-        setError(null);
-      })
-      .catch(err => {
+      } catch (err) {
         console.error('Error fetching clients:', err);
-        setError('Unable to load clients. Please check backend connection.');
-      })
-      .finally(() => setLoading(false));
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchClients();
   }, []);
 
   const handleChange = (e) => {
@@ -239,7 +250,7 @@ const AddOrder = () => {
 
     try {
       setLoading(true);
-      await axios.post(`${API_BASE}/api/orders`, payload);
+      await api.post(`/api/orders`, payload);
       alert('Order created successfully!');
       navigate('/deals');
     } catch (err) {
@@ -250,17 +261,6 @@ const AddOrder = () => {
     }
   };
 
-  const SectionHeader = ({ icon: Icon, title, color, bgColor }) => (
-    <div className="flex items-center gap-3 mb-6">
-      <div style={{ backgroundColor: bgColor, padding: '12px', borderRadius: '16px', color: color }}>
-        <Icon size={24} />
-      </div>
-      <div>
-        <h2 style={{ fontSize: '1.2rem', fontWeight: '800', color: '#1E293B', margin: 0 }}>{title}</h2>
-        <div style={{ height: '3px', width: '30px', backgroundColor: color, borderRadius: '2px', marginTop: '4px' }}></div>
-      </div>
-    </div>
-  );
 
   return (
     <div className="page-shell">

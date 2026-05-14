@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ArrowLeft, Lock, Key, Loader } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { API_BASE } from '../utils/api';
+import api from '../utils/api';
 
 const ChangePassword = () => {
   const navigate = useNavigate();
@@ -41,7 +40,7 @@ const ChangePassword = () => {
 
     setLoading(true);
     try {
-      await axios.put(`${API_BASE}/api/users/${user.id}/change-password`, {
+      await api.put(`/api/users/${user.id}/change-password`, {
         currentPassword: formData.currentPassword,
         newPassword: formData.newPassword,
       });

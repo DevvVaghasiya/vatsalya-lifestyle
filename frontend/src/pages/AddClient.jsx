@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ArrowLeft, Save, Building2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { API_BASE } from '../utils/api';
+import api from '../utils/api';
 
 const AddClient = () => {
   const navigate = useNavigate();
@@ -21,7 +20,7 @@ const AddClient = () => {
         gstIn: gstNumber
       };
 
-      await axios.post(`${API_BASE}/api/clients`, newClient);
+      await api.post(`/api/clients`, newClient);
       alert('Client saved successfully!');
       navigate(-1);
     } catch (err) {

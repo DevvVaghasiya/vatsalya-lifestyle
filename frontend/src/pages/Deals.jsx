@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Search, Plus, ChevronRight, Menu, MessageSquare } from 'lucide-react';
+/* eslint-disable react-hooks/set-state-in-effect */
+import { useState, useEffect } from 'react';
+import { ArrowLeft, Search, Plus, ChevronRight, MessageSquare } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { API_BASE } from '../utils/api';
+import api from '../utils/api';
 
 const Deals = () => {
   const [activeTab, setActiveTab] = useState('ongoing');
@@ -10,16 +10,11 @@ const Deals = () => {
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
-
-  useEffect(() => {
-    fetchOrders();
-  }, []);
 
   const fetchOrders = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`${API_BASE}/api/orders`);
+      const res = await api.get(`/api/orders`);
       setOrders(res.data || []);
     } catch (err) {
       console.error('Error fetching orders:', err);
@@ -27,6 +22,10 @@ const Deals = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchOrders();
+  }, []);
 
   const mapStatus = (status) => {
     if (!status) return 'Ongoing';

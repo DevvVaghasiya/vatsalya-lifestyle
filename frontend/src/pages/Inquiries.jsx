@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   ArrowLeft, Search, Plus, MessageSquare, Clock,
   CheckCircle, XCircle, Tag, ChevronRight, Download
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { API_BASE } from '../utils/api';
+import api from '../utils/api';
 import jsPDF from 'jspdf';
 
 /* ── PDF helper ── */
@@ -152,19 +151,20 @@ const Inquiries = () => {
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
-  useEffect(() => { fetchInquiries(); }, []);
-
-  const fetchInquiries = async () => {
-    setLoading(true);
-    try {
-      const res = await axios.get(`${API_BASE}/api/inquiries`);
-      setAllInquiries(res.data || []);
-    } catch (err) {
-      console.error('Error fetching inquiries:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+    const fetchInquiries = async () => {
+      setLoading(true);
+      try {
+        const res = await api.get(`/api/inquiries`);
+        setAllInquiries(res.data || []);
+      } catch (err) {
+        console.error('Error fetching inquiries:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchInquiries(); 
+  }, []);
 
   const filteredInquiries = allInquiries.filter(item => {
     if (!item) return false;

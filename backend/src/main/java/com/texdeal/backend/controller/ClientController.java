@@ -32,4 +32,19 @@ public class ClientController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteClient(@PathVariable Long id) {
+        try {
+            if (!clientRepository.existsById(id)) {
+                return ResponseEntity.notFound().build();
+            }
+            clientRepository.deleteById(id);
+            return ResponseEntity.ok().body(java.util.Collections.singletonMap("message", "Client deleted successfully"));
+        } catch (org.springframework.dao.DataIntegrityViolationException e) {
+            return ResponseEntity.badRequest().body(java.util.Collections.singletonMap("error", "Cannot delete client because they have associated orders or inquiries."));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(java.util.Collections.singletonMap("error", "Failed to delete client."));
+        }
+    }
 }

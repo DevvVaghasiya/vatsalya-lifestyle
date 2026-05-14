@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Search, Plus, Package, Layers, FileText, X, Trash2, Download, ChevronDown, ChevronUp } from 'lucide-react';
+/* eslint-disable react-hooks/set-state-in-effect */
+import { useState, useEffect, useCallback } from 'react';
+import { ArrowLeft, Search, Plus, Package, Layers, FileText, X, Trash2, Download, ChevronDown, ChevronUp, RefreshCw } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { API_BASE } from '../utils/api';
+import api from '../utils/api';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { jsPDF } from 'jspdf';
 import QRCode from 'qrcode';
 
-const API = `${API_BASE}/api/inventory`;
+const API_PATH = '/api/inventory';
 
 const formatDate = (dateStr) => {
   if (!dateStr) return 'N/A';
@@ -37,7 +37,7 @@ const buildFabricPdf = async (item) => {
   const pageWidth = doc.internal.pageSize.getWidth();
 
   const marginX = 40;
-  let currentY = 60;
+  let currentY;
   const rowH = 34;
   const tableWidth = pageWidth - marginX * 2;
   const col1W = Math.floor(tableWidth * 0.40);
@@ -131,6 +131,8 @@ const Inventory = () => {
   const [activeTab, setActiveTab] = useState('STOCK');
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [showAddModal, setShowAddModal] = useState(false);
   const [expandedCard, setExpandedCard] = useState(null);
@@ -150,16 +152,22 @@ const Inventory = () => {
     stockQuantity: ''
   });
 
-  useEffect(() => { fetchItems(); }, [activeTab]);
-
-  const fetchItems = async () => {
+  const fetchItems = useCallback(async () => {
     setLoading(true);
+    setError(null);
     try {
-      const res = await axios.get(`${API}/category/${activeTab}`);
+      const res = await api.get(`${API_PATH}/category/${activeTab}`);
       setItems(res.data || []);
-    } catch (err) { console.error('Error fetching:', err); }
+    } catch (err) {
+      console.error('Error fetching:', err);
+      setError('Unable to connect to server. The backend may be starting up — please retry.');
+    }
     finally { setLoading(false); }
-  };
+  }, [activeTab]);
+
+  useEffect(() => {
+    fetchItems();
+  }, [fetchItems]);
 
   const handleChange = (e) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -174,8 +182,9 @@ const Inventory = () => {
         return;
       }
     }
+    setSubmitting(true);
     try {
-      await axios.post(API, {
+      await api.post(API_PATH, {
         ...formData,
         gsm: toNumberOrNull(formData.gsm),
         stockQuantity: activeTab === 'FABRIC_ENTRY' ? null : toNumberOrNull(formData.stockQuantity),
@@ -198,13 +207,15 @@ const Inventory = () => {
       fetchItems();
     } catch (err) {
       console.error('Error adding:', err);
-      alert('Failed to add item');
+      alert('Failed to add item. Server may be starting up — please try again.');
+    } finally {
+      setSubmitting(false);
     }
   };
 
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this item?')) return;
-    try { await axios.delete(`${API}/${id}`); fetchItems(); }
+    try { await api.delete(`${API_PATH}/${id}`); fetchItems(); }
     catch (err) { console.error('Error deleting:', err); }
   };
 
@@ -216,7 +227,7 @@ const Inventory = () => {
       return;
     }
     try {
-      await axios.post(`${API}/${item.id}/dispatch`, {
+      await api.post(`${API_PATH}/${item.id}/dispatch`, {
         entryDate: dispatchDate.toISOString().split('T')[0],
         quantity: Number(dispatchQty),
         remark: dispatchRemark
@@ -527,7 +538,32 @@ const Inventory = () => {
           </span>
         </div>
 
-        {loading ? (
+        {error ? (
+          <div style={{ textAlign: 'center', padding: '40px 0' }}>
+            <div style={{
+              width: 56, height: 56, borderRadius: '50%',
+              background: '#FEF2F2',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              margin: '0 auto 14px'
+            }}>
+              <RefreshCw size={24} color="#EF4444" />
+            </div>
+            <p style={{ color: '#64748B', fontWeight: '700', margin: '0 0 6px', fontSize: '0.95rem' }}>Connection Issue</p>
+            <p style={{ color: '#94A3B8', fontWeight: '500', margin: '0 0 16px', fontSize: '0.82rem', maxWidth: 320, marginLeft: 'auto', marginRight: 'auto' }}>{error}</p>
+            <button
+              onClick={fetchItems}
+              style={{
+                background: currentTab.color, color: 'white', border: 'none',
+                padding: '10px 24px', borderRadius: 12,
+                fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer',
+                display: 'inline-flex', alignItems: 'center', gap: 8,
+                boxShadow: `0 6px 16px ${currentTab.color}33`
+              }}
+            >
+              <RefreshCw size={14} /> Retry
+            </button>
+          </div>
+        ) : loading ? (
           <div style={{ textAlign: 'center', padding: '40px 0' }}>
             <div className="spinner" />
             <p style={{ marginTop: 12, color: 'var(--muted)', fontWeight: 600 }}>Loading...</p>
@@ -641,14 +677,18 @@ const Inventory = () => {
                   </div>
                 </>
               )}
-              <button type="submit" style={{
+              <button type="submit" disabled={submitting} style={{
                 padding: '16px', borderRadius: '16px', border: 'none',
-                backgroundColor: currentTab.color, color: 'white', fontWeight: '700',
-                fontSize: '1rem', cursor: 'pointer', marginTop: '8px',
-                boxShadow: `0 8px 20px ${currentTab.color}33`
+                backgroundColor: submitting ? '#94A3B8' : currentTab.color, color: 'white', fontWeight: '700',
+                fontSize: '1rem', cursor: submitting ? 'not-allowed' : 'pointer', marginTop: '8px',
+                boxShadow: submitting ? 'none' : `0 8px 20px ${currentTab.color}33`,
+                opacity: submitting ? 0.7 : 1, transition: 'all 0.2s'
               }}>
-                <Plus size={18} style={{ marginRight: '8px', verticalAlign: 'middle' }} />
-                {addLabel[activeTab]}
+                {submitting ? (
+                  <><div className="spinner" style={{ width: 18, height: 18, borderWidth: 2, display: 'inline-block', verticalAlign: 'middle', marginRight: 8 }} /> Saving...</>
+                ) : (
+                  <><Plus size={18} style={{ marginRight: '8px', verticalAlign: 'middle' }} />{addLabel[activeTab]}</>
+                )}
               </button>
             </form>
           </div>

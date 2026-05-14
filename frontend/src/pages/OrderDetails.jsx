@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
+/* eslint-disable react-hooks/set-state-in-effect */
+import { useState, useEffect, useCallback } from 'react';
 import {
-  ArrowLeft, ShoppingBag, Clock, CheckCircle, XCircle,
+  ArrowLeft, Clock, CheckCircle, XCircle,
   User, Package, Calendar, Info, Hash, Palette,
   Briefcase, Edit3, Save, X, Truck, Layers, Ruler, DollarSign, FileCheck, Download
 } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
+import api from '../utils/api';
 import { motion } from 'framer-motion';
 import { jsPDF } from 'jspdf';
-import { API_BASE } from '../utils/api';
 
 const formatDisplayDate = (dateStr) => {
   if (!dateStr) return 'N/A';
@@ -16,7 +16,7 @@ const formatDisplayDate = (dateStr) => {
     const date = new Date(dateStr);
     if (isNaN(date.getTime())) return dateStr;
     return date.toLocaleDateString('en-GB');
-  } catch (e) {
+  } catch {
     return dateStr;
   }
 };
@@ -168,14 +168,10 @@ const OrderDetails = () => {
   const [dispatchReceiptQuantity, setDispatchReceiptQuantity] = useState('');
   const [dispatchReceiptRemark, setDispatchReceiptRemark] = useState('');
 
-  useEffect(() => {
-    fetchOrderDetails();
-  }, [id]);
-
-  const fetchOrderDetails = async () => {
+  const fetchOrderDetails = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`${API_BASE}/api/orders/${id}`);
+      const res = await api.get(`/api/orders/${id}`);
       setOrder(res.data);
       setEditData(prev => ({ ...prev, ...res.data }));
     } catch (err) {
@@ -183,11 +179,15 @@ const OrderDetails = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    fetchOrderDetails();
+  }, [fetchOrderDetails]);
 
   const handleUpdate = async () => {
     try {
-      await axios.put(`${API_BASE}/api/orders/${id}`, editData);
+      await api.put(`/api/orders/${id}`, editData);
       alert('Order updated successfully!');
       setIsEditing(false);
       fetchOrderDetails();
@@ -200,7 +200,7 @@ const OrderDetails = () => {
   const updateStatus = async (newStatus) => {
     if (!window.confirm(`Are you sure you want to mark this order as ${newStatus}?`)) return;
     try {
-      await axios.patch(`${API_BASE}/api/orders/${id}/status?status=${newStatus}`);
+      await api.patch(`/api/orders/${id}/status?status=${newStatus}`);
       alert(`Order marked as ${newStatus}`);
       fetchOrderDetails();
     } catch (err) {
