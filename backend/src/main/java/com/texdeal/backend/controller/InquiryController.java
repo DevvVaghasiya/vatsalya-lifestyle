@@ -5,6 +5,9 @@ import com.texdeal.backend.repository.InquiryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.texdeal.backend.repository.ClientRepository;
+import com.texdeal.backend.repository.UserRepository;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,7 +20,10 @@ public class InquiryController {
     private InquiryRepository inquiryRepository;
 
     @Autowired
-    private com.texdeal.backend.repository.UserRepository userRepository;
+    private UserRepository userRepository;
+
+    @Autowired
+    private ClientRepository clientRepository;
 
     @GetMapping
     public List<Inquiry> getAllInquiries() {
@@ -33,6 +39,15 @@ public class InquiryController {
 
     @PostMapping
     public Inquiry createInquiry(@RequestBody Inquiry inquiry) {
+        if (inquiry.getClient() != null && inquiry.getClient().getId() != null) {
+            inquiry.setClient(clientRepository.getReferenceById(inquiry.getClient().getId()));
+        }
+        if (inquiry.getCreatedBy() != null && inquiry.getCreatedBy().getId() != null) {
+            inquiry.setCreatedBy(userRepository.getReferenceById(inquiry.getCreatedBy().getId()));
+        }
+        if (inquiry.getLastEditedBy() != null && inquiry.getLastEditedBy().getId() != null) {
+            inquiry.setLastEditedBy(userRepository.getReferenceById(inquiry.getLastEditedBy().getId()));
+        }
         return inquiryRepository.save(inquiry);
     }
 
