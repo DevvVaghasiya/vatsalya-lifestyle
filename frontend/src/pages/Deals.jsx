@@ -27,17 +27,31 @@ const Deals = () => {
     fetchOrders();
   }, []);
 
-  const mapStatus = (status) => {
+  const mapStatus = (item) => {
+    const status = item.status;
     if (!status) return 'Ongoing';
     const normalized = status.toLowerCase();
-    if (['pending', 'processing'].includes(normalized)) return 'Ongoing';
+
     if (normalized === 'completed') return 'Completed';
     if (normalized === 'canceled' || normalized === 'cancelled') return 'Canceled';
+    if (normalized === 'delayed') return 'Delayed';
+
+    // Check if Ongoing but Date passed
+    if (item.completionDate) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const completion = new Date(item.completionDate);
+      if (completion < today && (['pending', 'processing'].includes(normalized))) {
+        return 'Delayed';
+      }
+    }
+
+    if (['pending', 'processing'].includes(normalized)) return 'Ongoing';
     return 'Ongoing';
   };
 
   const filteredOrders = orders.filter((item) => {
-    const statusGroup = mapStatus(item.status);
+    const statusGroup = mapStatus(item);
     const matchesTab = activeTab === 'all' ? true : statusGroup.toLowerCase() === activeTab;
     const search = (searchTerm || '').toLowerCase();
     const searchMatches =
@@ -48,15 +62,17 @@ const Deals = () => {
     return matchesTab && searchMatches;
   });
 
-  const getStatusStyles = (status) => {
-    const normalized = mapStatus(status).toLowerCase();
+  const getStatusStyles = (item) => {
+    const normalized = mapStatus(item).toLowerCase();
     switch (normalized) {
       case 'ongoing':
-        return { bg: '#FEF3C7', color: '#B45309' };
+        return { bg: '#EEF2FF', color: '#4F46E5' };
       case 'completed':
         return { bg: '#DCFCE7', color: '#166534' };
       case 'canceled':
         return { bg: '#FEE2E2', color: '#B91C1C' };
+      case 'delayed':
+        return { bg: '#FEF2F2', color: '#EF4444' };
       default:
         return { bg: '#E2E8F0', color: '#475569' };
     }
@@ -94,7 +110,7 @@ const Deals = () => {
           </div>
 
           <div className="tabs-row">
-            {['ongoing', 'completed', 'canceled'].map((tab) => (
+            {['ongoing', 'delayed', 'completed', 'canceled'].map((tab) => (
               <div
                 key={tab}
                 onClick={() => setActiveTab(tab)}
@@ -124,7 +140,7 @@ const Deals = () => {
               </div>
             ) : (
               filteredOrders.map((order) => {
-                const statusStyle = getStatusStyles(order.status);
+                const statusStyle = getStatusStyles(order);
                 const dispatchTotal = (order.dispatchQuantityReceivedEntries || []).reduce((sum, entry) => sum + (entry.quantity || 0), 0);
 
                 return (
@@ -148,7 +164,7 @@ const Deals = () => {
                         fontWeight: '800',
                         textTransform: 'uppercase'
                       }}>
-                        {mapStatus(order.status)}
+                        {mapStatus(order)}
                       </div>
                     </div>
 

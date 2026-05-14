@@ -129,7 +129,8 @@ public class Order {
         PROCESSING,
         COMPLETED,
         CANCELED,
-        CANCELLED
+        CANCELLED,
+        DELAYED
     }
 
     // Getters and Setters

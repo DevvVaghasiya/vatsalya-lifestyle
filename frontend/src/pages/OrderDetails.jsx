@@ -502,21 +502,31 @@ const OrderDetails = () => {
   const currentDigitalTotal = currentDigitalEntries.reduce((sum, entry) => sum + Number(entry.quantity || 0), 0);
   const currentDispatchTotal = currentDispatchEntries.reduce((sum, entry) => sum + Number(entry.quantity || 0), 0);
 
-  const getStatusStyle = (status) => {
+  const getStatusStyle = (order) => {
+    if (!order) return { bg: '#F1F5F9', color: '#64748B', icon: null, label: 'N/A' };
+    const status = order.status;
     const s = (status || 'PENDING').toUpperCase();
-    switch (s) {
-      case 'PENDING':
-      case 'PROCESSING':
-      case 'ONGOING': return { bg: '#EEF2FF', color: '#4F46E5', icon: <Clock size={16} /> };
-      case 'COMPLETED': return { bg: '#F0FDF4', color: '#16A34A', icon: <CheckCircle size={16} /> };
-      case 'CANCELED':
-      case 'CANCELLED': return { bg: '#FEF2F2', color: '#DC2626', icon: <XCircle size={16} /> };
-      default: return { bg: '#F1F5F9', color: '#64748B', icon: null };
+
+    if (s === 'COMPLETED') return { bg: '#F0FDF4', color: '#16A34A', icon: <CheckCircle size={16} />, label: 'COMPLETED' };
+    if (['CANCELED', 'CANCELLED'].includes(s)) return { bg: '#FEF2F2', color: '#DC2626', icon: <XCircle size={16} />, label: 'CANCELLED' };
+    if (s === 'DELAYED') return { bg: '#FEF2F2', color: '#EF4444', icon: <Clock size={16} />, label: 'DELAYED' };
+
+    // Dynamic delay check
+    if (order.completionDate) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const completion = new Date(order.completionDate);
+      if (completion < today && ['PENDING', 'PROCESSING', 'ONGOING'].includes(s)) {
+        return { bg: '#FEF2F2', color: '#EF4444', icon: <Clock size={16} />, label: 'DELAYED' };
+      }
     }
+
+    if (['PENDING', 'PROCESSING', 'ONGOING'].includes(s)) return { bg: '#EEF2FF', color: '#4F46E5', icon: <Clock size={16} />, label: s };
+    return { bg: '#F1F5F9', color: '#64748B', icon: null, label: s };
   };
 
-  const statusInfo = getStatusStyle(order.status);
-  const isOngoing = ['PENDING', 'PROCESSING', 'ONGOING'].includes((order.status || 'PENDING').toUpperCase());
+  const statusInfo = getStatusStyle(order);
+  const isOngoing = ['PENDING', 'PROCESSING', 'ONGOING', 'DELAYED'].includes((order.status || 'PENDING').toUpperCase()) || statusInfo.label === 'DELAYED';
 
   return (
     <div className="page-shell" style={{ backgroundColor: '#F0F2F5', minHeight: '100vh', paddingBottom: '100px' }}>
@@ -578,7 +588,7 @@ const OrderDetails = () => {
             letterSpacing: '1px'
           }}>
             {statusInfo.icon}
-            {order.status || 'Pending'}
+            {statusInfo.label}
           </div>
         </div>
 
