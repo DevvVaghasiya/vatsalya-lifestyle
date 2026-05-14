@@ -32,8 +32,31 @@ public class InquiryController {
     }
 
     @PostMapping
-    public Inquiry createInquiry(@RequestBody Inquiry inquiry) {
-        return inquiryRepository.save(inquiry);
+    public ResponseEntity<?> createInquiry(@RequestBody Inquiry inquiry) {
+        try {
+            // Validate client exists
+            if (inquiry.getClient() == null || inquiry.getClient().getId() == null) {
+                return ResponseEntity.badRequest().body("Client ID is required");
+            }
+            
+            // Validate User exists to avoid Foreign Key constraint violations
+            if (inquiry.getCreatedBy() != null && inquiry.getCreatedBy().getId() != null) {
+                if (!userRepository.existsById(inquiry.getCreatedBy().getId())) {
+                    inquiry.setCreatedBy(null);
+                }
+            }
+            if (inquiry.getLastEditedBy() != null && inquiry.getLastEditedBy().getId() != null) {
+                if (!userRepository.existsById(inquiry.getLastEditedBy().getId())) {
+                    inquiry.setLastEditedBy(null);
+                }
+            }
+            
+            Inquiry saved = inquiryRepository.save(inquiry);
+            return ResponseEntity.ok(saved);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Error saving inquiry: " + e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")

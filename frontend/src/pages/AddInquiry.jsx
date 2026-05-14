@@ -103,7 +103,8 @@ const AddInquiry = () => {
       navigate('/inquiries');
     } catch (err) {
       console.error('Error submitting inquiry:', err);
-      alert('Failed to save inquiry');
+      const errorMsg = err.response?.data?.message || err.response?.data || err.message;
+      alert('Failed to save inquiry: ' + errorMsg);
     } finally {
       setLoading(false);
     }
