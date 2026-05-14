@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Phone, Lock, Eye, EyeOff, Loader2, ArrowRight, ShieldCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '../utils/api';
+import logo from '../assets/logo.jpeg';
 
 const Login = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -75,7 +76,7 @@ const Login = () => {
             overflow: 'hidden',
             flexShrink: 0
           }}>
-            <img src="/logo.jpeg" alt="V" style={{ width: '85%', height: '85%', objectFit: 'contain' }} />
+            <img src={logo} alt="V" style={{ width: '85%', height: '85%', objectFit: 'contain' }} />
           </div>
           <div>
             <p style={{ margin: 0, fontWeight: 900, fontSize: '1.1rem', color: 'white', letterSpacing: '-0.3px' }}>

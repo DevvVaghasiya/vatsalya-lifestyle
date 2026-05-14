@@ -4,6 +4,7 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import api from '../utils/api';
+import logo from '../assets/logo.jpeg';
 
 const data = [
   { name: '1 May', sales: 22000 },
@@ -68,7 +69,7 @@ const Dashboard = () => {
       <div className="page-header" style={{ padding: '12px 20px' }}>
         <div className="flex items-center gap-3">
           <div className="dashboard-logo-container">
-            <img src="/logo.jpeg" alt="V" className="dashboard-logo-img" />
+            <img src={logo} alt="V" className="dashboard-logo-img" />
           </div>
           <div style={{ lineHeight: 1 }}>
             <p style={{ fontSize: '1rem', fontWeight: '800', color: '#1E293B', margin: 0 }}>Portal</p>

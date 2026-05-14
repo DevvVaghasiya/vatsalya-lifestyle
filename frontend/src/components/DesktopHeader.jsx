@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { Plus, Package, MessageSquare, Home, Users, LogOut, Layers } from 'lucide-react';
 import { motion } from 'framer-motion';
+import logo from '../assets/logo.jpeg';
 
 const DesktopHeader = () => {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ const DesktopHeader = () => {
         {/* Brand Logo Section */}
         <div className="brand-section" onClick={() => navigate('/')}>
           <div className="logo-img-container">
-            <img src="/logo.jpeg" alt="Vatsalya Logo" className="brand-logo-img" />
+            <img src={logo} alt="Vatsalya Logo" className="brand-logo-img" />
           </div>
           <div className="brand-titles">
             <span className="brand-name">VATSALYA</span>
