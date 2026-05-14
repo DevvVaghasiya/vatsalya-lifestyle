@@ -226,7 +226,7 @@ const Dashboard = () => {
             </div>
           </div>
           <div className="card" style={{
-            padding: '40px 0',
+            padding: '32px 0',
             borderRadius: '32px',
             border: '1px solid rgba(255,255,255,0.5)',
             boxShadow: '0 20px 40px rgba(0,0,0,0.03)',
@@ -243,25 +243,44 @@ const Dashboard = () => {
               {/* Row 1: Moving Right to Left */}
               <div className="flex mb-6" style={{ overflow: 'hidden' }}>
                 <motion.div
-                  animate={{ x: [0, -1200] }}
+                  animate={{ x: [0, -1400] }}
                   transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
                   className="flex gap-6 px-4"
                 >
-                  {[...Array(15)].map((_, i) => (
-                    <div key={i} style={{ width: '180px', height: '120px', flexShrink: 0, borderRadius: '20px', overflow: 'hidden', boxShadow: '0 8px 16px rgba(0,0,0,0.08)', border: '4px solid white' }}>
+                  {[
+                    '1620783770142-023055029ee1', // Leaf Pattern
+                    '1584184924103-e310d9dc85fc', // Pink Silk
+                    '1551488831-00ddcb6c6bd3', // Orange Pattern
+                    '1506792006437-256b665541e2', // Blue Silk
+                    '1544441893-675973e31985', // Sage Fabric
+                    '1485230895905-ec40ba36b9bc', // Stacked Colors
+                    '1620783770142-023055029ee1',
+                    '1584184924103-e310d9dc85fc',
+                    '1551488831-00ddcb6c6bd3',
+                    '1506792006437-256b665541e2',
+                    '1544441893-675973e31985',
+                    '1485230895905-ec40ba36b9bc'
+                  ].map((id, i) => (
+                    <motion.div
+                      key={i}
+                      whileHover={{ scale: 1.05, y: -5 }}
+                      style={{
+                        width: '200px',
+                        height: '140px',
+                        flexShrink: 0,
+                        borderRadius: '24px',
+                        overflow: 'hidden',
+                        boxShadow: '0 12px 24px rgba(0,0,0,0.1)',
+                        border: '4px solid white',
+                        cursor: 'pointer'
+                      }}
+                    >
                       <img
-                        src={`https://images.unsplash.com/photo-${[
-                          '1528459801416-a9e53bbf4e17',
-                          '1584184924103-e310d9dc85fc',
-                          '1550684848-fac1c5b4e853',
-                          '1544441893-675973e31985',
-                          '1520004434532-6684162097cf',
-                          '1506792006437-256b665541e2'
-                        ][i % 6]}?auto=format&fit=crop&w=400&q=80`}
+                        src={`https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=400&q=80`}
                         alt="fabric"
                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                       />
-                    </div>
+                    </motion.div>
                   ))}
                 </motion.div>
               </div>
@@ -269,25 +288,44 @@ const Dashboard = () => {
               {/* Row 2: Moving Left to Right */}
               <div className="flex mb-4" style={{ overflow: 'hidden' }}>
                 <motion.div
-                  animate={{ x: [-1200, 0] }}
+                  animate={{ x: [-1400, 0] }}
                   transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
                   className="flex gap-6 px-4"
                 >
-                  {[...Array(15)].map((_, i) => (
-                    <div key={i} style={{ width: '180px', height: '120px', flexShrink: 0, borderRadius: '20px', overflow: 'hidden', boxShadow: '0 8px 16px rgba(0,0,0,0.08)', border: '4px solid white' }}>
+                  {[
+                    '1485230895905-ec40ba36b9bc', // Stacked Colors
+                    '1544441893-675973e31985', // Sage Fabric
+                    '1506792006437-256b665541e2', // Blue Silk
+                    '1551488831-00ddcb6c6bd3', // Orange Pattern
+                    '1584184924103-e310d9dc85fc', // Pink Silk
+                    '1620783770142-023055029ee1', // Leaf Pattern
+                    '1485230895905-ec40ba36b9bc',
+                    '1544441893-675973e31985',
+                    '1506792006437-256b665541e2',
+                    '1551488831-00ddcb6c6bd3',
+                    '1584184924103-e310d9dc85fc',
+                    '1620783770142-023055029ee1'
+                  ].map((id, i) => (
+                    <motion.div
+                      key={i}
+                      whileHover={{ scale: 1.05, y: -5 }}
+                      style={{
+                        width: '200px',
+                        height: '140px',
+                        flexShrink: 0,
+                        borderRadius: '24px',
+                        overflow: 'hidden',
+                        boxShadow: '0 12px 24px rgba(0,0,0,0.1)',
+                        border: '4px solid white',
+                        cursor: 'pointer'
+                      }}
+                    >
                       <img
-                        src={`https://images.unsplash.com/photo-${[
-                          '1620783770142-023055029ee1',
-                          '1441986300917-64674bd600d8',
-                          '1556905055-8f358a7a47b2',
-                          '1523381210434-271e8be1f52b',
-                          '1551488831-00ddcb6c6bd3',
-                          '1485230895905-ec40ba36b9bc'
-                        ][i % 6]}?auto=format&fit=crop&w=400&q=80`}
+                        src={`https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=400&q=80`}
                         alt="fabric"
                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                       />
-                    </div>
+                    </motion.div>
                   ))}
                 </motion.div>
               </div>
