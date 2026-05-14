@@ -6,7 +6,19 @@ import { motion } from 'framer-motion';
 import api from '../utils/api';
 import logo from '../assets/logo.jpeg';
 import dashboardBg from '../assets/dashboard-bg.png';
-import fabricImg from '../assets/fabric-carousel.jpg';
+import fab1  from '../assets/fabric.jpeg';
+import fab2  from '../assets/fabric2.jpeg';
+import fab3  from '../assets/fabric3.jpeg';
+import fab4  from '../assets/fabric4.jpeg';
+import fab5  from '../assets/fabric5.jpeg';
+import fab6  from '../assets/fabric6.jpeg';
+import fab7  from '../assets/fabric7.jpeg';
+import fab8  from '../assets/fabric8.jpeg';
+import fab9  from '../assets/fabric9.jpeg';
+import fab10 from '../assets/fabric10.jpeg';
+import fab11 from '../assets/fabric11.jpeg';
+
+const fabricImages = [fab1, fab2, fab3, fab4, fab5, fab6, fab7, fab8, fab9, fab10, fab11];
 
 const data = [
   { name: '1 May', sales: 22000 },
@@ -248,7 +260,7 @@ const Dashboard = () => {
                   transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
                   className="flex gap-6 px-4"
                 >
-                  {[0,1,2,3,4,5,6,7,8,9,10,11].map((_, i) => (
+                  {[...fabricImages, ...fabricImages].map((src, i) => (
                     <motion.div
                       key={i}
                       whileHover={{ scale: 1.05, y: -5 }}
@@ -264,7 +276,7 @@ const Dashboard = () => {
                       }}
                     >
                       <img
-                        src={fabricImg}
+                        src={src}
                         alt="fabric"
                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                       />
@@ -280,7 +292,7 @@ const Dashboard = () => {
                   transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
                   className="flex gap-6 px-4"
                 >
-                  {[0,1,2,3,4,5,6,7,8,9,10,11].map((_, i) => (
+                  {[...fabricImages].reverse().concat([...fabricImages].reverse()).map((src, i) => (
                     <motion.div
                       key={i}
                       whileHover={{ scale: 1.05, y: -5 }}
@@ -296,7 +308,7 @@ const Dashboard = () => {
                       }}
                     >
                       <img
-                        src={fabricImg}
+                        src={src}
                         alt="fabric"
                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                       />
