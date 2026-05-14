@@ -22,9 +22,9 @@ public class BackendApplication {
 	CommandLineRunner initAdmin(UserRepository userRepository, PasswordEncoder passwordEncoder, JdbcTemplate jdbcTemplate) {
 		return args -> {
 			try {
-                jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS order_dye_quantity_received (order_id BIGINT NOT NULL, entry_date DATE, quantity DOUBLE, remark VARCHAR(255))");
-                jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS order_digital_quantity_received (order_id BIGINT NOT NULL, entry_date DATE, quantity DOUBLE, remark VARCHAR(255))");
-                jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS order_dispatch_quantity_received (order_id BIGINT NOT NULL, entry_date DATE, quantity DOUBLE, remark VARCHAR(255))");
+                jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS order_dye_quantity_received (id BIGINT AUTO_INCREMENT PRIMARY KEY, order_id BIGINT NOT NULL, entry_date DATE, quantity DOUBLE, remark VARCHAR(255))");
+                jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS order_digital_quantity_received (id BIGINT AUTO_INCREMENT PRIMARY KEY, order_id BIGINT NOT NULL, entry_date DATE, quantity DOUBLE, remark VARCHAR(255))");
+                jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS order_dispatch_quantity_received (id BIGINT AUTO_INCREMENT PRIMARY KEY, order_id BIGINT NOT NULL, entry_date DATE, quantity DOUBLE, remark VARCHAR(255))");
                 System.out.println("✅ Schema validation complete.");
                 
 				String adminPhone = "9999999999";
