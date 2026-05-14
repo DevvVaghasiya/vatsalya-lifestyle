@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import api from '../utils/api';
 import logo from '../assets/logo.jpeg';
 import dashboardBg from '../assets/dashboard-bg.png';
+import fabricImg from '../assets/fabric-carousel.jpg';
 
 const data = [
   { name: '1 May', sales: 22000 },
@@ -247,7 +248,7 @@ const Dashboard = () => {
                   transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
                   className="flex gap-6 px-4"
                 >
-                  {[10, 20, 30, 40, 50, 60, 10, 20, 30, 40, 50, 60].map((seed, i) => (
+                  {[0,1,2,3,4,5,6,7,8,9,10,11].map((_, i) => (
                     <motion.div
                       key={i}
                       whileHover={{ scale: 1.05, y: -5 }}
@@ -263,7 +264,7 @@ const Dashboard = () => {
                       }}
                     >
                       <img
-                        src={`https://picsum.photos/seed/${seed}a/400/280`}
+                        src={fabricImg}
                         alt="fabric"
                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                       />
@@ -279,7 +280,7 @@ const Dashboard = () => {
                   transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
                   className="flex gap-6 px-4"
                 >
-                  {[70, 80, 90, 100, 110, 120, 70, 80, 90, 100, 110, 120].map((seed, i) => (
+                  {[0,1,2,3,4,5,6,7,8,9,10,11].map((_, i) => (
                     <motion.div
                       key={i}
                       whileHover={{ scale: 1.05, y: -5 }}
@@ -295,7 +296,7 @@ const Dashboard = () => {
                       }}
                     >
                       <img
-                        src={`https://picsum.photos/seed/${seed}b/400/280`}
+                        src={fabricImg}
                         alt="fabric"
                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                       />
