@@ -87,19 +87,30 @@ const Dashboard = () => {
 
       <div style={{ position: 'relative', zIndex: 1 }}>
 
-      <div className="page-header" style={{ padding: '12px 20px', background: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(12px)', border: 'none' }}>
-        <div className="flex items-center gap-3">
-          <div className="dashboard-logo-container">
-            <img src={logo} alt="V" className="dashboard-logo-img" />
+      <div className="page-header" style={{
+        padding: '14px 24px',
+        background: 'rgba(255,255,255,0.7)',
+        backdropFilter: 'blur(16px)',
+        borderBottom: '1px solid rgba(255,255,255,0.3)',
+        boxShadow: '0 4px 30px rgba(0,0,0,0.03)'
+      }}>
+        <div className="flex items-center gap-4">
+          <div className="dashboard-logo-container" style={{ width: '42px', height: '42px', borderRadius: '12px', overflow: 'hidden', boxShadow: 'var(--shadow-sm)' }}>
+            <img src={logo} alt="V" className="dashboard-logo-img" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
-          <div style={{ lineHeight: 1 }}>
-            <p style={{ fontSize: '1rem', fontWeight: '800', color: '#1E293B', margin: 0 }}>Portal</p>
-            <p style={{ fontSize: '9px', fontWeight: '700', textTransform: 'uppercase', color: 'var(--primary)', margin: '2px 0 0' }}>Vatsalya Lifestyle</p>
+          <div style={{ lineHeight: 1.1 }}>
+            <p style={{ fontSize: '1.1rem', fontWeight: '900', color: '#1E293B', margin: 0, letterSpacing: '-0.3px' }}>Portal</p>
+            <p style={{ fontSize: '10px', fontWeight: '800', textTransform: 'uppercase', color: 'var(--primary)', margin: '2px 0 0', letterSpacing: '1px' }}>Vatsalya Lifestyle</p>
           </div>
         </div>
-        <div className="flex gap-2">
-
-          <motion.div whileTap={{ scale: 0.9 }} className="profile-avatar-small" onClick={() => navigate('/profile')}>
+        <div className="flex items-center gap-3">
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="profile-avatar-small"
+            onClick={() => navigate('/profile')}
+            style={{ border: '2px solid white', boxShadow: 'var(--shadow-sm)', width: '42px', height: '42px' }}
+          >
             <img src={user.profilePictureUrl || 'https://i.pravatar.cc/150?img=11'} alt="User" />
           </motion.div>
         </div>
@@ -111,150 +122,209 @@ const Dashboard = () => {
         initial="hidden"
         animate="show"
       >
-        <motion.div variants={item} className="hero-card" style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.4)' }}>
+        <motion.div variants={item} className="hero-card" style={{
+          background: 'rgba(255,255,255,0.5)',
+          backdropFilter: 'blur(24px)',
+          border: '1px solid rgba(255,255,255,0.5)',
+          borderRadius: '32px',
+          padding: '32px',
+          boxShadow: '0 20px 40px rgba(0,0,0,0.05)'
+        }}>
           <div className="flex justify-between items-start mb-6">
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider opacity-70">Welcome back,</p>
-              <h1 style={{ fontSize: '1.75rem', fontWeight: '900', margin: '4px 0 0' }}>{firstName} 👋</h1>
+              <p className="text-[11px] font-black uppercase tracking-[2px] text-primary mb-1">Authenticated Access</p>
+              <h1 style={{ fontSize: '2rem', fontWeight: '900', color: '#1E293B', margin: 0, letterSpacing: '-0.5px' }}>Hi, {firstName} 👋</h1>
             </div>
-            <div className="pill" style={{ background: 'rgba(255,255,255,0.2)', border: 'none' }}>
-              <Zap size={14} fill="white" style={{ marginRight: 4 }} />
-              {new Date().toLocaleDateString('en-GB')}
+            <div className="pill" style={{ background: 'white', color: '#1E293B', fontWeight: '800', fontSize: '11px', padding: '8px 14px', borderRadius: '12px', boxShadow: 'var(--shadow-sm)' }}>
+              <Zap size={14} fill="var(--primary)" color="var(--primary)" style={{ marginRight: 6 }} />
+              {new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}
             </div>
           </div>
-          <p className="mb-8 font-medium" style={{ opacity: 0.9, lineHeight: 1.6 }}>
-             Let your business flow like fabric in the air.
+          <p className="mb-8 font-semibold text-[#64748B]" style={{ fontSize: '1.05rem', lineHeight: 1.6, maxWidth: '400px' }}>
+             Manage your textile empire with precision. Let your business flow like fabric.
           </p>
 
-          <div className="flex gap-3" style={{ marginTop: '10px' }}>
-            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => navigate('/deals')} className="button button-white" style={{ flex: 1, padding: '12px', fontSize: '0.9rem', background: 'white' }}>
-              <Plus size={18} /> New Order
+          <div className="flex gap-4">
+            <motion.button
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => navigate('/deals')}
+              className="button"
+              style={{ flex: 1, padding: '16px', fontSize: '0.95rem', background: 'var(--primary)', color: 'white', borderRadius: '18px', boxShadow: '0 10px 20px rgba(79, 70, 229, 0.2)' }}
+            >
+              <Plus size={20} style={{ marginRight: 8 }} /> New Order
             </motion.button>
-            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => navigate('/inquiries')} className="button button-glass" style={{ flex: 1, padding: '12px', fontSize: '0.9rem' }}>
-              Inquiries <ArrowRight size={18} />
+            <motion.button
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => navigate('/inquiries')}
+              className="button"
+              style={{ flex: 1, padding: '16px', fontSize: '0.95rem', background: 'white', color: '#1E293B', border: '1px solid #E2E8F0', borderRadius: '18px', boxShadow: 'var(--shadow-sm)' }}
+            >
+              Recent Inquiries <ArrowRight size={20} style={{ marginLeft: 8 }} />
             </motion.button>
           </div>
         </motion.div>
 
-        <div className="stats-grid" style={{ marginTop: 0 }}>
-          <motion.div variants={item} className="card" style={{ border: 'none', boxShadow: 'var(--shadow-sm)', background: 'rgba(255,255,255,0.8)' }}>
-            <p className="card-title">Flow</p>
-            <div className="card-row">
-              <h3 className="card-value">{loading ? '...' : stats.totalDeals}</h3>
-              <div className="card-icon success" style={{ background: '#F0FDF4' }}>
-                <FileText size={20} />
+        <div className="stats-grid" style={{ marginTop: 24, gap: '20px' }}>
+          {[
+            { label: 'Orders', value: stats.totalDeals, icon: FileText, color: '#4F46E5', bg: '#EEF2FF' },
+            { label: 'Receivables', value: `₹${(stats.pendingDues/1000).toFixed(1)}k`, icon: DollarSign, color: '#10B981', bg: '#ECFDF5' },
+            { label: 'Revenue', value: `₹${(stats.sales/1000).toFixed(1)}k`, icon: TrendingUp, color: '#06B6D4', bg: '#ECFEFF' },
+            { label: 'Low Stock', value: stats.lowStock, icon: Package, color: '#EF4444', bg: '#FEF2F2' }
+          ].map((stat, i) => (
+            <motion.div
+              key={i}
+              variants={item}
+              whileHover={{ y: -5 }}
+              className="card"
+              style={{
+                border: '1px solid rgba(255,255,255,0.5)',
+                boxShadow: '0 10px 25px rgba(0,0,0,0.02)',
+                background: 'rgba(255,255,255,0.7)',
+                backdropFilter: 'blur(10px)',
+                borderRadius: '24px',
+                padding: '20px'
+              }}
+            >
+              <div className="flex justify-between items-start mb-4">
+                <div className="card-icon" style={{ background: stat.bg, color: stat.color, width: '40px', height: '40px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <stat.icon size={20} />
+                </div>
+                <div style={{ fontSize: '10px', fontWeight: '800', color: stat.color, background: `${stat.color}15`, padding: '4px 8px', borderRadius: '6px' }}>+12%</div>
               </div>
-            </div>
-          </motion.div>
-          <motion.div variants={item} className="card" style={{ border: 'none', background: 'rgba(255,255,255,0.8)' }}>
-            <p className="card-title">Dues</p>
-            <div className="card-row">
-              <h3 className="card-value" style={{ fontSize: '1.2rem' }}>{loading ? '...' : `₹${(stats.pendingDues/1000).toFixed(1)}k`}</h3>
-              <div className="card-icon warning" style={{ background: '#FFFBEB' }}>
-                <DollarSign size={20} />
+              <div>
+                <p style={{ fontSize: '11px', fontWeight: '800', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.5px', margin: 0 }}>{stat.label}</p>
+                <h3 style={{ fontSize: '1.5rem', fontWeight: '900', color: '#1E293B', margin: '4px 0 0' }}>{loading ? '...' : stat.value}</h3>
               </div>
-            </div>
-          </motion.div>
-          <motion.div variants={item} className="card" style={{ border: 'none', background: 'rgba(255,255,255,0.8)' }}>
-            <p className="card-title">Sales</p>
-            <div className="card-row">
-              <h3 className="card-value" style={{ fontSize: '1.2rem' }}>{loading ? '...' : `₹${(stats.sales/1000).toFixed(1)}k`}</h3>
-              <div className="card-icon info" style={{ background: '#EFF6FF' }}>
-                <TrendingUp size={20} />
-              </div>
-            </div>
-          </motion.div>
-          <motion.div variants={item} className="card" style={{ border: 'none', background: 'rgba(255,255,255,0.8)' }}>
-            <p className="card-title">Alerts</p>
-            <div className="card-row">
-              <h3 className="card-value">{loading ? '...' : stats.lowStock}</h3>
-              <div className="card-icon danger" style={{ background: '#FEF2F2' }}>
-                <Package size={20} />
-              </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          ))}
         </div>
 
-        <motion.div variants={item} className="section-group">
-          <div className="section-head">
-            <div className="flex items-center gap-2">
-               <div style={{ width: 4, height: 16, background: 'var(--primary)', borderRadius: 2 }}></div>
-               <h2 className="font-bold text-dark">Revenue Insights</h2>
+        <motion.div variants={item} className="section-group" style={{ marginTop: 32 }}>
+          <div className="section-head" style={{ marginBottom: 20 }}>
+            <div className="flex items-center gap-3">
+               <div style={{ width: 6, height: 24, background: 'var(--primary)', borderRadius: 3 }}></div>
+               <h2 className="font-extrabold text-[#1E293B] text-xl">Revenue Growth</h2>
             </div>
-            <div className="text-[10px] font-black uppercase text-primary tracking-widest">
-              Live Analysis
+            <div className="flex items-center gap-2">
+               <span className="text-[10px] font-black uppercase text-primary bg-[#4F46E510] px-3 py-1.5 rounded-full tracking-wider">Live Monitoring</span>
             </div>
           </div>
-          <div className="card" style={{ padding: '32px 16px 16px 16px', borderRadius: '30px', border: 'none', boxShadow: 'var(--shadow-sm)', background: 'rgba(255,255,255,0.8)' }}>
-            <div style={{ width: '100%', height: '240px' }}>
+          <div className="card" style={{
+            padding: '32px 24px',
+            borderRadius: '32px',
+            border: '1px solid rgba(255,255,255,0.5)',
+            boxShadow: '0 20px 40px rgba(0,0,0,0.03)',
+            background: 'rgba(255,255,255,0.7)',
+            backdropFilter: 'blur(10px)'
+          }}>
+            <div style={{ width: '100%', height: '280px' }}>
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={data} margin={{ top: 10, right: 0, left: -20, bottom: 0 }}>
                   <defs>
                     <linearGradient id="colorSales" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.1} />
+                      <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.2} />
                       <stop offset="95%" stopColor="var(--primary)" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(0,0,0,0.03)" />
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(0,0,0,0.05)" />
                   <XAxis
                     dataKey="name"
                     axisLine={false}
                     tickLine={false}
-                    tick={{ fontSize: 10, fill: '#94A3B8', fontWeight: 700 }}
+                    tick={{ fontSize: 11, fill: '#64748B', fontWeight: 700 }}
                     dy={12}
                   />
-                  <YAxis
-                    hide={true}
-                  />
+                  <YAxis hide={true} />
                   <Tooltip
                     contentStyle={{
-                      borderRadius: '20px',
+                      borderRadius: '16px',
                       border: 'none',
-                      boxShadow: '0 15px 35px rgba(0,0,0,0.1)',
+                      boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
                       fontSize: '12px',
-                      fontWeight: '800'
+                      fontWeight: '800',
+                      padding: '12px'
                     }}
                   />
                   <Area
                     type="monotone"
                     dataKey="sales"
                     stroke="var(--primary)"
-                    strokeWidth={5}
+                    strokeWidth={4}
                     fillOpacity={1}
                     fill="url(#colorSales)"
-                    animationDuration={2500}
+                    animationDuration={2000}
                   />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
-            <div className="flex justify-between items-center mt-6 px-2">
-               <p className="text-[10px] font-bold text-gray-400">MAY 2024 PERFORMANCE</p>
-               <div className="flex items-center gap-1 text-[10px] font-black text-primary">DETAILED AUDIT <ArrowRight size={12} /></div>
+            <div className="flex justify-between items-center mt-8 pt-6 border-t border-[#E2E8F0]">
+               <div>
+                  <p className="text-[10px] font-black text-[#94A3B8] uppercase tracking-widest mb-1">Current Period</p>
+                  <p className="text-sm font-bold text-[#1E293B]">May 1 — May 31, 2024</p>
+               </div>
+               <motion.div
+                 whileHover={{ x: 5 }}
+                 className="flex items-center gap-2 text-[11px] font-black text-primary cursor-pointer"
+               >
+                 VIEW FULL REPORT <ArrowRight size={14} />
+               </motion.div>
             </div>
           </div>
         </motion.div>
 
-        <motion.div variants={item} className="section-group" style={{ marginBottom: 40 }}>
-          <div className="section-head">
-            <h2 className="font-bold text-dark">Activity Log</h2>
-            <div className="section-action" style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: 1 }}>Full Archive</div>
+        <motion.div variants={item} className="section-group" style={{ marginBottom: 60, marginTop: 40 }}>
+          <div className="section-head" style={{ marginBottom: 20 }}>
+            <h2 className="font-extrabold text-[#1E293B] text-xl">Operational Log</h2>
+            <div className="text-[11px] font-black text-primary bg-[#4F46E510] px-4 py-2 rounded-full cursor-pointer hover:bg-primary hover:text-white transition-all uppercase tracking-wider">Historical Archive</div>
           </div>
-          <div className="card" style={{ padding: 0, border: 'none', borderRadius: '24px', overflow: 'hidden' }}>
+          <div className="card" style={{
+            padding: 0,
+            border: '1px solid rgba(255,255,255,0.5)',
+            borderRadius: '32px',
+            overflow: 'hidden',
+            background: 'rgba(255,255,255,0.7)',
+            backdropFilter: 'blur(10px)',
+            boxShadow: '0 20px 40px rgba(0,0,0,0.03)'
+          }}>
              {[
-               { title: 'New inquiry: Shree Ram Textiles', time: '2 hours ago', icon: <Activity size={20} />, color: '#4F46E5', bg: '#EEF2FF' },
-               { title: 'Payment: Deal #1012 verified', time: '5 hours ago', icon: <DollarSign size={20} />, color: '#10B981', bg: '#ECFDF5' },
-               { title: 'Inventory: Cotton Fabric low', time: 'Yesterday', icon: <Zap size={20} />, color: '#F59E0B', bg: '#FFFBEB' }
+               { title: 'New inquiry: Shree Ram Textiles', time: '2 hours ago', icon: <Activity size={18} />, color: '#4F46E5', bg: '#EEF2FF' },
+               { title: 'Payment: Deal #1012 verified', time: '5 hours ago', icon: <DollarSign size={18} />, color: '#10B981', bg: '#ECFDF5' },
+               { title: 'Inventory: Cotton Fabric low', time: 'Yesterday', icon: <Zap size={18} />, color: '#F59E0B', bg: '#FFFBEB' }
              ].map((activity, idx) => (
-               <div key={idx} className="activity-item" style={{ borderBottom: idx === 2 ? 'none' : '1px solid #F8FAFC' }}>
-                 <div className="activity-icon" style={{ backgroundColor: activity.bg, color: activity.color }}>
+               <motion.div
+                 key={idx}
+                 whileHover={{ background: 'rgba(255,255,255,0.5)' }}
+                 className="activity-item"
+                 style={{
+                    padding: '20px 24px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '16px',
+                    borderBottom: idx === 2 ? 'none' : '1px solid rgba(226, 232, 240, 0.5)',
+                    cursor: 'pointer'
+                 }}
+               >
+                 <div className="activity-icon" style={{
+                    width: '44px',
+                    height: '44px',
+                    borderRadius: '14px',
+                    backgroundColor: activity.bg,
+                    color: activity.color,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.02)'
+                 }}>
                    {activity.icon}
                  </div>
                  <div className="flex-1">
-                   <p className="font-bold text-sm text-dark">{activity.title}</p>
-                   <p className="text-[10px] font-bold text-gray-400 uppercase mt-0.5">{activity.time}</p>
+                   <p className="font-extrabold text-[14px] text-[#1E293B] mb-0.5">{activity.title}</p>
+                   <p className="text-[10px] font-black text-[#94A3B8] uppercase tracking-wider">{activity.time}</p>
                  </div>
-                 <ChevronRight size={14} className="text-gray-300" />
-               </div>
+                 <ChevronRight size={16} className="text-[#CBD5E1]" />
+               </motion.div>
              ))}
           </div>
         </motion.div>
