@@ -99,7 +99,7 @@ const Dashboard = () => {
             <img src={logo} alt="V" className="dashboard-logo-img" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
           <div style={{ lineHeight: 1.1 }}>
-            <p style={{ fontSize: '14px', fontWeight: '900', textTransform: 'uppercase', color: 'var(--primary)', margin: 0, letterSpacing: '1.5px' }}>Vatsalya Lifestyle LLP</p>
+            <p style={{ fontSize: '12px', fontWeight: '900', textTransform: 'uppercase', color: 'var(--primary)', margin: 0, letterSpacing: '1.5px' }}>Vatsalya Lifestyle LLP</p>
           </div>
         </div>
         <div className="flex items-center gap-3">
@@ -138,19 +138,19 @@ const Dashboard = () => {
               background: 'white',
               color: '#1E293B',
               fontWeight: '800',
-              fontSize: '13px',
-              padding: '10px 18px',
-              borderRadius: '14px',
+              fontSize: '11px',
+              padding: '6px 12px',
+              borderRadius: '10px',
               boxShadow: 'var(--shadow-sm)',
               display: 'flex',
               alignItems: 'center'
             }}>
-              <Zap size={16} fill="var(--primary)" color="var(--primary)" style={{ marginRight: 8 }} />
+              <Zap size={12} fill="var(--primary)" color="var(--primary)" style={{ marginRight: 5 }} />
               {new Date().toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short' })}
             </div>
           </div>
           <p className="mb-10 font-semibold text-[#64748B]" style={{ fontSize: '1.15rem', lineHeight: 1.6, maxWidth: '450px' }}>
-             Textiles That Define Your Vision. High-quality fabrics for the modern industry.
+             Textiles That Define Your Vision.
           </p>
 
           <div className="flex gap-5">
