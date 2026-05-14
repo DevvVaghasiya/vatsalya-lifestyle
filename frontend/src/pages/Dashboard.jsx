@@ -102,7 +102,7 @@ const Dashboard = () => {
             </div>
           </div>
           <p className="mb-8 font-medium" style={{ opacity: 0.9, lineHeight: 1.6 }}>
-            The enterprise is performing at peak efficiency. You have <b style={{ color: '#FCD34D' }}>{stats.totalDeals} active deals</b> and significant revenue growth this month.
+            Textiles That Define Your Vision.
           </p>
 
           <div className="flex gap-3" style={{ marginTop: '10px' }}>
