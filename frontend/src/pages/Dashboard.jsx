@@ -335,8 +335,8 @@ const Dashboard = () => {
         </motion.div>
 
         {/* Logo below carousel */}
-        <motion.div variants={item} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 32, marginBottom: 40, gap: 8 }}>
-          <img src={logo3} alt="Vatsalya Logo" style={{ maxWidth: '400px', width: '100%', objectFit: 'contain' }} />
+        <motion.div variants={item} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 32, marginBottom: 40, gap: 2 }}>
+          <img src={logo3} alt="Vatsalya Logo" style={{ maxWidth: '480px', width: '100%', objectFit: 'contain' }} />
           <a
             href="https://www.vatsalyalifestyle.co.in"
             target="_blank"
