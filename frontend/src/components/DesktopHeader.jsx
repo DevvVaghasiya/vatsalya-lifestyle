@@ -34,7 +34,7 @@ const DesktopHeader = () => {
           </div>
           <div className="brand-titles">
             <span className="brand-name">VATSALYA</span>
-            <span className="brand-tagline">Lifestyle Enterprise</span>
+            <span className="brand-tagline">Lifestyle LLP</span>
           </div>
         </div>
 
