@@ -66,7 +66,18 @@ const Dashboard = () => {
 
   return (
     <div className="page-shell">
-      <div className="page-header" style={{ padding: '12px 20px' }}>
+      <div className="dashboard-sky-bg">
+        <div className="wave-container">
+          <div className="wave wave1"></div>
+          <div className="wave wave2"></div>
+          <div className="wave wave3"></div>
+        </div>
+        <div className="fabric-float">
+          <div className="fabric-layer"></div>
+        </div>
+      </div>
+
+      <div className="page-header" style={{ padding: '12px 20px', background: 'rgba(255,255,255,0.7)', backdropFilter: 'blur(10px)', border: 'none' }}>
         <div className="flex items-center gap-3">
           <div className="dashboard-logo-container">
             <img src={logo} alt="V" className="dashboard-logo-img" />
@@ -90,7 +101,7 @@ const Dashboard = () => {
         initial="hidden"
         animate="show"
       >
-        <motion.div variants={item} className="hero-card">
+        <motion.div variants={item} className="hero-card" style={{ background: 'rgba(255,255,255,0.4)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.3)' }}>
           <div className="flex justify-between items-start mb-6">
             <div>
               <p className="text-xs font-bold uppercase tracking-wider opacity-70">Welcome back,</p>
@@ -102,11 +113,11 @@ const Dashboard = () => {
             </div>
           </div>
           <p className="mb-8 font-medium" style={{ opacity: 0.9, lineHeight: 1.6 }}>
-            Textiles That Define Your Vision.
+             Let your business flow like fabric in the air.
           </p>
 
           <div className="flex gap-3" style={{ marginTop: '10px' }}>
-            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => navigate('/deals')} className="button button-white" style={{ flex: 1, padding: '12px', fontSize: '0.9rem' }}>
+            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => navigate('/deals')} className="button button-white" style={{ flex: 1, padding: '12px', fontSize: '0.9rem', background: 'white' }}>
               <Plus size={18} /> New Order
             </motion.button>
             <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => navigate('/inquiries')} className="button button-glass" style={{ flex: 1, padding: '12px', fontSize: '0.9rem' }}>
@@ -116,7 +127,7 @@ const Dashboard = () => {
         </motion.div>
 
         <div className="stats-grid" style={{ marginTop: 0 }}>
-          <motion.div variants={item} className="card" style={{ border: 'none', boxShadow: 'var(--shadow-sm)' }}>
+          <motion.div variants={item} className="card" style={{ border: 'none', boxShadow: 'var(--shadow-sm)', background: 'rgba(255,255,255,0.8)' }}>
             <p className="card-title">Flow</p>
             <div className="card-row">
               <h3 className="card-value">{loading ? '...' : stats.totalDeals}</h3>
@@ -125,7 +136,7 @@ const Dashboard = () => {
               </div>
             </div>
           </motion.div>
-          <motion.div variants={item} className="card" style={{ border: 'none' }}>
+          <motion.div variants={item} className="card" style={{ border: 'none', background: 'rgba(255,255,255,0.8)' }}>
             <p className="card-title">Dues</p>
             <div className="card-row">
               <h3 className="card-value" style={{ fontSize: '1.2rem' }}>{loading ? '...' : `₹${(stats.pendingDues/1000).toFixed(1)}k`}</h3>
@@ -134,7 +145,7 @@ const Dashboard = () => {
               </div>
             </div>
           </motion.div>
-          <motion.div variants={item} className="card" style={{ border: 'none' }}>
+          <motion.div variants={item} className="card" style={{ border: 'none', background: 'rgba(255,255,255,0.8)' }}>
             <p className="card-title">Sales</p>
             <div className="card-row">
               <h3 className="card-value" style={{ fontSize: '1.2rem' }}>{loading ? '...' : `₹${(stats.sales/1000).toFixed(1)}k`}</h3>
@@ -143,7 +154,7 @@ const Dashboard = () => {
               </div>
             </div>
           </motion.div>
-          <motion.div variants={item} className="card" style={{ border: 'none' }}>
+          <motion.div variants={item} className="card" style={{ border: 'none', background: 'rgba(255,255,255,0.8)' }}>
             <p className="card-title">Alerts</p>
             <div className="card-row">
               <h3 className="card-value">{loading ? '...' : stats.lowStock}</h3>
@@ -164,7 +175,7 @@ const Dashboard = () => {
               Live Analysis
             </div>
           </div>
-          <div className="card" style={{ padding: '32px 16px 16px 16px', borderRadius: '30px', border: 'none', boxShadow: 'var(--shadow-sm)' }}>
+          <div className="card" style={{ padding: '32px 16px 16px 16px', borderRadius: '30px', border: 'none', boxShadow: 'var(--shadow-sm)', background: 'rgba(255,255,255,0.8)' }}>
             <div style={{ width: '100%', height: '240px' }}>
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={data} margin={{ top: 10, right: 0, left: -20, bottom: 0 }}>
