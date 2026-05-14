@@ -68,7 +68,7 @@ const Dashboard = () => {
       <div className="page-header" style={{ padding: '12px 20px' }}>
         <div className="flex items-center gap-3">
           <div className="dashboard-logo-container">
-            <img src="/logo.png" alt="V" className="dashboard-logo-img" />
+            <img src="/logo.jpeg" alt="V" className="dashboard-logo-img" />
           </div>
           <div style={{ lineHeight: 1 }}>
             <p style={{ fontSize: '1rem', fontWeight: '800', color: '#1E293B', margin: 0 }}>Portal</p>

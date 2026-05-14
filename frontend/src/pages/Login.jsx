@@ -75,7 +75,7 @@ const Login = () => {
             overflow: 'hidden',
             flexShrink: 0
           }}>
-            <img src="/logo.png" alt="V" style={{ width: '85%', height: '85%', objectFit: 'contain' }} />
+            <img src="/logo.jpeg" alt="V" style={{ width: '85%', height: '85%', objectFit: 'contain' }} />
           </div>
           <div>
             <p style={{ margin: 0, fontWeight: 900, fontSize: '1.1rem', color: 'white', letterSpacing: '-0.3px' }}>

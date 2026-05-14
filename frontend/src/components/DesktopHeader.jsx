@@ -29,7 +29,7 @@ const DesktopHeader = () => {
         {/* Brand Logo Section */}
         <div className="brand-section" onClick={() => navigate('/')}>
           <div className="logo-img-container">
-            <img src="/logo.png" alt="Vatsalya Logo" className="brand-logo-img" />
+            <img src="/logo.jpeg" alt="Vatsalya Logo" className="brand-logo-img" />
           </div>
           <div className="brand-titles">
             <span className="brand-name">VATSALYA</span>
