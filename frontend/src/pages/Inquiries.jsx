@@ -3,7 +3,7 @@ import {
   ArrowLeft, Search, Plus, MessageSquare, Clock,
   CheckCircle, XCircle, Tag, ChevronRight, Download
 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import api from '../utils/api';
 import jsPDF from 'jspdf';
 
@@ -135,7 +135,8 @@ const generateInquiryPDF = (item) => {
 /* ── Component ── */
 const Inquiries = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('ongoing');
+  const location = useLocation();
+  const [activeTab, setActiveTab] = useState(location.state?.tab || 'ongoing');
   const [allInquiries, setAllInquiries] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');

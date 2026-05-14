@@ -1,15 +1,16 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 import { useState, useEffect } from 'react';
 import { ArrowLeft, Search, Plus, ChevronRight, MessageSquare } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import api from '../utils/api';
 
 const Deals = () => {
-  const [activeTab, setActiveTab] = useState('ongoing');
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [activeTab, setActiveTab] = useState(location.state?.tab || 'ongoing');
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const navigate = useNavigate();
 
   const fetchOrders = async () => {
     setLoading(true);

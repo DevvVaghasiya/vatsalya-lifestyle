@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ChevronRight, TrendingUp, Package, DollarSign, FileText, Plus, ArrowRight, Activity, Zap } from 'lucide-react';
+import { ChevronRight, TrendingUp, Package, DollarSign, FileText, Plus, ArrowRight, Activity, Zap, FileCheck, Clock, CheckCircle } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -168,15 +168,17 @@ const Dashboard = () => {
 
         <div className="stats-grid" style={{ marginTop: 24, gap: '20px' }}>
           {[
-            { label: 'Orders', value: stats.totalDeals, icon: FileText, color: '#4F46E5', bg: '#EEF2FF' },
-            { label: 'Receivables', value: `₹${(stats.pendingDues/1000).toFixed(1)}k`, icon: DollarSign, color: '#10B981', bg: '#ECFDF5' },
-            { label: 'Revenue', value: `₹${(stats.sales/1000).toFixed(1)}k`, icon: TrendingUp, color: '#06B6D4', bg: '#ECFEFF' },
-            { label: 'Low Stock', value: stats.lowStock, icon: Package, color: '#EF4444', bg: '#FEF2F2' }
+            { label: 'Completed Orders', value: stats.completedOrders, icon: FileCheck, color: '#10B981', bg: '#ECFDF5', path: '/deals', tab: 'completed' },
+            { label: 'Delayed Orders', value: stats.delayedOrders, icon: Clock, color: '#EF4444', bg: '#FEF2F2', path: '/deals', tab: 'delayed' },
+            { label: 'Ongoing Inquiries', value: stats.ongoingInquiries, icon: Activity, color: '#4F46E5', bg: '#EEF2FF', path: '/inquiries', tab: 'ongoing' },
+            { label: 'Completed Inquiries', value: stats.completedInquiries, icon: CheckCircle, color: '#06B6D4', bg: '#ECFEFF', path: '/inquiries', tab: 'completed' }
           ].map((stat, i) => (
             <motion.div
               key={i}
               variants={item}
-              whileHover={{ y: -5 }}
+              whileHover={{ y: -5, scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => navigate(stat.path, { state: { tab: stat.tab } })}
               className="card"
               style={{
                 border: '1px solid rgba(255,255,255,0.5)',
@@ -184,7 +186,8 @@ const Dashboard = () => {
                 background: 'rgba(255,255,255,0.7)',
                 backdropFilter: 'blur(10px)',
                 borderRadius: '24px',
-                padding: '20px'
+                padding: '20px',
+                cursor: 'pointer'
               }}
             >
               <div className="flex justify-between items-start mb-4">
