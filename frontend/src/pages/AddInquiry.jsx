@@ -82,12 +82,20 @@ const AddInquiry = () => {
 
     setLoading(true);
     try {
+      // Create a clean payload for the backend
+      const { customerId, ...otherFormData } = formData;
+
       const payload = {
-        client: { id: formData.customerId },
-        createdBy: { id: currentUser.id },
-        lastEditedBy: { id: currentUser.id },
-        ...formData
+        ...otherFormData,
+        client: { id: parseInt(customerId) },
+        status: 'Ongoing'
       };
+
+      // Only add user info if we have a valid ID to avoid transient object errors
+      if (currentUser && currentUser.id) {
+        payload.createdBy = { id: currentUser.id };
+        payload.lastEditedBy = { id: currentUser.id };
+      }
 
       await api.post(`/api/inquiries`, payload);
       localStorage.removeItem('inquiry_draft');

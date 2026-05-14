@@ -117,10 +117,12 @@ const InquiryDetails = () => {
   const handleUpdate = async () => {
     const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
     try {
-      await api.put(`/api/inquiries/${id}`, {
-        ...editData,
-        lastEditedBy: { id: currentUser.id }
-      });
+      const payload = { ...editData };
+      if (currentUser && currentUser.id) {
+        payload.lastEditedBy = { id: currentUser.id };
+      }
+
+      await api.put(`/api/inquiries/${id}`, payload);
       alert('Inquiry updated successfully!');
       setIsEditing(false);
       fetchInquiryDetails();
