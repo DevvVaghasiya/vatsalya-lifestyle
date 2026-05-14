@@ -99,8 +99,7 @@ const Dashboard = () => {
             <img src={logo} alt="V" className="dashboard-logo-img" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
           <div style={{ lineHeight: 1.1 }}>
-            <p style={{ fontSize: '1.1rem', fontWeight: '900', color: '#1E293B', margin: 0, letterSpacing: '-0.3px' }}>Portal</p>
-            <p style={{ fontSize: '10px', fontWeight: '800', textTransform: 'uppercase', color: 'var(--primary)', margin: '2px 0 0', letterSpacing: '1px' }}>Vatsalya Lifestyle</p>
+            <p style={{ fontSize: '10px', fontWeight: '800', textTransform: 'uppercase', color: 'var(--primary)', margin: 0, letterSpacing: '1px' }}>Vatsalya Lifestyle LLP</p>
           </div>
         </div>
         <div className="flex items-center gap-3">
