@@ -69,13 +69,13 @@ const Login = () => {
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 36 }}>
           <div style={{
             width: 48, height: 48, borderRadius: 16,
-            background: 'linear-gradient(135deg, #4F46E5, #7C3AED)',
+            background: 'white',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 8px 20px rgba(79,70,229,0.4)',
-            fontSize: '1.4rem', fontWeight: 900, color: 'white',
+            boxShadow: '0 8px 24px rgba(0,0,0,0.2)',
+            overflow: 'hidden',
             flexShrink: 0
           }}>
-            V
+            <img src="/logo.png" alt="V" style={{ width: '85%', height: '85%', objectFit: 'contain' }} />
           </div>
           <div>
             <p style={{ margin: 0, fontWeight: 900, fontSize: '1.1rem', color: 'white', letterSpacing: '-0.3px' }}>

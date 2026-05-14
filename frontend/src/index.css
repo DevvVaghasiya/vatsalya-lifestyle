@@ -145,33 +145,40 @@ html, body {
   cursor: pointer;
 }
 
-.logo-cube {
-  width: 40px;
-  height: 40px;
+.logo-img-container {
+  width: 44px;
+  height: 44px;
+  background: white;
   border-radius: 12px;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
-  box-shadow: 0 6px 16px var(--primary-glow);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
 }
 
-.logo-letter {
-  color: white;
-  font-weight: 900;
-  font-size: 1.25rem;
-  z-index: 2;
+.brand-logo-img {
+  width: 85%;
+  height: 85%;
+  object-fit: contain;
 }
 
-.cube-glow {
-  position: absolute;
-  inset: -2px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, var(--primary), var(--accent));
-  opacity: 0.3;
-  filter: blur(4px);
-  z-index: 1;
+.dashboard-logo-container {
+  width: 42px;
+  height: 42px;
+  background: white;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.dashboard-logo-img {
+  width: 85%;
+  height: 85%;
+  object-fit: contain;
 }
 
 .brand-titles {

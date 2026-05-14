@@ -67,22 +67,8 @@ const Dashboard = () => {
     <div className="page-shell">
       <div className="page-header" style={{ padding: '12px 20px' }}>
         <div className="flex items-center gap-3">
-          <div
-            style={{
-              width: '38px',
-              height: '38px',
-              background: 'linear-gradient(135deg, var(--primary) 0%, #3730A3 100%)',
-              borderRadius: '10px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'white',
-              fontWeight: '900',
-              fontSize: '1.2rem',
-              boxShadow: '0 4px 10px rgba(79, 70, 229, 0.2)'
-            }}
-          >
-            V
+          <div className="dashboard-logo-container">
+            <img src="/logo.png" alt="V" className="dashboard-logo-img" />
           </div>
           <div style={{ lineHeight: 1 }}>
             <p style={{ fontSize: '1rem', fontWeight: '800', color: '#1E293B', margin: 0 }}>Portal</p>

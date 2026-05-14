@@ -28,9 +28,8 @@ const DesktopHeader = () => {
       <div className="header-inner">
         {/* Brand Logo Section */}
         <div className="brand-section" onClick={() => navigate('/')}>
-          <div className="logo-cube">
-            <span className="logo-letter">V</span>
-            <div className="cube-glow"></div>
+          <div className="logo-img-container">
+            <img src="/logo.png" alt="Vatsalya Logo" className="brand-logo-img" />
           </div>
           <div className="brand-titles">
             <span className="brand-name">VATSALYA</span>
