@@ -67,7 +67,14 @@ const Dashboard = () => {
 
   return (
     <div className="page-shell">
-      <div className="dashboard-sky-bg" style={{ backgroundImage: `url(${dashboardBg})` }}>
+      <div className="dashboard-sky-bg" style={{ 
+        backgroundImage: `url(${dashboardBg})`,
+        backgroundPosition: 'center top',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed',
+        zIndex: 0
+      }}>
         <div className="wave-container">
           <div className="wave wave1"></div>
           <div className="wave wave2"></div>
@@ -78,7 +85,9 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className="page-header" style={{ padding: '12px 20px', background: 'rgba(255,255,255,0.7)', backdropFilter: 'blur(10px)', border: 'none' }}>
+      <div style={{ position: 'relative', zIndex: 1 }}>
+
+      <div className="page-header" style={{ padding: '12px 20px', background: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(12px)', border: 'none' }}>
         <div className="flex items-center gap-3">
           <div className="dashboard-logo-container">
             <img src={logo} alt="V" className="dashboard-logo-img" />
@@ -102,7 +111,7 @@ const Dashboard = () => {
         initial="hidden"
         animate="show"
       >
-        <motion.div variants={item} className="hero-card" style={{ background: 'rgba(255,255,255,0.4)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.3)' }}>
+        <motion.div variants={item} className="hero-card" style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.4)' }}>
           <div className="flex justify-between items-start mb-6">
             <div>
               <p className="text-xs font-bold uppercase tracking-wider opacity-70">Welcome back,</p>
@@ -250,6 +259,7 @@ const Dashboard = () => {
           </div>
         </motion.div>
       </motion.div>
+      </div>
     </div>
   );
 };
