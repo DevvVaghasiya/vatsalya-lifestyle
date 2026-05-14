@@ -335,8 +335,27 @@ const Dashboard = () => {
         </motion.div>
 
         {/* Logo below carousel */}
-        <motion.div variants={item} style={{ display: 'flex', justifyContent: 'center', marginTop: 28, marginBottom: 32 }}>
-          <img src={logo3} alt="Vatsalya Logo" style={{ maxWidth: '220px', width: '100%', objectFit: 'contain' }} />
+        <motion.div variants={item} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 32, marginBottom: 40, gap: 12 }}>
+          <img src={logo3} alt="Vatsalya Logo" style={{ maxWidth: '320px', width: '100%', objectFit: 'contain' }} />
+          <a
+            href="https://www.vatsalyalifestyle.co.in"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              fontSize: '13px',
+              fontWeight: '700',
+              color: 'var(--primary)',
+              textDecoration: 'none',
+              letterSpacing: '1px',
+              background: 'linear-gradient(90deg, #4F46E5, #7C3AED)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              borderBottom: '1.5px solid #4F46E540',
+              paddingBottom: '2px'
+            }}
+          >
+            www.vatsalyalifestyle.co.in
+          </a>
         </motion.div>
       </motion.div>
       </div>
