@@ -329,60 +329,7 @@ const Dashboard = () => {
           </div>
         </motion.div>
 
-        <motion.div variants={item} className="section-group" style={{ marginBottom: 60, marginTop: 40 }}>
-          <div className="section-head" style={{ marginBottom: 20 }}>
-            <h2 className="font-extrabold text-[#1E293B] text-xl">Operational Log</h2>
-            <div className="text-[11px] font-black text-primary bg-[#4F46E510] px-4 py-2 rounded-full cursor-pointer hover:bg-primary hover:text-white transition-all uppercase tracking-wider">Historical Archive</div>
-          </div>
-          <div className="card" style={{
-            padding: 0,
-            border: '1px solid rgba(255,255,255,0.5)',
-            borderRadius: '32px',
-            overflow: 'hidden',
-            background: 'rgba(255,255,255,0.7)',
-            backdropFilter: 'blur(10px)',
-            boxShadow: '0 20px 40px rgba(0,0,0,0.03)'
-          }}>
-             {[
-               { title: 'New inquiry: Shree Ram Textiles', time: '2 hours ago', icon: <Activity size={18} />, color: '#4F46E5', bg: '#EEF2FF' },
-               { title: 'Payment: Deal #1012 verified', time: '5 hours ago', icon: <DollarSign size={18} />, color: '#10B981', bg: '#ECFDF5' },
-               { title: 'Inventory: Cotton Fabric low', time: 'Yesterday', icon: <Zap size={18} />, color: '#F59E0B', bg: '#FFFBEB' }
-             ].map((activity, idx) => (
-               <motion.div
-                 key={idx}
-                 whileHover={{ background: 'rgba(255,255,255,0.5)' }}
-                 className="activity-item"
-                 style={{
-                    padding: '20px 24px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '16px',
-                    borderBottom: idx === 2 ? 'none' : '1px solid rgba(226, 232, 240, 0.5)',
-                    cursor: 'pointer'
-                 }}
-               >
-                 <div className="activity-icon" style={{
-                    width: '44px',
-                    height: '44px',
-                    borderRadius: '14px',
-                    backgroundColor: activity.bg,
-                    color: activity.color,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.02)'
-                 }}>
-                   {activity.icon}
-                 </div>
-                 <div className="flex-1">
-                   <p className="font-extrabold text-[14px] text-[#1E293B] mb-0.5">{activity.title}</p>
-                   <p className="text-[10px] font-black text-[#94A3B8] uppercase tracking-wider">{activity.time}</p>
-                 </div>
-                 <ChevronRight size={16} className="text-[#CBD5E1]" />
-               </motion.div>
-             ))}
-          </div>
-        </motion.div>
+
       </motion.div>
       </div>
     </div>
