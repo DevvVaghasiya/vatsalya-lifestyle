@@ -126,30 +126,32 @@ const Dashboard = () => {
           backdropFilter: 'blur(24px)',
           border: '1px solid rgba(255,255,255,0.5)',
           borderRadius: '32px',
-          padding: '40px',
+          padding: '24px', // Reduced padding for better mobile fit
           boxShadow: '0 20px 40px rgba(0,0,0,0.05)'
         }}>
-          <div className="flex justify-between items-start mb-8">
+          <div className="flex justify-between items-start mb-6">
             <div>
-              <p className="text-[12px] font-black uppercase tracking-[2.5px] text-primary mb-2">Authenticated Access</p>
-              <h1 style={{ fontSize: '2.5rem', fontWeight: '900', color: '#1E293B', margin: 0, letterSpacing: '-1px' }}>Hi, {firstName} 👋</h1>
+              <p className="text-[10px] font-black uppercase tracking-[2px] text-primary mb-1">Authenticated Access</p>
+              <h1 style={{ fontSize: '2rem', fontWeight: '900', color: '#1E293B', margin: 0, letterSpacing: '-1px' }}>Hi, {firstName} 👋</h1>
             </div>
             <div className="pill" style={{
-              background: 'white',
+              background: 'transparent',
               color: '#1E293B',
               fontWeight: '800',
-              fontSize: '11px',
-              padding: '6px 12px',
-              borderRadius: '10px',
-              boxShadow: 'var(--shadow-sm)',
+              fontSize: '10px',
+              padding: '4px 10px',
+              borderRadius: '8px',
+              border: '1px solid rgba(0,0,0,0.05)',
               display: 'flex',
-              alignItems: 'center'
+              alignItems: 'center',
+              whiteSpace: 'nowrap',
+              flexShrink: 0
             }}>
-              <Zap size={12} fill="var(--primary)" color="var(--primary)" style={{ marginRight: 5 }} />
+              <Zap size={10} color="var(--primary)" style={{ marginRight: 4 }} />
               {new Date().toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short' })}
             </div>
           </div>
-          <p className="mb-10 font-semibold text-[#64748B]" style={{ fontSize: '1.15rem', lineHeight: 1.6, maxWidth: '450px' }}>
+          <p className="mb-8 font-semibold text-[#64748B]" style={{ fontSize: '0.95rem', lineHeight: 1.5, maxWidth: '300px' }}>
              Textiles That Define Your Vision.
           </p>
 
@@ -224,67 +226,74 @@ const Dashboard = () => {
             </div>
           </div>
           <div className="card" style={{
-            padding: '24px 0',
+            padding: '40px 0',
             borderRadius: '32px',
             border: '1px solid rgba(255,255,255,0.5)',
             boxShadow: '0 20px 40px rgba(0,0,0,0.03)',
             background: 'rgba(255,255,255,0.7)',
             backdropFilter: 'blur(10px)',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            position: 'relative'
           }}>
-            {/* Row 1: Moving Right to Left */}
-            <div className="flex mb-4">
-              <motion.div
-                animate={{ x: [0, -1035] }}
-                transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-                className="flex gap-4 px-4"
-              >
-                {[...Array(12)].map((_, i) => (
-                  <div key={i} style={{ width: '150px', height: '100px', flexShrink: 0, borderRadius: '16px', overflow: 'hidden', boxShadow: 'var(--shadow-sm)' }}>
-                    <img
-                      src={`https://images.unsplash.com/photo-${[
-                        '1528459801416-a9e53bbf4e17',
-                        '1584184924103-e310d9dc85fc',
-                        '1550684848-fac1c5b4e853',
-                        '1544441893-675973e31985',
-                        '1520004434532-6684162097cf',
-                        '1506792006437-256b665541e2'
-                      ][i % 6]}?auto=format&fit=crop&w=300&q=80`}
-                      alt="fabric"
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                    />
-                  </div>
-                ))}
-              </motion.div>
+            {/* Fade effect at edges */}
+            <div style={{ position: 'absolute', top: 0, left: 0, width: '120px', height: '100%', background: 'linear-gradient(to right, rgba(255,255,255,0.9), transparent)', zIndex: 10 }}></div>
+            <div style={{ position: 'absolute', top: 0, right: 0, width: '120px', height: '100%', background: 'linear-gradient(to left, rgba(255,255,255,0.9), transparent)', zIndex: 10 }}></div>
+
+            <div style={{ position: 'relative' }}>
+              {/* Row 1: Moving Right to Left */}
+              <div className="flex mb-6" style={{ overflow: 'hidden' }}>
+                <motion.div
+                  animate={{ x: [0, -1200] }}
+                  transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
+                  className="flex gap-6 px-4"
+                >
+                  {[...Array(15)].map((_, i) => (
+                    <div key={i} style={{ width: '180px', height: '120px', flexShrink: 0, borderRadius: '20px', overflow: 'hidden', boxShadow: '0 8px 16px rgba(0,0,0,0.08)', border: '4px solid white' }}>
+                      <img
+                        src={`https://images.unsplash.com/photo-${[
+                          '1528459801416-a9e53bbf4e17',
+                          '1584184924103-e310d9dc85fc',
+                          '1550684848-fac1c5b4e853',
+                          '1544441893-675973e31985',
+                          '1520004434532-6684162097cf',
+                          '1506792006437-256b665541e2'
+                        ][i % 6]}?auto=format&fit=crop&w=400&q=80`}
+                        alt="fabric"
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      />
+                    </div>
+                  ))}
+                </motion.div>
+              </div>
+
+              {/* Row 2: Moving Left to Right */}
+              <div className="flex mb-4" style={{ overflow: 'hidden' }}>
+                <motion.div
+                  animate={{ x: [-1200, 0] }}
+                  transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
+                  className="flex gap-6 px-4"
+                >
+                  {[...Array(15)].map((_, i) => (
+                    <div key={i} style={{ width: '180px', height: '120px', flexShrink: 0, borderRadius: '20px', overflow: 'hidden', boxShadow: '0 8px 16px rgba(0,0,0,0.08)', border: '4px solid white' }}>
+                      <img
+                        src={`https://images.unsplash.com/photo-${[
+                          '1620783770142-023055029ee1',
+                          '1441986300917-64674bd600d8',
+                          '1556905055-8f358a7a47b2',
+                          '1523381210434-271e8be1f52b',
+                          '1551488831-00ddcb6c6bd3',
+                          '1485230895905-ec40ba36b9bc'
+                        ][i % 6]}?auto=format&fit=crop&w=400&q=80`}
+                        alt="fabric"
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      />
+                    </div>
+                  ))}
+                </motion.div>
+              </div>
             </div>
 
-            {/* Row 2: Moving Left to Right */}
-            <div className="flex">
-              <motion.div
-                animate={{ x: [-1035, 0] }}
-                transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-                className="flex gap-4 px-4"
-              >
-                {[...Array(12)].map((_, i) => (
-                  <div key={i} style={{ width: '150px', height: '100px', flexShrink: 0, borderRadius: '16px', overflow: 'hidden', boxShadow: 'var(--shadow-sm)' }}>
-                    <img
-                      src={`https://images.unsplash.com/photo-${[
-                        '1506792006437-256b665541e2',
-                        '1520004434532-6684162097cf',
-                        '1544441893-675973e31985',
-                        '1550684848-fac1c5b4e853',
-                        '1584184924103-e310d9dc85fc',
-                        '1528459801416-a9e53bbf4e17'
-                      ][i % 6]}?auto=format&fit=crop&w=300&q=80`}
-                      alt="fabric"
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                    />
-                  </div>
-                ))}
-              </motion.div>
-            </div>
-
-            <div className="flex justify-between items-center mt-6 px-8 pt-6 border-t border-[#E2E8F0]">
+            <div className="flex justify-between items-center mt-10 px-10 pt-8 border-t border-[#E2E8F0]">
                <div>
                   <p className="text-[10px] font-black text-[#94A3B8] uppercase tracking-widest mb-1">Our Premium Range</p>
                   <p className="text-sm font-bold text-[#1E293B]">High-Quality Textiles & Fabrics</p>
