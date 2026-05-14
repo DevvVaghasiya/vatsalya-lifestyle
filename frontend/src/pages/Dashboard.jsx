@@ -217,70 +217,84 @@ const Dashboard = () => {
           <div className="section-head" style={{ marginBottom: 20 }}>
             <div className="flex items-center gap-3">
                <div style={{ width: 6, height: 24, background: 'var(--primary)', borderRadius: 3 }}></div>
-               <h2 className="font-extrabold text-[#1E293B] text-xl">Revenue Growth</h2>
+               <h2 className="font-extrabold text-[#1E293B] text-xl">Fabric Collection</h2>
             </div>
             <div className="flex items-center gap-2">
-               <span className="text-[10px] font-black uppercase text-primary bg-[#4F46E510] px-3 py-1.5 rounded-full tracking-wider">Live Monitoring</span>
+               <span className="text-[10px] font-black uppercase text-primary bg-[#4F46E510] px-3 py-1.5 rounded-full tracking-wider">Live Showcase</span>
             </div>
           </div>
           <div className="card" style={{
-            padding: '32px 24px',
+            padding: '24px 0',
             borderRadius: '32px',
             border: '1px solid rgba(255,255,255,0.5)',
             boxShadow: '0 20px 40px rgba(0,0,0,0.03)',
             background: 'rgba(255,255,255,0.7)',
-            backdropFilter: 'blur(10px)'
+            backdropFilter: 'blur(10px)',
+            overflow: 'hidden'
           }}>
-            <div style={{ width: '100%', height: '280px' }}>
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={data} margin={{ top: 10, right: 0, left: -20, bottom: 0 }}>
-                  <defs>
-                    <linearGradient id="colorSales" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.2} />
-                      <stop offset="95%" stopColor="var(--primary)" stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(0,0,0,0.05)" />
-                  <XAxis
-                    dataKey="name"
-                    axisLine={false}
-                    tickLine={false}
-                    tick={{ fontSize: 11, fill: '#64748B', fontWeight: 700 }}
-                    dy={12}
-                  />
-                  <YAxis hide={true} />
-                  <Tooltip
-                    contentStyle={{
-                      borderRadius: '16px',
-                      border: 'none',
-                      boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
-                      fontSize: '12px',
-                      fontWeight: '800',
-                      padding: '12px'
-                    }}
-                  />
-                  <Area
-                    type="monotone"
-                    dataKey="sales"
-                    stroke="var(--primary)"
-                    strokeWidth={4}
-                    fillOpacity={1}
-                    fill="url(#colorSales)"
-                    animationDuration={2000}
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
+            {/* Row 1: Moving Right to Left */}
+            <div className="flex mb-4">
+              <motion.div
+                animate={{ x: [0, -1035] }}
+                transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                className="flex gap-4 px-4"
+              >
+                {[...Array(12)].map((_, i) => (
+                  <div key={i} style={{ width: '150px', height: '100px', flexShrink: 0, borderRadius: '16px', overflow: 'hidden', boxShadow: 'var(--shadow-sm)' }}>
+                    <img
+                      src={`https://images.unsplash.com/photo-${[
+                        '1528459801416-a9e53bbf4e17',
+                        '1584184924103-e310d9dc85fc',
+                        '1550684848-fac1c5b4e853',
+                        '1544441893-675973e31985',
+                        '1520004434532-6684162097cf',
+                        '1506792006437-256b665541e2'
+                      ][i % 6]}?auto=format&fit=crop&w=300&q=80`}
+                      alt="fabric"
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                  </div>
+                ))}
+              </motion.div>
             </div>
-            <div className="flex justify-between items-center mt-8 pt-6 border-t border-[#E2E8F0]">
+
+            {/* Row 2: Moving Left to Right */}
+            <div className="flex">
+              <motion.div
+                animate={{ x: [-1035, 0] }}
+                transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                className="flex gap-4 px-4"
+              >
+                {[...Array(12)].map((_, i) => (
+                  <div key={i} style={{ width: '150px', height: '100px', flexShrink: 0, borderRadius: '16px', overflow: 'hidden', boxShadow: 'var(--shadow-sm)' }}>
+                    <img
+                      src={`https://images.unsplash.com/photo-${[
+                        '1506792006437-256b665541e2',
+                        '1520004434532-6684162097cf',
+                        '1544441893-675973e31985',
+                        '1550684848-fac1c5b4e853',
+                        '1584184924103-e310d9dc85fc',
+                        '1528459801416-a9e53bbf4e17'
+                      ][i % 6]}?auto=format&fit=crop&w=300&q=80`}
+                      alt="fabric"
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                  </div>
+                ))}
+              </motion.div>
+            </div>
+
+            <div className="flex justify-between items-center mt-6 px-8 pt-6 border-t border-[#E2E8F0]">
                <div>
-                  <p className="text-[10px] font-black text-[#94A3B8] uppercase tracking-widest mb-1">Current Period</p>
-                  <p className="text-sm font-bold text-[#1E293B]">May 1 — May 31, 2024</p>
+                  <p className="text-[10px] font-black text-[#94A3B8] uppercase tracking-widest mb-1">Our Premium Range</p>
+                  <p className="text-sm font-bold text-[#1E293B]">High-Quality Textiles & Fabrics</p>
                </div>
                <motion.div
                  whileHover={{ x: 5 }}
                  className="flex items-center gap-2 text-[11px] font-black text-primary cursor-pointer"
+                 onClick={() => navigate('/inventory')}
                >
-                 VIEW FULL REPORT <ArrowRight size={14} />
+                 EXPLORE INVENTORY <ArrowRight size={14} />
                </motion.div>
             </div>
           </div>
