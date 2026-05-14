@@ -333,19 +333,7 @@ const Dashboard = () => {
               </div>
             </div>
 
-            <div className="flex justify-between items-center mt-10 px-10 pt-8 border-t border-[#E2E8F0]">
-               <div>
-                  <p className="text-[10px] font-black text-[#94A3B8] uppercase tracking-widest mb-1">Our Premium Range</p>
-                  <p className="text-sm font-bold text-[#1E293B]">High-Quality Textiles & Fabrics</p>
-               </div>
-               <motion.div
-                 whileHover={{ x: 5 }}
-                 className="flex items-center gap-2 text-[11px] font-black text-primary cursor-pointer"
-                 onClick={() => navigate('/inventory')}
-               >
-                 EXPLORE INVENTORY <ArrowRight size={14} />
-               </motion.div>
-            </div>
+
           </div>
         </motion.div>
 
