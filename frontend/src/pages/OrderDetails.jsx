@@ -118,7 +118,9 @@ const OrderDetails = () => {
     styleNo: '',
     dispatchDate: '',
     fabricName: '',
-    fabricStyle: '',
+    referenceNo: '',
+    orderQuantity: '',
+    orderPrice: '',
     gsm: '',
     countConst: '',
     width: '',
@@ -328,7 +330,9 @@ const OrderDetails = () => {
         { label: "Style No", value: order.styleNo },
         { label: "Order Date", value: formatDisplayDate(order.dispatchDate) },
         { label: "Fabric Name", value: order.fabricName },
-        { label: "Fabric Style", value: order.fabricStyle },
+        { label: "Reference No", value: order.referenceNo },
+        { label: "Order Quantity", value: order.orderQuantity },
+        { label: "Price", value: order.orderPrice },
         { label: "GSM", value: order.gsm },
         { label: "Count/Const", value: order.countConst },
         { label: "Width", value: order.width },
@@ -582,7 +586,11 @@ const OrderDetails = () => {
           </div>
           <div style={{ display: 'flex', gap: '16px' }}>
             <DetailItem label="Fabric Name" value={order.fabricName} icon={Package} name="fabricName" isEditing={isEditing} editData={editData} onChange={handleChange} />
-            <DetailItem label="Fabric Style" value={order.fabricStyle} icon={Layers} name="fabricStyle" isEditing={isEditing} editData={editData} onChange={handleChange} />
+            <DetailItem label="Reference No" value={order.referenceNo} icon={Hash} name="referenceNo" isEditing={isEditing} editData={editData} onChange={handleChange} />
+          </div>
+          <div style={{ display: 'flex', gap: '16px' }}>
+            <DetailItem label="Order Quantity" value={order.orderQuantity} icon={Layers} name="orderQuantity" isEditing={isEditing} editData={editData} onChange={handleChange} type="number" />
+            <DetailItem label="Price" value={order.orderPrice} icon={DollarSign} name="orderPrice" isEditing={isEditing} editData={editData} onChange={handleChange} type="number" />
           </div>
           <div style={{ display: 'flex', gap: '16px' }}>
             <DetailItem label="GSM" value={order.gsm} icon={Hash} name="gsm" isEditing={isEditing} editData={editData} onChange={handleChange} />

@@ -74,7 +74,9 @@ public class OrderController {
         return orderRepository.findById(id).map(order -> {
             order.setStyleNo(orderDetails.getStyleNo());
             order.setFabricName(orderDetails.getFabricName());
-            order.setFabricStyle(orderDetails.getFabricStyle());
+            order.setReferenceNo(orderDetails.getReferenceNo());
+            order.setOrderQuantity(orderDetails.getOrderQuantity());
+            order.setOrderPrice(orderDetails.getOrderPrice());
             order.setWidth(orderDetails.getWidth());
             order.setGsm(orderDetails.getGsm());
             order.setCountConst(orderDetails.getCountConst());

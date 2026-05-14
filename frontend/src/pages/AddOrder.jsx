@@ -36,7 +36,9 @@ const AddOrder = () => {
     width: '',
     fabricName: '',
     orderDate: today,
-    fabricStyle: '',
+    referenceNo: '',
+    orderQuantity: '',
+    orderPrice: '',
     styleNo: '',
     gsm: '',
     countConst: '',
@@ -193,7 +195,9 @@ const AddOrder = () => {
       user: { id: currentUser.id },
       styleNo: formData.styleNo,
       fabricName: formData.fabricName,
-      fabricStyle: formData.fabricStyle,
+      referenceNo: formData.referenceNo,
+      orderQuantity: formData.orderQuantity,
+      orderPrice: formData.orderPrice,
       width: formData.width,
       gsm: formData.gsm,
       countConst: formData.countConst,
@@ -339,8 +343,19 @@ const AddOrder = () => {
                 <input type="text" className="form-input" name="fabricName" placeholder="e.g. Cotton Satin" value={formData.fabricName} onChange={handleChange} style={{ backgroundColor: '#F8FAFC', borderRadius: '16px' }} />
               </div>
               <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
-                <label className="form-label">Fabric Style</label>
-                <input type="text" className="form-input" name="fabricStyle" placeholder="e.g. Floral Print" value={formData.fabricStyle} onChange={handleChange} style={{ backgroundColor: '#F8FAFC', borderRadius: '16px' }} />
+                <label className="form-label">Reference No</label>
+                <input type="text" className="form-input" name="referenceNo" placeholder="Enter reference no" value={formData.referenceNo} onChange={handleChange} style={{ backgroundColor: '#F8FAFC', borderRadius: '16px' }} />
+              </div>
+            </div>
+
+            <div className="flex gap-4 mb-4">
+              <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
+                <label className="form-label">Order Quantity</label>
+                <input type="number" className="form-input" name="orderQuantity" placeholder="Enter quantity" value={formData.orderQuantity} onChange={handleChange} style={{ backgroundColor: '#F8FAFC', borderRadius: '16px' }} />
+              </div>
+              <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
+                <label className="form-label">Price</label>
+                <input type="number" className="form-input" name="orderPrice" placeholder="Enter price" value={formData.orderPrice} onChange={handleChange} style={{ backgroundColor: '#F8FAFC', borderRadius: '16px' }} />
               </div>
             </div>
 
