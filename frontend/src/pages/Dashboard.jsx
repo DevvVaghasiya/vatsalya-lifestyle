@@ -181,7 +181,7 @@ const Dashboard = () => {
                 {now.toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short' })}
               </div>
               <div style={{ fontSize: '11px', fontWeight: '700', color: 'var(--primary)', letterSpacing: '0.5px' }}>
-                {now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                {now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}
               </div>
             </div>
           </div>
