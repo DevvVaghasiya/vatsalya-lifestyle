@@ -247,20 +247,7 @@ const Dashboard = () => {
                   transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
                   className="flex gap-6 px-4"
                 >
-                  {[
-                    '1620783770142-023055029ee1', // Teal Leaf Pattern (matching user image)
-                    '1618220179471-90a607865c3f', // Zebra/Tan Pattern (matching user image)
-                    '1590736704728-f4730bb30770', // Stacked Colorful Muslins (matching user image)
-                    '1556905055-8f358a7a47b2', // Tan Crepe/Drape (matching user image)
-                    '1584184924103-e310d9dc85fc', // Pink Satin/Silk (matching user image)
-                    '1506792006437-256b665541e2', // Blue-ish Grey Crepe (matching user image)
-                    '1620783770142-023055029ee1',
-                    '1618220179471-90a607865c3f',
-                    '1590736704728-f4730bb30770',
-                    '1556905055-8f358a7a47b2',
-                    '1584184924103-e310d9dc85fc',
-                    '1506792006437-256b665541e2'
-                  ].map((id, i) => (
+                  {[10, 20, 30, 40, 50, 60, 10, 20, 30, 40, 50, 60].map((seed, i) => (
                     <motion.div
                       key={i}
                       whileHover={{ scale: 1.05, y: -5 }}
@@ -276,10 +263,9 @@ const Dashboard = () => {
                       }}
                     >
                       <img
-                        src={`https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=400&q=80`}
+                        src={`https://picsum.photos/seed/${seed}a/400/280`}
                         alt="fabric"
                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                        onError={(e) => { e.currentTarget.parentElement.style.display = 'none'; }}
                       />
                     </motion.div>
                   ))}
@@ -293,20 +279,7 @@ const Dashboard = () => {
                   transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
                   className="flex gap-6 px-4"
                 >
-                  {[
-                    '1550684848-fac1c5b4e853', // Fabric Swatches (matching user image)
-                    '1544441893-675973e31985', // Light Green Satin (matching user image)
-                    '1485230895905-ec40ba36b9bc', // Stacked Darker Fabrics (matching user image)
-                    '1523381210434-271e8be1f52b', // Gold Jacquard/Drape (matching user image)
-                    '1528459801416-a9e53bbf4e17', // Bright Blue Drape (matching user image)
-                    '1551488831-00ddcb6c6bd3', // Colorful Pleated Fabric (matching user image)
-                    '1550684848-fac1c5b4e853',
-                    '1544441893-675973e31985',
-                    '1485230895905-ec40ba36b9bc',
-                    '1523381210434-271e8be1f52b',
-                    '1528459801416-a9e53bbf4e17',
-                    '1551488831-00ddcb6c6bd3'
-                  ].map((id, i) => (
+                  {[70, 80, 90, 100, 110, 120, 70, 80, 90, 100, 110, 120].map((seed, i) => (
                     <motion.div
                       key={i}
                       whileHover={{ scale: 1.05, y: -5 }}
@@ -322,10 +295,9 @@ const Dashboard = () => {
                       }}
                     >
                       <img
-                        src={`https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=400&q=80`}
+                        src={`https://picsum.photos/seed/${seed}b/400/280`}
                         alt="fabric"
                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                        onError={(e) => { e.currentTarget.parentElement.style.display = 'none'; }}
                       />
                     </motion.div>
                   ))}
