@@ -279,6 +279,7 @@ const Dashboard = () => {
                         src={`https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=400&q=80`}
                         alt="fabric"
                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        onError={(e) => { e.currentTarget.parentElement.style.display = 'none'; }}
                       />
                     </motion.div>
                   ))}
@@ -324,6 +325,7 @@ const Dashboard = () => {
                         src={`https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=400&q=80`}
                         alt="fabric"
                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        onError={(e) => { e.currentTarget.parentElement.style.display = 'none'; }}
                       />
                     </motion.div>
                   ))}
