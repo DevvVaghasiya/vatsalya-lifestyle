@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import api from '../utils/api';
 import logo from '../assets/logo.jpeg';
+import dashboardBg from '../assets/dashboard-bg.png';
 
 const data = [
   { name: '1 May', sales: 22000 },
@@ -66,7 +67,7 @@ const Dashboard = () => {
 
   return (
     <div className="page-shell">
-      <div className="dashboard-sky-bg">
+      <div className="dashboard-sky-bg" style={{ backgroundImage: `url(${dashboardBg})` }}>
         <div className="wave-container">
           <div className="wave wave1"></div>
           <div className="wave wave2"></div>
