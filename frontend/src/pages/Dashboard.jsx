@@ -239,10 +239,10 @@ const Dashboard = () => {
           <div className="section-head" style={{ marginBottom: 20 }}>
             <div className="flex items-center gap-3">
                <div style={{ width: 6, height: 24, background: 'var(--primary)', borderRadius: 3 }}></div>
-               <h2 className="font-extrabold text-[#1E293B] text-xl">Fabric Collection</h2>
+
             </div>
             <div className="flex items-center gap-2">
-               <span className="text-[10px] font-black uppercase text-primary bg-[#4F46E510] px-3 py-1.5 rounded-full tracking-wider">Live Showcase</span>
+               <span className="text-[10px] font-black uppercase text-primary bg-[#4F46E510] px-3 py-1.5 rounded-full tracking-wider"></span>
             </div>
           </div>
           <div className="card" style={{
