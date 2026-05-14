@@ -88,18 +88,18 @@ const Dashboard = () => {
       <div style={{ position: 'relative', zIndex: 1 }}>
 
       <div className="page-header" style={{
-        padding: '14px 24px',
+        padding: '18px 24px',
         background: 'rgba(255,255,255,0.7)',
         backdropFilter: 'blur(16px)',
         borderBottom: '1px solid rgba(255,255,255,0.3)',
         boxShadow: '0 4px 30px rgba(0,0,0,0.03)'
       }}>
         <div className="flex items-center gap-4">
-          <div className="dashboard-logo-container" style={{ width: '42px', height: '42px', borderRadius: '12px', overflow: 'hidden', boxShadow: 'var(--shadow-sm)' }}>
+          <div className="dashboard-logo-container" style={{ width: '56px', height: '56px', borderRadius: '14px', overflow: 'hidden', boxShadow: 'var(--shadow-sm)' }}>
             <img src={logo} alt="V" className="dashboard-logo-img" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
           <div style={{ lineHeight: 1.1 }}>
-            <p style={{ fontSize: '10px', fontWeight: '800', textTransform: 'uppercase', color: 'var(--primary)', margin: 0, letterSpacing: '1px' }}>Vatsalya Lifestyle LLP</p>
+            <p style={{ fontSize: '14px', fontWeight: '900', textTransform: 'uppercase', color: 'var(--primary)', margin: 0, letterSpacing: '1.5px' }}>Vatsalya Lifestyle LLP</p>
           </div>
         </div>
         <div className="flex items-center gap-3">
@@ -108,7 +108,7 @@ const Dashboard = () => {
             whileTap={{ scale: 0.95 }}
             className="profile-avatar-small"
             onClick={() => navigate('/profile')}
-            style={{ border: '2px solid white', boxShadow: 'var(--shadow-sm)', width: '42px', height: '42px' }}
+            style={{ border: '2px solid white', boxShadow: 'var(--shadow-sm)', width: '52px', height: '52px' }}
           >
             <img src={user.profilePictureUrl || 'https://i.pravatar.cc/150?img=11'} alt="User" />
           </motion.div>
@@ -126,41 +126,51 @@ const Dashboard = () => {
           backdropFilter: 'blur(24px)',
           border: '1px solid rgba(255,255,255,0.5)',
           borderRadius: '32px',
-          padding: '32px',
+          padding: '40px',
           boxShadow: '0 20px 40px rgba(0,0,0,0.05)'
         }}>
-          <div className="flex justify-between items-start mb-6">
+          <div className="flex justify-between items-start mb-8">
             <div>
-              <p className="text-[11px] font-black uppercase tracking-[2px] text-primary mb-1">Authenticated Access</p>
-              <h1 style={{ fontSize: '2rem', fontWeight: '900', color: '#1E293B', margin: 0, letterSpacing: '-0.5px' }}>Hi, {firstName} 👋</h1>
+              <p className="text-[12px] font-black uppercase tracking-[2.5px] text-primary mb-2">Authenticated Access</p>
+              <h1 style={{ fontSize: '2.5rem', fontWeight: '900', color: '#1E293B', margin: 0, letterSpacing: '-1px' }}>Hi, {firstName} 👋</h1>
             </div>
-            <div className="pill" style={{ background: 'white', color: '#1E293B', fontWeight: '800', fontSize: '11px', padding: '8px 14px', borderRadius: '12px', boxShadow: 'var(--shadow-sm)' }}>
-              <Zap size={14} fill="var(--primary)" color="var(--primary)" style={{ marginRight: 6 }} />
-              {new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}
+            <div className="pill" style={{
+              background: 'white',
+              color: '#1E293B',
+              fontWeight: '800',
+              fontSize: '13px',
+              padding: '10px 18px',
+              borderRadius: '14px',
+              boxShadow: 'var(--shadow-sm)',
+              display: 'flex',
+              alignItems: 'center'
+            }}>
+              <Zap size={16} fill="var(--primary)" color="var(--primary)" style={{ marginRight: 8 }} />
+              {new Date().toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short' })}
             </div>
           </div>
-          <p className="mb-8 font-semibold text-[#64748B]" style={{ fontSize: '1.05rem', lineHeight: 1.6, maxWidth: '400px' }}>
-             Textiles That Define Your Vision.
+          <p className="mb-10 font-semibold text-[#64748B]" style={{ fontSize: '1.15rem', lineHeight: 1.6, maxWidth: '450px' }}>
+             Textiles That Define Your Vision. High-quality fabrics for the modern industry.
           </p>
 
-          <div className="flex gap-4">
+          <div className="flex gap-5">
             <motion.button
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => navigate('/deals')}
               className="button"
-              style={{ flex: 1, padding: '16px', fontSize: '0.95rem', background: 'var(--primary)', color: 'white', borderRadius: '18px', boxShadow: '0 10px 20px rgba(79, 70, 229, 0.2)' }}
+              style={{ flex: 1, padding: '18px', fontSize: '1rem', fontWeight: '700', background: 'var(--primary)', color: 'white', borderRadius: '20px', boxShadow: '0 10px 25px rgba(79, 70, 229, 0.2)' }}
             >
-              <Plus size={20} style={{ marginRight: 8 }} /> New Order
+              <Plus size={22} style={{ marginRight: 8 }} /> New Order
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => navigate('/inquiries')}
               className="button"
-              style={{ flex: 1, padding: '16px', fontSize: '0.95rem', background: 'white', color: '#1E293B', border: '1px solid #E2E8F0', borderRadius: '18px', boxShadow: 'var(--shadow-sm)' }}
+              style={{ flex: 1, padding: '18px', fontSize: '1rem', fontWeight: '700', background: 'white', color: '#1E293B', border: '1px solid #E2E8F0', borderRadius: '20px', boxShadow: 'var(--shadow-sm)' }}
             >
-              Recent Inquiries <ArrowRight size={20} style={{ marginLeft: 8 }} />
+              Recent Inquiries <ArrowRight size={22} style={{ marginLeft: 8 }} />
             </motion.button>
           </div>
         </motion.div>
