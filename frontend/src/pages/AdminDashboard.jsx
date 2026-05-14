@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import {
   Users, ClipboardList, Search,
   Clock, CheckCircle, XCircle, ChevronRight,
-  Activity, ShieldCheck, Download
+  Activity, ShieldCheck, Download, Package, Layers
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -78,6 +78,8 @@ const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('users');
   const [users, setUsers] = useState([]);
   const [inquiries, setInquiries] = useState([]);
+  const [orders, setOrders] = useState([]);
+  const [inventory, setInventory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('All');
@@ -91,14 +93,28 @@ const AdminDashboard = () => {
         if (activeTab === 'users') {
           const res = await api.get(`/api/admin/users`);
           setUsers(res.data);
-        } else {
+        } else if (activeTab === 'inquiries') {
           const res = await api.get(`/api/inquiries`);
           setInquiries(res.data);
+        } else if (activeTab === 'orders') {
+          const res = await api.get(`/api/orders`);
+          setOrders(res.data || []);
+        } else if (activeTab === 'inventory') {
+          const [s1, s2, s3] = await Promise.all([
+            api.get('/api/inventory/category/STOCK'),
+            api.get('/api/inventory/category/SAMPLE'),
+            api.get('/api/inventory/category/FABRIC_ENTRY'),
+          ]);
+          setInventory([
+            ...(s1.data||[]).map(i=>({...i,category:'Stock'})),
+            ...(s2.data||[]).map(i=>({...i,category:'Sample'})),
+            ...(s3.data||[]).map(i=>({...i,category:'Fabric Entry'})),
+          ]);
         }
       } catch (err) { console.error('Error fetching admin data:', err); }
       finally { setLoading(false); }
     };
-    fetchData(); 
+    fetchData();
   }, [activeTab]);
 
   const filteredUsers = users.filter(u =>
@@ -210,27 +226,29 @@ const AdminDashboard = () => {
         <div style={{
           display: 'flex', gap: 4,
           background: 'rgba(0,0,0,0.04)', borderRadius: 18,
-          padding: 5, marginBottom: 20
+          padding: 5, marginBottom: 20, flexWrap: 'wrap'
         }}>
           {[
-            { key: 'users', label: 'Partners', Icon: Users },
+            { key: 'users',     label: 'Partners',  Icon: Users },
             { key: 'inquiries', label: 'Inquiries', Icon: ClipboardList },
+            { key: 'orders',    label: 'Orders',    Icon: Package },
+            { key: 'inventory', label: 'Inventory', Icon: Layers },
           ].map(({ key, label, Icon }) => (
             <button
               key={key}
               onClick={() => { setActiveTab(key); setSearchTerm(''); setFilterStatus('All'); }}
               style={{
-                flex: 1, padding: '12px 16px', borderRadius: 14,
+                flex: 1, minWidth: 80, padding: '12px 10px', borderRadius: 14,
                 border: 'none', cursor: 'pointer',
-                fontWeight: 800, fontSize: '0.88rem',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                fontWeight: 800, fontSize: '0.82rem',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
                 transition: 'all 0.2s',
                 background: activeTab === key ? 'white' : 'transparent',
                 color: activeTab === key ? 'var(--primary)' : 'var(--muted)',
                 boxShadow: activeTab === key ? 'var(--shadow-sm)' : 'none',
               }}
             >
-              <Icon size={17} /> {label}
+              <Icon size={15} /> {label}
             </button>
           ))}
         </div>
@@ -245,7 +263,12 @@ const AdminDashboard = () => {
           <Search size={17} color="#94A3B8" />
           <input
             type="text"
-            placeholder={activeTab === 'users' ? 'Search partners by name or phone...' : 'Search inquiries by client or style...'}
+            placeholder={
+              activeTab === 'users' ? 'Search partners by name or phone...' :
+              activeTab === 'orders' ? 'Search orders by client or style...' :
+              activeTab === 'inventory' ? 'Search inventory by fabric or ref...' :
+              'Search inquiries by client or style...'
+            }
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
             style={searchStyle}
@@ -380,7 +403,7 @@ const AdminDashboard = () => {
               })}
             </motion.div>
 
-          ) : (
+          ) : activeTab === 'inquiries' ? (
             /* ── Inquiries List ── */
             <motion.div key="inquiries" variants={stagger} initial="hidden" animate="show"
               style={{ display: 'flex', flexDirection: 'column', gap: 12 }}
@@ -388,79 +411,160 @@ const AdminDashboard = () => {
               <p style={{ margin: '0 0 4px 2px', fontSize: '0.7rem', fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                 {filteredInquiries.length} records
               </p>
-
               {filteredInquiries.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--muted)', fontWeight: 700, opacity: 0.5 }}>
-                  No inquiries matched the filter.
-                </div>
+                <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--muted)', fontWeight: 700, opacity: 0.5 }}>No inquiries matched the filter.</div>
               ) : filteredInquiries.map(inq => {
                 const ss = getStatus(inq.status);
                 const StatusIcon = ss.Icon;
                 return (
-                  <motion.div key={inq.id} variants={pop} layout
-                    whileHover={{ y: -2 }}
+                  <motion.div key={inq.id} variants={pop} layout whileHover={{ y: -2 }}
                     onClick={() => navigate(`/inquiry/${inq.id}`)}
-                    style={{
-                      background: 'white', borderRadius: 20,
-                      padding: '18px 20px', border: '1px solid var(--border)',
-                      boxShadow: 'var(--shadow-sm)', cursor: 'pointer',
-                      transition: 'box-shadow 0.2s'
-                    }}
+                    style={{ background: 'white', borderRadius: 20, padding: '18px 20px', border: '1px solid var(--border)', boxShadow: 'var(--shadow-sm)', cursor: 'pointer' }}
                   >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 14 }}>
-                      <div style={{ display: 'flex', gap: 12, alignItems: 'center', flex: 1, minWidth: 0 }}>
-                        <div style={{
-                          width: 44, height: 44, borderRadius: 14, flexShrink: 0,
-                          background: 'var(--primary-soft)', color: 'var(--primary)',
-                          display: 'flex', alignItems: 'center', justifyContent: 'center'
-                        }}>
-                          <Activity size={20} />
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                      <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+                        <div style={{ width: 40, height: 40, borderRadius: 12, background: 'var(--primary-soft)', color: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                          <Activity size={18} />
                         </div>
-                        <div style={{ minWidth: 0 }}>
-                          <h4 style={{ margin: 0, fontWeight: 800, fontSize: '0.98rem', color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                            {inq.client?.name || 'Unknown Client'}
-                          </h4>
-                          <p style={{ margin: '3px 0 0', fontSize: '0.72rem', fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.4px' }}>
-                            Ref: {inq.styleNo || 'N/A'}
-                          </p>
+                        <div>
+                          <h4 style={{ margin: 0, fontWeight: 800, fontSize: '0.95rem', color: 'var(--text)' }}>{inq.client?.name || 'Unknown'}</h4>
+                          <p style={{ margin: '2px 0 0', fontSize: '0.7rem', fontWeight: 700, color: 'var(--muted)' }}>Ref: {inq.styleNo || 'N/A'}</p>
                         </div>
                       </div>
-
-                      <div style={{
-                        display: 'flex', alignItems: 'center', gap: 6,
-                        background: ss.bg, color: ss.color,
-                        padding: '5px 12px', borderRadius: 10,
-                        fontSize: '0.65rem', fontWeight: 800,
-                        textTransform: 'uppercase', letterSpacing: '0.5px',
-                        flexShrink: 0, marginLeft: 8
-                      }}>
-                        <StatusIcon size={11} />
-                        {inq.status || 'Ongoing'}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 5, background: ss.bg, color: ss.color, padding: '4px 10px', borderRadius: 8, fontSize: '0.65rem', fontWeight: 800 }}>
+                        <StatusIcon size={10} /> {inq.status || 'Ongoing'}
                       </div>
                     </div>
-
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 14 }}>
-                      {[
-                        { label: 'Quality', value: inq.quality || 'Standard' },
-                        { label: 'Date', value: inq.createdAt ? new Date(inq.createdAt).toLocaleDateString('en-GB') : '—' }
-                      ].map(({ label, value }) => (
-                        <div key={label} style={{ background: 'var(--bg)', padding: '10px 14px', borderRadius: 12 }}>
-                          <p style={{ margin: 0, fontSize: '0.58rem', fontWeight: 800, color: '#94A3B8', textTransform: 'uppercase' }}>{label}</p>
-                          <p style={{ margin: '4px 0 0', fontSize: '0.88rem', fontWeight: 700, color: 'var(--text)' }}>{value}</p>
-                        </div>
-                      ))}
-                    </div>
-
                     <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 4 }}>
-                      <span style={{ fontSize: '0.72rem', fontWeight: 800, color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                        View Details
-                      </span>
-                      <ChevronRight size={14} color="var(--primary)" />
+                      <span style={{ fontSize: '0.7rem', fontWeight: 800, color: 'var(--primary)' }}>View Details</span>
+                      <ChevronRight size={13} color="var(--primary)" />
                     </div>
                   </motion.div>
                 );
               })}
             </motion.div>
+
+          ) : activeTab === 'orders' ? (
+            /* ── Orders List ── */
+            (() => {
+              const filtered = orders.filter(o =>
+                (o.client?.name||'').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                (o.styleNo||'').toLowerCase().includes(searchTerm.toLowerCase())
+              );
+              const mapStatus = o => {
+                const s = (o.status||'').toLowerCase();
+                if (s === 'completed') return { label:'Completed', bg:'#DCFCE7', color:'#166534' };
+                if (s === 'canceled' || s === 'cancelled') return { label:'Canceled', bg:'#FEE2E2', color:'#B91C1C' };
+                if (s === 'delayed') return { label:'Delayed', bg:'#FEF2F2', color:'#EF4444' };
+                return { label:'Ongoing', bg:'#EEF2FF', color:'#4F46E5' };
+              };
+              return (
+                <motion.div key="orders" variants={stagger} initial="hidden" animate="show" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                  <p style={{ margin: '0 0 4px 2px', fontSize: '0.7rem', fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{filtered.length} orders</p>
+                  {filtered.length === 0 ? (
+                    <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--muted)', fontWeight: 700, opacity: 0.5 }}>No orders found.</div>
+                  ) : filtered.map(order => {
+                    const st = mapStatus(order);
+                    const dispatchTotal = (order.dispatchQuantityReceivedEntries||[]).reduce((s,e)=>s+(e.quantity||0),0);
+                    return (
+                      <motion.div key={order.id} variants={pop} layout whileHover={{ y: -2 }}
+                        onClick={() => navigate(`/deal-detail/${order.id}`)}
+                        style={{ background: 'white', borderRadius: 20, padding: '18px 20px', border: '1px solid var(--border)', boxShadow: 'var(--shadow-sm)', cursor: 'pointer' }}
+                      >
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                          <div>
+                            <h4 style={{ margin: 0, fontWeight: 800, fontSize: '0.95rem', color: 'var(--text)' }}>{order.client?.name || 'N/A'}</h4>
+                            <p style={{ margin: '2px 0 0', fontSize: '0.7rem', fontWeight: 700, color: 'var(--muted)' }}>Style: {order.styleNo || 'N/A'} · #{order.id}</p>
+                          </div>
+                          <div style={{ background: st.bg, color: st.color, padding: '4px 10px', borderRadius: 8, fontSize: '0.65rem', fontWeight: 800 }}>{st.label}</div>
+                        </div>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, background: '#F8FAFC', borderRadius: 12, padding: '10px 14px', marginBottom: 10 }}>
+                          {[
+                            { label: 'Booking', value: `${order.bookingQuantity||0} mtr` },
+                            { label: 'Dispatch', value: `${dispatchTotal} mtr` },
+                            { label: 'Delivery', value: order.completionDate ? new Date(order.completionDate).toLocaleDateString('en-GB') : '—' },
+                          ].map(({ label, value }) => (
+                            <div key={label}>
+                              <p style={{ margin: 0, fontSize: '0.58rem', color: '#94A3B8', fontWeight: 700, textTransform: 'uppercase' }}>{label}</p>
+                              <p style={{ margin: '3px 0 0', fontSize: '0.85rem', fontWeight: 800, color: '#1E293B' }}>{value}</p>
+                            </div>
+                          ))}
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 4 }}>
+                          <span style={{ fontSize: '0.7rem', fontWeight: 800, color: 'var(--primary)' }}>View Order</span>
+                          <ChevronRight size={13} color="var(--primary)" />
+                        </div>
+                      </motion.div>
+                    );
+                  })}
+                </motion.div>
+              );
+            })()
+
+          ) : (
+            /* ── Inventory List ── */
+            (() => {
+              const filtered = inventory.filter(i =>
+                (i.fabricName||'').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                (i.referenceNo||'').toLowerCase().includes(searchTerm.toLowerCase())
+              );
+              const catColor = { Stock:'#4F46E5', Sample:'#0D9488', 'Fabric Entry':'#D97706' };
+              const catBg    = { Stock:'#EEF2FF', Sample:'#F0FDFA', 'Fabric Entry':'#FFFBEB' };
+              return (
+                <motion.div key="inventory" variants={stagger} initial="hidden" animate="show" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                  <p style={{ margin: '0 0 4px 2px', fontSize: '0.7rem', fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{filtered.length} items</p>
+                  {filtered.length === 0 ? (
+                    <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--muted)', fontWeight: 700, opacity: 0.5 }}>No inventory items found.</div>
+                  ) : filtered.map(item => {
+                    const available = (item.stockQuantity||0) - (item.soldQuantity||0);
+                    const cc = catColor[item.category]||'#4F46E5';
+                    const cb = catBg[item.category]||'#EEF2FF';
+                    return (
+                      <motion.div key={item.id} variants={pop} layout whileHover={{ y: -2 }}
+                        style={{ background: 'white', borderRadius: 20, padding: '18px 20px', border: '1px solid var(--border)', boxShadow: 'var(--shadow-sm)' }}
+                      >
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                          <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+                            <div style={{ width: 40, height: 40, borderRadius: 12, background: cb, color: cc, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: '1.1rem', flexShrink: 0 }}>
+                              {(item.fabricName||'F').charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                              <h4 style={{ margin: 0, fontWeight: 800, fontSize: '0.95rem', color: 'var(--text)' }}>{item.fabricName}</h4>
+                              {item.referenceNo && <p style={{ margin: '2px 0 0', fontSize: '0.7rem', fontWeight: 700, color: 'var(--muted)' }}>Ref: {item.referenceNo}</p>}
+                            </div>
+                          </div>
+                          <span style={{ background: cb, color: cc, padding: '4px 10px', borderRadius: 8, fontSize: '0.65rem', fontWeight: 800 }}>{item.category}</span>
+                        </div>
+                        {item.category !== 'Fabric Entry' && (
+                          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, background: '#F8FAFC', borderRadius: 12, padding: '10px 14px' }}>
+                            {[
+                              { label: 'Available', value: `${available} Mtr`, highlight: available > 0 ? '#16A34A' : '#EF4444' },
+                              { label: 'Total', value: `${item.stockQuantity||0} Mtr`, highlight: '#1E293B' },
+                              { label: 'Dispatched', value: `${item.soldQuantity||0} Mtr`, highlight: '#D97706' },
+                            ].map(({ label, value, highlight }) => (
+                              <div key={label}>
+                                <p style={{ margin: 0, fontSize: '0.58rem', color: '#94A3B8', fontWeight: 700, textTransform: 'uppercase' }}>{label}</p>
+                                <p style={{ margin: '3px 0 0', fontSize: '0.85rem', fontWeight: 800, color: highlight }}>{value}</p>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        {item.category === 'Fabric Entry' && (
+                          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                            {[['Composition', item.composition], ['GSM', item.gsm], ['Width', item.width], ['Type', item.fabricType]].filter(([,v])=>v).map(([k,v]) => (
+                              <div key={k} style={{ background: '#FFFBEB', padding: '4px 10px', borderRadius: 8 }}>
+                                <span style={{ fontSize: '0.65rem', color: '#D97706', fontWeight: 700 }}>{k}: </span>
+                                <span style={{ fontSize: '0.78rem', color: '#1E293B', fontWeight: 700 }}>{v}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </motion.div>
+                    );
+                  })}
+                </motion.div>
+              );
+            })()
           )}
         </AnimatePresence>
       </div>
