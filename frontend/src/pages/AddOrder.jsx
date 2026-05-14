@@ -594,7 +594,7 @@ const AddOrder = () => {
                       ))}
                     </div>
                   )}
-                  <p style={{ marginTop: '12px', color: '#475569', fontWeight: '600' }}>Total received: {totalDyeReceived}</p>
+                  <p style={{ marginTop: '12px', color: '#475569', fontWeight: '600' }}>Dispatch Qty: {totalDyeReceived}</p>
                 </div>
               </div>
             )}
