@@ -11,7 +11,9 @@
 import axios from 'axios';
 
 export const API_BASE = import.meta.env.VITE_API_URL
-  || `http://${window.location.hostname}:8080`;
+  || (window.location.hostname === 'localhost' 
+      ? 'http://localhost:8080' 
+      : 'https://vatsalya-lifestyle-1.onrender.com');
 
 /**
  * Pre-configured Axios instance with:
