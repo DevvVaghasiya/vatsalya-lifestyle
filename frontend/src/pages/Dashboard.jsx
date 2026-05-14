@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import api from '../utils/api';
 import logo from '../assets/logo.jpeg';
 import dashboardBg from '../assets/dashboard-bg.png';
+import logo3 from '../assets/logo3.png';
 import fab1  from '../assets/fabric.jpeg';
 import fab2  from '../assets/fabric2.jpeg';
 import fab3  from '../assets/fabric3.jpeg';
@@ -320,7 +321,10 @@ const Dashboard = () => {
           </div>
         </motion.div>
 
-
+        {/* Logo below carousel */}
+        <motion.div variants={item} style={{ display: 'flex', justifyContent: 'center', marginTop: 28, marginBottom: 32 }}>
+          <img src={logo3} alt="Vatsalya Logo" style={{ maxWidth: '220px', width: '100%', objectFit: 'contain' }} />
+        </motion.div>
       </motion.div>
       </div>
     </div>
