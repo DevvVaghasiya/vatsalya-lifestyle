@@ -216,6 +216,7 @@ const AddOrder = () => {
       gsm: formData.gsm,
       countConst: formData.countConst,
       design: formData.design,
+      orderDays: formData.days,
       quality: formData.quality || '',
       weaver: formData.weaver,
       bookingReferenceNo: formData.bookingReferenceNo,

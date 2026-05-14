@@ -44,6 +44,7 @@ public class Order {
     private String countConst;
     private String design;
     private String quality;
+    private Integer orderDays;
 
     // Fabric Booking Section
     private String weaver;
@@ -173,6 +174,9 @@ public class Order {
 
     public String getQuality() { return quality; }
     public void setQuality(String quality) { this.quality = quality; }
+
+    public Integer getOrderDays() { return orderDays; }
+    public void setOrderDays(Integer orderDays) { this.orderDays = orderDays; }
 
     public String getWeaver() { return weaver; }
     public void setWeaver(String weaver) { this.weaver = weaver; }

@@ -82,6 +82,7 @@ public class OrderController {
             order.setCountConst(orderDetails.getCountConst());
             order.setDesign(orderDetails.getDesign());
             order.setQuality(orderDetails.getQuality());
+            order.setOrderDays(orderDetails.getOrderDays());
             
             // Update Fabric Booking Section
             order.setWeaver(orderDetails.getWeaver());

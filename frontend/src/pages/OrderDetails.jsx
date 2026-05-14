@@ -126,6 +126,7 @@ const OrderDetails = () => {
     width: '',
     design: '',
     notes: '',
+    orderDays: '',
     weaver: '',
     bookingReferenceNo: '',
     bookingFabricName: '',
@@ -329,6 +330,7 @@ const OrderDetails = () => {
         { label: "Customer", value: order.client?.name },
         { label: "Style No", value: order.styleNo },
         { label: "Order Date", value: formatDisplayDate(order.dispatchDate) },
+        { label: "Order Days", value: order.orderDays },
         { label: "Fabric Name", value: order.fabricName },
         { label: "Reference No", value: order.referenceNo },
         { label: "Order Quantity", value: order.orderQuantity },
@@ -403,7 +405,17 @@ const OrderDetails = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setEditData(prev => ({ ...prev, [name]: value }));
+    setEditData(prev => {
+      const updated = { ...prev, [name]: value };
+      if (name === 'dispatchDate' || name === 'orderDays') {
+        if (updated.dispatchDate && updated.orderDays) {
+          const date = new Date(updated.dispatchDate);
+          date.setDate(date.getDate() + parseInt(updated.orderDays || 0));
+          updated.completionDate = date.toISOString().split('T')[0];
+        }
+      }
+      return updated;
+    });
   };
 
   const addDyeReceiptEntry = () => {
@@ -583,6 +595,7 @@ const OrderDetails = () => {
           <div style={{ display: 'flex', gap: '16px' }}>
             <DetailItem label="Style No" value={order.styleNo} icon={Hash} name="styleNo" isEditing={isEditing} editData={editData} onChange={handleChange} />
             <DetailItem label="Order Date" value={order.dispatchDate} icon={Calendar} name="dispatchDate" isEditing={isEditing} editData={editData} onChange={handleChange} type="date" />
+            <DetailItem label="Order Days" value={order.orderDays} icon={Clock} name="orderDays" isEditing={isEditing} editData={editData} onChange={handleChange} type="number" />
           </div>
           <div style={{ display: 'flex', gap: '16px' }}>
             <DetailItem label="Fabric Name" value={order.fabricName} icon={Package} name="fabricName" isEditing={isEditing} editData={editData} onChange={handleChange} />
