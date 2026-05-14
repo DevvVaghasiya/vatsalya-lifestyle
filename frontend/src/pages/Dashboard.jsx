@@ -239,7 +239,7 @@ const Dashboard = () => {
                 <div className="card-icon" style={{ background: stat.bg, color: stat.color, width: '40px', height: '40px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <stat.icon size={20} />
                 </div>
-                <div style={{ fontSize: '10px', fontWeight: '800', color: stat.color, background: `${stat.color}15`, padding: '4px 8px', borderRadius: '6px' }}>+12%</div>
+                <div style={{ fontSize: '10px', fontWeight: '800', color: stat.color, background: `${stat.color}15`, padding: '4px 8px', borderRadius: '6px' }}></div>
               </div>
               <div>
                 <p style={{ fontSize: '11px', fontWeight: '800', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.5px', margin: 0 }}>{stat.label}</p>
@@ -335,7 +335,7 @@ const Dashboard = () => {
         </motion.div>
 
         {/* Logo below carousel */}
-        <motion.div variants={item} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 32, marginBottom: 40, gap: 2 }}>
+        <motion.div variants={item} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 32, marginBottom: 40, gap: 0 }}>
           <img src={logo3} alt="Vatsalya Logo" style={{ maxWidth: '480px', width: '100%', objectFit: 'contain' }} />
           <a
             href="https://www.vatsalyalifestyle.co.in"
@@ -347,6 +347,8 @@ const Dashboard = () => {
               color: '#4B47A8',
               textDecoration: 'none',
               letterSpacing: '0.8px',
+              marginTop: '-10px',
+              marginLeft: '-30px',
             }}
           >
             www.vatsalyalifestyle.co.in
