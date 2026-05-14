@@ -92,20 +92,9 @@ const generateInquiryPDF = (item) => {
     }
     gap();
 
-    // Check page overflow
     if (y > 200) { doc.addPage(); y = 20; }
 
-    // ── Section 2: What we are doing ──
-    sectionTitle("WHAT WE ARE DOING?", 13, 148, 136);
-    row("Sample Booking", item.sampleBooking);
-    row("Dying / Printing Mill", item.dyingPrintingMill);
-    row("Value Addition Mill", item.valueAdditionMill);
-    row("Readymade", item.readymade);
-    gap();
-
-    if (y > 200) { doc.addPage(); y = 20; }
-
-    // ── Section 3: Submission ──
+    // ── Section 2: Submission ──
     sectionTitle("SUBMISSION DETAILS", 217, 119, 6);
     row("Submission Date", formatDateShort(item.submissionDate || item.createdAt));
     row("Article No", item.articleNo);

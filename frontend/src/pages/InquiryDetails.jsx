@@ -220,38 +220,6 @@ const InquiryDetails = () => {
       doc.text(remarkText, 15, yPosition + 5);
       yPosition += remarkText.length * 5 + 12;
 
-      // What we are doing? Section
-      doc.setFillColor(13, 148, 136);
-      doc.setTextColor(255, 255, 255);
-      doc.setFont(undefined, 'bold');
-      doc.setFontSize(12);
-      doc.rect(10, yPosition - 5, pageWidth - 20, 8, 'F');
-      doc.text("WHAT WE ARE DOING?", 15, yPosition);
-      yPosition += 15;
-
-      doc.setTextColor(0, 0, 0);
-      doc.setFont(undefined, 'normal');
-      doc.setFontSize(10);
-
-      const processingData = [
-        ['Sample Booking', inquiry.sampleBooking || 'N/A'],
-        ['Dying/Printing Mill', inquiry.dyingPrintingMill || 'N/A'],
-        ['Value Addition', inquiry.valueAdditionMill || 'N/A'],
-        ['Readymade', inquiry.readymade || 'N/A']
-      ];
-
-      processingData.forEach(([label, value]) => {
-        doc.setFont(undefined, 'bold');
-        doc.setTextColor(13, 148, 136);
-        doc.text(`${label}:`, 15, yPosition);
-        doc.setFont(undefined, 'normal');
-        doc.setTextColor(0, 0, 0);
-        doc.text(String(value), 60, yPosition);
-        yPosition += 7;
-      });
-
-      yPosition += 5;
-
       // Check if new page is needed
       if (yPosition > pageHeight - 40) {
         doc.addPage();
