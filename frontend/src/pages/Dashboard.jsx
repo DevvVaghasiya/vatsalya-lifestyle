@@ -57,6 +57,12 @@ const Dashboard = () => {
     lowStock: 0,
   });
   const [loading, setLoading] = useState(true);
+  const [now, setNow] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     api
@@ -160,16 +166,23 @@ const Dashboard = () => {
               color: '#1E293B',
               fontWeight: '800',
               fontSize: '10px',
-              padding: '4px 10px',
+              padding: '6px 10px',
               borderRadius: '8px',
               border: '1px solid rgba(0,0,0,0.05)',
               display: 'flex',
+              flexDirection: 'column',
               alignItems: 'center',
               whiteSpace: 'nowrap',
-              flexShrink: 0
+              flexShrink: 0,
+              gap: '2px'
             }}>
-              <Zap size={10} color="var(--primary)" style={{ marginRight: 4 }} />
-              {new Date().toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short' })}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                <Zap size={10} color="var(--primary)" />
+                {now.toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short' })}
+              </div>
+              <div style={{ fontSize: '11px', fontWeight: '700', color: 'var(--primary)', letterSpacing: '0.5px' }}>
+                {now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+              </div>
             </div>
           </div>
           <p className="mb-8 font-semibold text-[#64748B]" style={{ fontSize: '0.95rem', lineHeight: 1.5, maxWidth: '300px' }}>
