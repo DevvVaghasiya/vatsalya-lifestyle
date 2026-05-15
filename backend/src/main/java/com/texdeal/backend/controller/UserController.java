@@ -42,6 +42,22 @@ public class UserController {
         return ResponseEntity.notFound().build();
     }
 
+    @PatchMapping("/{id}/profile-picture")
+    public ResponseEntity<?> updateProfilePicture(@PathVariable Long id, @RequestBody Map<String, String> body) {
+        Optional<AppUser> userOpt = userRepository.findById(id);
+        if (userOpt.isPresent()) {
+            AppUser user = userOpt.get();
+            String url = body.get("profilePictureUrl");
+            if (url == null || url.isBlank()) {
+                return ResponseEntity.badRequest().body("profilePictureUrl is required");
+            }
+            user.setProfilePictureUrl(url);
+            userRepository.save(user);
+            return ResponseEntity.ok(Map.of("profilePictureUrl", url));
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     @PutMapping("/{id}/change-password")
     public ResponseEntity<?> changePassword(@PathVariable Long id, @RequestBody Map<String, String> passwordData) {
         Optional<AppUser> userOpt = userRepository.findById(id);

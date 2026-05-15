@@ -19,15 +19,15 @@ const saveProfilePicture = async (user, url) => {
   const updatedUser = { ...user, profilePictureUrl: url };
   localStorage.setItem('user', JSON.stringify(updatedUser));
 
-  // 2. Dispatch a storage event so other tabs/components re-read user
+  // 2. Dispatch event so Navbar / other components re-read the updated user
   window.dispatchEvent(new Event('userProfileUpdated'));
 
-  // 3. Sync to backend
+  // 3. Sync only the URL to backend via dedicated PATCH endpoint
   if (user.id) {
     try {
-      await api.put(
-        `/api/users/${user.id}`,
-        { ...user, profilePictureUrl: url }
+      await api.patch(
+        `/api/users/${user.id}/profile-picture`,
+        { profilePictureUrl: url }
       );
     } catch (err) {
       console.warn('Could not sync profile picture to backend:', err.message);
@@ -92,7 +92,8 @@ const Profile = () => {
       setTimeout(() => setUploadDone(false), 3000);
     } catch (err) {
       console.error('Upload failed:', err);
-      setUploadError('Upload failed. Please try again.');
+      // Show the actual error so the user knows what went wrong
+      setUploadError(err.message || 'Upload failed. Please try again.');
     } finally {
       setUploading(false);
     }
