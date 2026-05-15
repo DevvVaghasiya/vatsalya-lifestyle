@@ -1,12 +1,10 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 import { useState, useEffect, useCallback } from 'react';
-import { ArrowLeft, Search, Plus, Package, Layers, FileText, X, Trash2, Download, ChevronDown, ChevronUp, RefreshCw } from 'lucide-react';
+import { ArrowLeft, Search, Plus, Package, Layers, FileText, X, Trash2, Printer, ChevronDown, ChevronUp, RefreshCw } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import api from '../utils/api';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { jsPDF } from 'jspdf';
-import QRCode from 'qrcode';
 
 const API_PATH = '/api/inventory';
 
@@ -27,103 +25,169 @@ const toNumberOrNull = (v) => {
   return Number.isFinite(n) ? n : null;
 };
 
-const safePdfText = (v) => {
-  const s = (v ?? '').toString().trim();
-  return s.length ? s : 'N/A';
-};
 
-const buildFabricPdf = async (item) => {
-  const doc = new jsPDF({ unit: 'pt', format: 'a4' });
-  const pageWidth = doc.internal.pageSize.getWidth();
 
-  const marginX = 40;
-  let currentY;
-  const rowH = 34;
-  const tableWidth = pageWidth - marginX * 2;
-  const col1W = Math.floor(tableWidth * 0.40);
 
-  const boxHeight = 450;
-  doc.setDrawColor(200);
-  doc.setLineWidth(1);
-  doc.rect(marginX, 40, tableWidth, boxHeight);
+/**
+ * Opens a new browser window with a compact fabric sticker and triggers print.
+ * No file is downloaded — the user prints directly.
+ */
+const printFabricSticker = (item) => {
+  const fields = [
+    ['Reference No', item.referenceNo],
+    ['Fabric Name',  item.fabricName],
+    ['Composition',  item.composition],
+    ['GSM',          item.gsm],
+    ['Width',        item.width],
+    ['Fabric Type',  item.fabricType],
+    ['Count / Const',item.countConst],
+    ['Remark',       item.remark],
+  ].filter(([, v]) => v !== null && v !== undefined && String(v).trim() !== '');
 
-  // Full-width merged row
-  doc.setFillColor(79, 70, 229);
-  doc.rect(marginX, 40, tableWidth, 50, 'F');
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(20);
-  doc.setTextColor(255, 255, 255);
-  doc.text('VATSALYA LIFESTYLE LLP', pageWidth / 2, 72, { align: 'center' });
+  const rows = fields.map(([label, value]) => `
+    <tr>
+      <td class="label">${label}</td>
+      <td class="value">${value}</td>
+    </tr>`).join('');
 
-  currentY = 90;
-  doc.setFillColor(248, 250, 252);
-  doc.rect(marginX, currentY, tableWidth, 30, 'F');
-  doc.setDrawColor(226, 232, 240);
-  doc.line(marginX, currentY + 30, marginX + tableWidth, currentY + 30);
-  doc.setFontSize(12);
-  doc.setTextColor(71, 85, 105);
-  doc.setFont('helvetica', 'bold');
-  doc.text('FABRIC SPECIFICATION SHEET', pageWidth / 2, currentY + 20, { align: 'center' });
-  currentY += 30;
-
-  const rows = [
-    ['Reference Number', safePdfText(item.referenceNo)],
-    ['Fabric Name', safePdfText(item.fabricName)],
-    ['Composition', safePdfText(item.composition)],
-    ['GSM (Weight)', safePdfText(item.gsm)],
-    ['Width', safePdfText(item.width)],
-    ['Fabric Type', safePdfText(item.fabricType)],
-    ['Count / Const', safePdfText(item.countConst)],
-  ];
-
-  doc.setFontSize(11);
-  for (let i = 0; i < rows.length; i++) {
-    const y = currentY + (i * rowH);
-    if (i % 2 === 0) {
-      doc.setFillColor(252, 253, 255);
-      doc.rect(marginX + 1, y, tableWidth - 2, rowH, 'F');
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fabric Sticker — ${item.fabricName || ''}</title>
+  <style>
+    @page {
+      size: 100mm 150mm;
+      margin: 0;
     }
-    doc.setDrawColor(235);
-    doc.line(marginX, y + rowH, marginX + tableWidth, y + rowH);
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background: white;
+      width: 100mm;
+      min-height: 150mm;
+      padding: 0;
+    }
 
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(100, 116, 139);
-    doc.text(String(rows[i][0]), marginX + 20, y + 22);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(30, 41, 59);
-    doc.text(String(rows[i][1]), marginX + col1W + 10, y + 22);
-  }
+    .sticker {
+      width: 100mm;
+      min-height: 150mm;
+      border: 2px solid #4F46E5;
+      border-radius: 6px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
 
-  currentY += (rows.length * rowH) + 20;
+    .header {
+      background: #4F46E5;
+      padding: 8px 10px;
+      text-align: center;
+    }
+    .header .brand {
+      color: white;
+      font-size: 11pt;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+    .header .sub {
+      color: rgba(255,255,255,0.7);
+      font-size: 6.5pt;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 1px;
+    }
 
-  // Cleaner, smaller QR block
-  const qrSize = 74;
-  const qrX = (pageWidth - qrSize) / 2;
-  const publicBaseUrl = import.meta.env.VITE_PUBLIC_APP_URL || window.location.origin;
-  const publicPdfUrl = `${publicBaseUrl}/f/${item.id}/p`;
-  const qrDataUrl = await QRCode.toDataURL(publicPdfUrl, { width: 220, margin: 1 });
+    .body { padding: 8px 10px; flex: 1; }
 
-  doc.setDrawColor(226, 232, 240);
-  doc.setLineWidth(1);
-  doc.roundedRect(pageWidth / 2 - 75, currentY, 150, 112, 8, 8);
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(8);
-  doc.setTextColor(79, 70, 229);
-  doc.text('SCAN TO OPEN PDF', pageWidth / 2, currentY + 14, { align: 'center' });
-  doc.addImage(qrDataUrl, 'PNG', qrX, currentY + 20, qrSize, qrSize);
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    tr { border-bottom: 1px solid #E2E8F0; }
+    tr:last-child { border-bottom: none; }
+    td { padding: 5px 4px; vertical-align: top; }
+    td.label {
+      font-size: 6pt;
+      font-weight: 800;
+      color: #94A3B8;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      width: 35%;
+      padding-top: 6px;
+    }
+    td.value {
+      font-size: 9pt;
+      font-weight: 700;
+      color: #1E293B;
+    }
 
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(7);
-  doc.setTextColor(120, 130, 150);
-  doc.text(`ID: ${item.id || 'N/A'}`, pageWidth / 2, currentY + 106, { align: 'center' });
+    .footer {
+      background: #F8FAFC;
+      border-top: 1px solid #E2E8F0;
+      padding: 5px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer .id {
+      font-size: 6pt;
+      color: #94A3B8;
+      font-weight: 700;
+    }
+    .footer .badge {
+      background: #FFFBEB;
+      color: #D97706;
+      font-size: 6pt;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
 
-  return doc;
-};
+    @media print {
+      body { margin: 0; }
+      .no-print { display: none !important; }
+    }
 
-const downloadFabricEntryPdf = async (item) => {
-  const doc = await buildFabricPdf(item);
-  const fileNameBase = (item.referenceNo || item.fabricName || 'fabric-spec').toString().trim().replace(/[\\/:*?"<>|]+/g, '-');
-  doc.save(`${fileNameBase}.pdf`);
+    /* Screen preview button */
+    .print-btn {
+      display: block;
+      margin: 10px auto;
+      padding: 8px 20px;
+      background: #4F46E5;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 10pt;
+      font-weight: 700;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="sticker">
+    <div class="header">
+      <div class="brand">VATSALYA LIFESTYLE LLP</div>
+      <div class="sub">Fabric Entry Sticker</div>
+    </div>
+    <div class="body">
+      <table>${rows}</table>
+    </div>
+    <div class="footer">
+      <span class="id">ID: ${item.id || 'N/A'}</span>
+      <span class="badge">Fabric Entry</span>
+    </div>
+  </div>
+  <button class="print-btn no-print" onclick="window.print()">🖨 Print Sticker</button>
+  <script>window.onload = () => window.print();<\/script>
+</body>
+</html>`;
+
+  const win = window.open('', '_blank', 'width=420,height=600');
+  win.document.write(html);
+  win.document.close();
 };
 
 const Inventory = () => {
@@ -301,11 +365,11 @@ const Inventory = () => {
               )}
               {isFabricEntry && (
                 <button
-                  onClick={() => downloadFabricEntryPdf(item)}
-                  title="Download PDF"
+                  onClick={() => printFabricSticker(item)}
+                  title="Print Sticker"
                   style={{ background: '#FFF7ED', border: 'none', borderRadius: '10px', padding: '8px', cursor: 'pointer', color: '#C2410C' }}
                 >
-                  <Download size={16} />
+                  <Printer size={16} />
                 </button>
               )}
               <button onClick={() => handleDelete(item.id)}
