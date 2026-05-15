@@ -42,6 +42,4 @@ public class AppUser {
 
     @CreationTimestamp
     private LocalDateTime createdAt;
-
-    private String accessCode;
 }

@@ -48,14 +48,5 @@ api.interceptors.response.use(
   }
 );
 
-// Request interceptor to add accessCode and Auth token
-api.interceptors.request.use((config) => {
-  const accessCode = localStorage.getItem('accessCode');
-  if (accessCode) {
-    config.params = { ...config.params, accessCode };
-  }
-  return config;
-});
-
 export { api };
 export default api;

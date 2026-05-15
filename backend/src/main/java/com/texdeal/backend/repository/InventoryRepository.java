@@ -10,5 +10,4 @@ import java.util.List;
 public interface InventoryRepository extends JpaRepository<Inventory, Long> {
     List<Inventory> findByCategory(String category);
     List<Inventory> findByCategoryAndStatus(String category, String status);
-    List<Inventory> findByCategoryAndAccessCode(String category, String accessCode);
 }

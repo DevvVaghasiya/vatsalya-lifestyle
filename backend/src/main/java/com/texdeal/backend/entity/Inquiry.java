@@ -60,8 +60,6 @@ public class Inquiry {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    private String accessCode;
-
     // Explicit Getters and Setters to avoid Lombok issues
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -111,6 +109,4 @@ public class Inquiry {
     public void setStatus(String status) { this.status = status; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-    public String getAccessCode() { return accessCode; }
-    public void setAccessCode(String accessCode) { this.accessCode = accessCode; }
 }

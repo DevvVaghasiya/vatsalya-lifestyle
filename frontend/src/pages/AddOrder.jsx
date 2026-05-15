@@ -264,8 +264,7 @@ const AddOrder = () => {
       creditDays: formData.creditDays,
       notes: formData.remark,
       priority: formData.priority,
-      status: formData.status || 'PENDING',
-      accessCode: localStorage.getItem('accessCode')
+      status: formData.status || 'PENDING'
     };
 
     try {

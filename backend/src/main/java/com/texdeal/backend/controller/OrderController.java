@@ -30,10 +30,7 @@ public class OrderController {
     private UserRepository userRepository;
 
     @GetMapping
-    public List<Order> getOrders(@RequestParam(required = false) String accessCode) {
-        if (accessCode != null && !accessCode.isBlank()) {
-            return orderRepository.findByAccessCode(accessCode);
-        }
+    public List<Order> getOrders() {
         return orderRepository.findAll();
     }
 

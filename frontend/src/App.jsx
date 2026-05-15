@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import DesktopHeader from './components/DesktopHeader';
-import AccessCodeModal from './components/AccessCodeModal';
 import Dashboard from './pages/Dashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import Deals from './pages/Deals';
@@ -57,13 +56,6 @@ const useSyncUser = () => {
         // Merge server data into local user
         const merged = { ...user, ...fresh };
         localStorage.setItem('user', JSON.stringify(merged));
-        
-        // If the server has an accessCode but we don't have it locally, sync it
-        if (fresh.accessCode && !localStorage.getItem('accessCode')) {
-            localStorage.setItem('accessCode', fresh.accessCode);
-            window.location.reload();
-        }
-
         // Only notify components if the profile picture actually changed
         // (avoids interfering with the upload-done banner timer)
         if (fresh.profilePictureUrl !== user.profilePictureUrl) {
@@ -79,25 +71,6 @@ const useSyncUser = () => {
 function App() {
   useSyncUser();
   const location = useLocation();
-  const [modalOpen, setModalOpen] = useState(false);
-  
-  useEffect(() => {
-    const auth = localStorage.getItem('isAuthenticated') === 'true';
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    const code = localStorage.getItem('accessCode');
-    
-    // Admins don't need a workspace code (they see everything)
-    if (auth && !code && user.role !== 'ADMIN') {
-      setModalOpen(true);
-    } else {
-      setModalOpen(false);
-    }
-  }, [location.pathname]);
-
-  const handleCodeEntered = (code) => {
-    setModalOpen(false);
-    window.location.reload(); 
-  };
 
   // Auth pages don't show the navigation header
   const isAuthPage = ['/login', '/signup'].some(path => location.pathname.includes(path));
@@ -109,11 +82,6 @@ function App() {
     <div className="app-root-wrapper">
       {showHeader && <DesktopHeader />}
       
-      <AccessCodeModal 
-        isOpen={modalOpen} 
-        onCodeEntered={handleCodeEntered} 
-      />
-
       <div className="page-container">
         <div className="main-content">
           <Routes>

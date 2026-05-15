@@ -84,18 +84,5 @@ public class UserController {
         userRepository.save(user);
         return ResponseEntity.ok("Password updated successfully");
     }
-
-    @PatchMapping("/{id}/access-code")
-    public ResponseEntity<?> updateAccessCode(@PathVariable Long id, @RequestBody Map<String, String> body) {
-        Optional<AppUser> userOpt = userRepository.findById(id);
-        if (userOpt.isPresent()) {
-            AppUser user = userOpt.get();
-            String code = body.get("accessCode");
-            user.setAccessCode(code);
-            userRepository.save(user);
-            return ResponseEntity.ok(Map.of("accessCode", code));
-        }
-        return ResponseEntity.notFound().build();
-    }
 }
 

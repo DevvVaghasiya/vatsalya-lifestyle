@@ -37,22 +37,12 @@ public class InventoryController {
     }
 
     @GetMapping
-    public List<Inventory> getAllInventory(@RequestParam(required = false) String accessCode) {
-        if (accessCode != null && !accessCode.isBlank()) {
-            // We need findByAccessCode in repository or filter manually
-            // Let's add findByAccessCode to InventoryRepository as well for consistency
-            return inventoryRepository.findAll().stream()
-                .filter(i -> accessCode.equals(i.getAccessCode()))
-                .toList();
-        }
+    public List<Inventory> getAllInventory() {
         return inventoryRepository.findAll();
     }
 
     @GetMapping("/category/{category}")
-    public List<Inventory> getByCategory(@PathVariable String category, @RequestParam(required = false) String accessCode) {
-        if (accessCode != null && !accessCode.isBlank()) {
-            return inventoryRepository.findByCategoryAndAccessCode(category.toUpperCase(), accessCode);
-        }
+    public List<Inventory> getByCategory(@PathVariable String category) {
         return inventoryRepository.findByCategory(category.toUpperCase());
     }
 

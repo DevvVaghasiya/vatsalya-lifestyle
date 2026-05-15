@@ -124,8 +124,6 @@ public class Order {
     @CreationTimestamp
     private LocalDateTime createdAt;
     
-    private String accessCode;
-
     public enum OrderStatus {
         PENDING,
         PROCESSING,
@@ -333,7 +331,4 @@ public class Order {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-
-    public String getAccessCode() { return accessCode; }
-    public void setAccessCode(String accessCode) { this.accessCode = accessCode; }
 }

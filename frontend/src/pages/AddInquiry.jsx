@@ -88,8 +88,7 @@ const AddInquiry = () => {
       const payload = {
         ...otherFormData,
         client: { id: parseInt(customerId) },
-        status: 'Ongoing',
-        accessCode: localStorage.getItem('accessCode')
+        status: 'Ongoing'
       };
 
       // Only add user info if we have a valid ID to avoid transient object errors

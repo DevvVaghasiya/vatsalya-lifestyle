@@ -254,8 +254,7 @@ const Inventory = () => {
         stockQuantity: activeTab === 'FABRIC_ENTRY' ? null : toNumberOrNull(formData.stockQuantity),
         category: activeTab,
         status: 'available',
-        soldQuantity: 0,
-        accessCode: localStorage.getItem('accessCode')
+        soldQuantity: 0
       });
       setShowAddModal(false);
       setFormData({
