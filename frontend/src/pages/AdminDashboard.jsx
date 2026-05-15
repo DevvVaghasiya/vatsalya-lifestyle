@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import {
   Users, ClipboardList, Search,
   Clock, CheckCircle, XCircle, ChevronRight,
-  Activity, ShieldCheck, Download, Package, Layers
+  Activity, ShieldCheck, Download, Package, Layers,
+  UserCheck, UserX
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -77,12 +78,14 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('users');
   const [users, setUsers] = useState([]);
+  const [pendingUsers, setPendingUsers] = useState([]);
   const [inquiries, setInquiries] = useState([]);
   const [orders, setOrders] = useState([]);
   const [inventory, setInventory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('All');
+  const [approvingId, setApprovingId] = useState(null);
 
   const adminUser = JSON.parse(localStorage.getItem('user') || '{}');
 
@@ -93,6 +96,9 @@ const AdminDashboard = () => {
         if (activeTab === 'users') {
           const res = await api.get(`/api/admin/users`);
           setUsers(res.data);
+        } else if (activeTab === 'approvals') {
+          const res = await api.get(`/api/admin/users/pending`);
+          setPendingUsers(res.data);
         } else if (activeTab === 'inquiries') {
           const res = await api.get(`/api/inquiries`);
           setInquiries(res.data);
@@ -116,6 +122,31 @@ const AdminDashboard = () => {
     };
     fetchData();
   }, [activeTab]);
+
+  // Always fetch pending count for badge
+  useEffect(() => {
+    api.get('/api/admin/users/pending')
+      .then(r => setPendingUsers(r.data))
+      .catch(() => {});
+  }, []);
+
+  const handleApprove = async (userId) => {
+    setApprovingId(userId);
+    try {
+      await api.patch(`/api/admin/users/${userId}/approve`);
+      setPendingUsers(prev => prev.filter(u => u.id !== userId));
+    } catch (e) { console.error(e); }
+    finally { setApprovingId(null); }
+  };
+
+  const handleReject = async (userId) => {
+    setApprovingId(userId);
+    try {
+      await api.patch(`/api/admin/users/${userId}/reject`);
+      setPendingUsers(prev => prev.filter(u => u.id !== userId));
+    } catch (e) { console.error(e); }
+    finally { setApprovingId(null); }
+  };
 
   const filteredUsers = users.filter(u =>
     (u.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -230,10 +261,11 @@ const AdminDashboard = () => {
         }}>
           {[
             { key: 'users',     label: 'Partners',  Icon: Users },
+            { key: 'approvals', label: 'Approvals', Icon: UserCheck, badge: pendingUsers.length },
             { key: 'inquiries', label: 'Inquiries', Icon: ClipboardList },
             { key: 'orders',    label: 'Orders',    Icon: Package },
             { key: 'inventory', label: 'Inventory', Icon: Layers },
-          ].map(({ key, label, Icon }) => (
+          ].map(({ key, label, Icon, badge }) => (
             <button
               key={key}
               onClick={() => { setActiveTab(key); setSearchTerm(''); setFilterStatus('All'); }}
@@ -246,9 +278,19 @@ const AdminDashboard = () => {
                 background: activeTab === key ? 'white' : 'transparent',
                 color: activeTab === key ? 'var(--primary)' : 'var(--muted)',
                 boxShadow: activeTab === key ? 'var(--shadow-sm)' : 'none',
+                position: 'relative'
               }}
             >
               <Icon size={15} /> {label}
+              {badge > 0 && (
+                <span style={{
+                  position: 'absolute', top: 6, right: 6,
+                  background: '#EF4444', color: 'white',
+                  fontSize: '0.6rem', fontWeight: 900,
+                  borderRadius: '50%', width: 16, height: 16,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center'
+                }}>{badge > 9 ? '9+' : badge}</span>
+              )}
             </button>
           ))}
         </div>
@@ -328,6 +370,87 @@ const AdminDashboard = () => {
             >
               <div className="spinner" style={{ marginBottom: 12 }} />
               <p style={{ color: 'var(--muted)', fontWeight: 700 }}>Synchronizing systems...</p>
+            </motion.div>
+
+          ) : activeTab === 'approvals' ? (
+            /* ── Pending Approvals ── */
+            <motion.div key="approvals" variants={stagger} initial="hidden" animate="show"
+              style={{ display: 'flex', flexDirection: 'column', gap: 12 }}
+            >
+              <p style={{ margin: '0 0 4px 2px', fontSize: '0.7rem', fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                {pendingUsers.length} {pendingUsers.length === 1 ? 'request' : 'requests'} awaiting approval
+              </p>
+
+              {pendingUsers.length === 0 ? (
+                <div style={{ textAlign: 'center', padding: '60px 20px' }}>
+                  <div style={{ fontSize: '2.5rem', marginBottom: 12 }}>✅</div>
+                  <p style={{ fontWeight: 800, color: 'var(--text)', margin: 0 }}>All caught up!</p>
+                  <p style={{ color: 'var(--muted)', fontSize: '0.85rem', margin: '6px 0 0' }}>No pending approval requests.</p>
+                </div>
+              ) : pendingUsers.map(u => {
+                const initials = (u.name || '?').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+                const avatarColor = getAvatarColor(u.name);
+                const isProcessing = approvingId === u.id;
+                return (
+                  <motion.div key={u.id} variants={pop} layout
+                    style={{
+                      background: 'white', borderRadius: 20,
+                      padding: '18px 20px', border: '1px solid #FEF3C7',
+                      boxShadow: '0 2px 8px rgba(234,179,8,0.1)',
+                      display: 'flex', gap: 14, alignItems: 'center'
+                    }}
+                  >
+                    {/* Avatar */}
+                    <div style={{
+                      width: 48, height: 48, borderRadius: 14, flexShrink: 0,
+                      background: `${avatarColor}18`, color: avatarColor,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontWeight: 900, fontSize: '1rem', border: `2px solid ${avatarColor}22`
+                    }}>{initials}</div>
+
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3 }}>
+                        <h3 style={{ margin: 0, fontWeight: 800, fontSize: '0.95rem', color: 'var(--text)' }}>{u.name || 'Unnamed'}</h3>
+                        <span style={{ background: '#FEF9C3', color: '#A16207', fontSize: '0.6rem', fontWeight: 800, padding: '2px 8px', borderRadius: 6, textTransform: 'uppercase' }}>Pending</span>
+                      </div>
+                      <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--muted)', fontWeight: 600 }}>{u.phoneNumber}</p>
+                      <p style={{ margin: '2px 0 0', fontSize: '0.72rem', color: '#94A3B8', fontWeight: 600 }}>
+                        Requested: {u.createdAt ? new Date(u.createdAt).toLocaleDateString('en-GB') : '—'}
+                      </p>
+                    </div>
+
+                    {/* Action buttons */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8, flexShrink: 0 }}>
+                      <button
+                        disabled={isProcessing}
+                        onClick={() => handleApprove(u.id)}
+                        style={{
+                          display: 'flex', alignItems: 'center', gap: 6,
+                          padding: '8px 14px', borderRadius: 10, border: 'none',
+                          background: '#DCFCE7', color: '#16A34A',
+                          fontWeight: 800, fontSize: '0.78rem', cursor: isProcessing ? 'not-allowed' : 'pointer',
+                          opacity: isProcessing ? 0.6 : 1, transition: 'all 0.2s'
+                        }}
+                      >
+                        <UserCheck size={14} /> Approve
+                      </button>
+                      <button
+                        disabled={isProcessing}
+                        onClick={() => handleReject(u.id)}
+                        style={{
+                          display: 'flex', alignItems: 'center', gap: 6,
+                          padding: '8px 14px', borderRadius: 10, border: 'none',
+                          background: '#FEE2E2', color: '#DC2626',
+                          fontWeight: 800, fontSize: '0.78rem', cursor: isProcessing ? 'not-allowed' : 'pointer',
+                          opacity: isProcessing ? 0.6 : 1, transition: 'all 0.2s'
+                        }}
+                      >
+                        <UserX size={14} /> Reject
+                      </button>
+                    </div>
+                  </motion.div>
+                );
+              })}
             </motion.div>
 
           ) : activeTab === 'users' ? (

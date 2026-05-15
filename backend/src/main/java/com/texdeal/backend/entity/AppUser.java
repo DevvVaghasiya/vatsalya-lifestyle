@@ -32,7 +32,11 @@ public class AppUser {
     @Column(unique = true, nullable = false)
     private String phoneNumber;
 
-    private String role; // e.g., OWNER, ADMIN
+    private String role; // e.g., USER, ADMIN
+
+    // Approval status: PENDING | APPROVED | REJECTED
+    @Column(nullable = false)
+    private String status = "PENDING";
 
     private String profilePictureUrl;
 

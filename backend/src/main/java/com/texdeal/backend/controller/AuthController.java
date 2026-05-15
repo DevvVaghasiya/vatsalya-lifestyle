@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -38,30 +39,38 @@ public class AuthController {
         user.setName(request.getName());
         user.setPhoneNumber(request.getPhoneNumber());
         user.setPassword(request.getPassword());   // stored as plain text
-
-        
-        // Use phone number as a fallback email if the database still requires it
         user.setEmail(request.getPhoneNumber() + "@vatsalya.com");
-
         user.setRole("USER");
+        user.setStatus("PENDING");   // requires admin approval before login
         user.setCreatedAt(LocalDateTime.now());
 
         userRepository.save(user);
 
-        String token = jwtUtil.generateToken(user.getPhoneNumber());
-        return ResponseEntity.ok(new AuthResponse(token, user));
+        // Do NOT issue a token — user must wait for admin approval
+        return ResponseEntity.ok(Map.of(
+            "message", "Registration successful. Your account is pending admin approval."
+        ));
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest request) {
         Optional<AppUser> userOpt = userRepository.findByPhoneNumber(request.getPhoneNumber());
 
-        if (userOpt.isPresent() && passwordEncoder.matches(request.getPassword(), userOpt.get().getPassword())) {
-            AppUser user = userOpt.get();
-            String token = jwtUtil.generateToken(user.getPhoneNumber());
-            return ResponseEntity.ok(new AuthResponse(token, user));
+        if (userOpt.isEmpty() || !passwordEncoder.matches(request.getPassword(), userOpt.get().getPassword())) {
+            return ResponseEntity.status(401).body("Invalid phone number or password");
         }
 
-        return ResponseEntity.status(401).body("Invalid phone number or password");
+        AppUser user = userOpt.get();
+
+        // Block login for unapproved accounts
+        if ("PENDING".equalsIgnoreCase(user.getStatus())) {
+            return ResponseEntity.status(403).body("PENDING_APPROVAL");
+        }
+        if ("REJECTED".equalsIgnoreCase(user.getStatus())) {
+            return ResponseEntity.status(403).body("ACCOUNT_REJECTED");
+        }
+
+        String token = jwtUtil.generateToken(user.getPhoneNumber());
+        return ResponseEntity.ok(new AuthResponse(token, user));
     }
 }

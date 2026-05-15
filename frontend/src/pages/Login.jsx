@@ -24,7 +24,14 @@ const Login = () => {
       localStorage.setItem('isAuthenticated', 'true');
       navigate('/');
     } catch (err) {
-      setError(err.response?.data || 'Access denied. Please check your credentials.');
+      const data = err.response?.data;
+      if (data === 'PENDING_APPROVAL') {
+        setError('⏳ Your account is pending admin approval. Please wait.');
+      } else if (data === 'ACCOUNT_REJECTED') {
+        setError('❌ Your account access has been rejected. Contact admin.');
+      } else {
+        setError(data || 'Access denied. Please check your credentials.');
+      }
     } finally {
       setLoading(false);
     }

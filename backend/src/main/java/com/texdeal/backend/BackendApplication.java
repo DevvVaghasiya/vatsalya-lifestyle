@@ -25,6 +25,9 @@ public class BackendApplication {
                 jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS order_dye_quantity_received (id BIGINT AUTO_INCREMENT PRIMARY KEY, order_id BIGINT NOT NULL, entry_date DATE, quantity DOUBLE, remark VARCHAR(255))");
                 jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS order_digital_quantity_received (id BIGINT AUTO_INCREMENT PRIMARY KEY, order_id BIGINT NOT NULL, entry_date DATE, quantity DOUBLE, remark VARCHAR(255))");
                 jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS order_dispatch_quantity_received (id BIGINT AUTO_INCREMENT PRIMARY KEY, order_id BIGINT NOT NULL, entry_date DATE, quantity DOUBLE, remark VARCHAR(255))");
+                // Migration: approve all pre-existing users so they aren't locked out
+                try { jdbcTemplate.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS status VARCHAR(20) DEFAULT 'APPROVED'"); } catch (Exception ignored) {}
+                jdbcTemplate.execute("UPDATE users SET status = 'APPROVED' WHERE status IS NULL");
                 System.out.println("✅ Schema validation complete.");
                 
 				String adminPhone = "9999999999";
@@ -36,6 +39,7 @@ public class BackendApplication {
 					admin.setPhoneNumber(adminPhone);
 					admin.setPassword(passwordEncoder.encode("Dev@8047"));
 					admin.setRole("ADMIN");
+					admin.setStatus("APPROVED");
 					admin.setCreatedAt(LocalDateTime.now());
 					userRepository.save(admin);
 					System.out.println("✅ Admin User Auto-Created: " + adminPhone);
@@ -51,6 +55,7 @@ public class BackendApplication {
 					user.setPhoneNumber(userPhone);
 					user.setPassword(passwordEncoder.encode("12345678"));
 					user.setRole("USER");
+					user.setStatus("APPROVED");
 					user.setCreatedAt(LocalDateTime.now());
 					userRepository.save(user);
 					System.out.println("✅ Default User Auto-Created: " + userPhone);
