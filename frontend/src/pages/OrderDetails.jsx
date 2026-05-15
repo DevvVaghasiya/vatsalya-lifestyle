@@ -114,7 +114,7 @@ const OrderDetails = () => {
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
-  const [editData, setEditData] = useState({
+  const initialEditData = {
     styleNo: '',
     dispatchDate: '',
     fabricName: '',
@@ -160,7 +160,9 @@ const OrderDetails = () => {
     dyeQuantityReceivedEntries: [],
     digitalQuantityReceivedEntries: [],
     dispatchQuantityReceivedEntries: []
-  });
+  };
+
+  const [editData, setEditData] = useState(initialEditData);
   const [dyeReceiptDate, setDyeReceiptDate] = useState(today);
   const [dyeReceiptQuantity, setDyeReceiptQuantity] = useState('');
   const [dyeReceiptRemark, setDyeReceiptRemark] = useState('');
@@ -176,7 +178,19 @@ const OrderDetails = () => {
     try {
       const res = await api.get(`/api/orders/${id}`);
       setOrder(res.data);
-      setEditData(prev => ({ ...prev, ...res.data }));
+      // Reset editData with initial defaults then merge with fetched data to avoid leaks
+      setEditData({ ...initialEditData, ...res.data });
+      
+      // Reset form fields
+      setDyeReceiptDate(today);
+      setDyeReceiptQuantity('');
+      setDyeReceiptRemark('');
+      setDigitalReceiptDate(today);
+      setDigitalReceiptQuantity('');
+      setDigitalReceiptRemark('');
+      setDispatchReceiptDate(today);
+      setDispatchReceiptQuantity('');
+      setDispatchReceiptRemark('');
     } catch (err) {
       console.error('Error fetching order details:', err);
     } finally {
@@ -693,157 +707,228 @@ const OrderDetails = () => {
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '16px', marginTop: '16px' }}>
-            <DetailItem label="Dye Mill Name" value={order.dyeMillName} icon={User} name="dyeMillName" isEditing={isEditing} editData={editData} onChange={handleChange} />
-            <DetailItem label="Dye Job Charge" value={order.dyeJobCharge} icon={DollarSign} name="dyeJobCharge" isEditing={isEditing} editData={editData} onChange={handleChange} />
-            <DetailItem label="Dye Finish Quantity" value={order.dyeFinishQuantity} icon={Package} name="dyeFinishQuantity" isEditing={isEditing} editData={editData} onChange={handleChange} />
-            <DetailItem label="Dye Width" value={order.dyeWidth} icon={Ruler} name="dyeWidth" isEditing={isEditing} editData={editData} onChange={handleChange} />
-            <DetailItem label="Dye Colour / Design" value={order.dyeColorDesign} icon={Palette} name="dyeColorDesign" isEditing={isEditing} editData={editData} onChange={handleChange} />
-            <DetailItem label="Dye Shortage" value={order.dyeShortage} icon={Info} name="dyeShortage" isEditing={isEditing} editData={editData} onChange={handleChange} />
-            <DetailItem label="Dye Delivery Date" value={order.dyeDeliveryDate} icon={Calendar} name="dyeDeliveryDate" type="date" isEditing={isEditing} editData={editData} onChange={handleChange} />
-            <DetailItem label="Digital Mill Name" value={order.digitalMillName} icon={User} name="digitalMillName" isEditing={isEditing} editData={editData} onChange={handleChange} />
-            <DetailItem label="Digital Job Charge" value={order.digitalJobCharge} icon={DollarSign} name="digitalJobCharge" isEditing={isEditing} editData={editData} onChange={handleChange} />
-            <DetailItem label="Digital Finish Quantity" value={order.digitalFinishQuantity} icon={Package} name="digitalFinishQuantity" isEditing={isEditing} editData={editData} onChange={handleChange} />
-            <DetailItem label="Digital Width" value={order.digitalWidth} icon={Ruler} name="digitalWidth" isEditing={isEditing} editData={editData} onChange={handleChange} />
-            <DetailItem label="Digital Design" value={order.digitalDesign} icon={Palette} name="digitalDesign" isEditing={isEditing} editData={editData} onChange={handleChange} />
-            <DetailItem label="Digital Shortage" value={order.digitalShortage} icon={Info} name="digitalShortage" isEditing={isEditing} editData={editData} onChange={handleChange} />
-            <DetailItem label="Digital Delivery Date" value={order.digitalDeliveryDate} icon={Calendar} name="digitalDeliveryDate" type="date" isEditing={isEditing} editData={editData} onChange={handleChange} />
+            {(isEditing ? editData.fabricJobWorkMill === 'dyingAndPrinting' || editData.fabricJobWorkMill === 'both' : order.fabricJobWorkMill === 'dyingAndPrinting' || order.fabricJobWorkMill === 'both') && (
+              <>
+                <DetailItem label="Dye Mill Name" value={order.dyeMillName} icon={User} name="dyeMillName" isEditing={isEditing} editData={editData} onChange={handleChange} />
+                <DetailItem label="Dye Job Charge" value={order.dyeJobCharge} icon={DollarSign} name="dyeJobCharge" isEditing={isEditing} editData={editData} onChange={handleChange} />
+                <DetailItem label="Dye Finish Quantity" value={order.dyeFinishQuantity} icon={Package} name="dyeFinishQuantity" isEditing={isEditing} editData={editData} onChange={handleChange} />
+                <DetailItem label="Dye Width" value={order.dyeWidth} icon={Ruler} name="dyeWidth" isEditing={isEditing} editData={editData} onChange={handleChange} />
+                <DetailItem label="Dye Colour / Design" value={order.dyeColorDesign} icon={Palette} name="dyeColorDesign" isEditing={isEditing} editData={editData} onChange={handleChange} />
+                <DetailItem label="Dye Shortage" value={order.dyeShortage} icon={Info} name="dyeShortage" isEditing={isEditing} editData={editData} onChange={handleChange} />
+                <DetailItem label="Dye Delivery Date" value={order.dyeDeliveryDate} icon={Calendar} name="dyeDeliveryDate" type="date" isEditing={isEditing} editData={editData} onChange={handleChange} />
+              </>
+            )}
+
+            {(isEditing ? editData.fabricJobWorkMill === 'digitalPrinting' || editData.fabricJobWorkMill === 'both' : order.fabricJobWorkMill === 'digitalPrinting' || order.fabricJobWorkMill === 'both') && (
+              <>
+                <DetailItem label="Digital Mill Name" value={order.digitalMillName} icon={User} name="digitalMillName" isEditing={isEditing} editData={editData} onChange={handleChange} />
+                <DetailItem label="Digital Job Charge" value={order.digitalJobCharge} icon={DollarSign} name="digitalJobCharge" isEditing={isEditing} editData={editData} onChange={handleChange} />
+                <DetailItem label="Digital Finish Quantity" value={order.digitalFinishQuantity} icon={Package} name="digitalFinishQuantity" isEditing={isEditing} editData={editData} onChange={handleChange} />
+                <DetailItem label="Digital Width" value={order.digitalWidth} icon={Ruler} name="digitalWidth" isEditing={isEditing} editData={editData} onChange={handleChange} />
+                <DetailItem label="Digital Design" value={order.digitalDesign} icon={Palette} name="digitalDesign" isEditing={isEditing} editData={editData} onChange={handleChange} />
+                <DetailItem label="Digital Shortage" value={order.digitalShortage} icon={Info} name="digitalShortage" isEditing={isEditing} editData={editData} onChange={handleChange} />
+                <DetailItem label="Digital Delivery Date" value={order.digitalDeliveryDate} icon={Calendar} name="digitalDeliveryDate" type="date" isEditing={isEditing} editData={editData} onChange={handleChange} />
+              </>
+            )}
           </div>
         </SectionWrapper>
 
         <SectionWrapper title="Quantity Received History" icon={FileCheck} color="#4F46E5" onDownload={() => generatePDF('history')}>
           <div style={{ display: 'grid', gap: '20px' }}>
-            <div style={{ backgroundColor: '#F8FAFC', borderRadius: '16px', padding: '16px', border: '1px solid #E2E8F0' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px' }}>
-                <p style={{ margin: '0 0 10px 0', fontWeight: '700', color: '#0F172A' }}>Dying & Printing Receipts</p>
-                {isEditing && (
-                  <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                    <input
-                      type="date"
-                      value={dyeReceiptDate}
-                      onChange={(e) => setDyeReceiptDate(e.target.value)}
-                      style={{ border: '1px solid #E2E8F0', borderRadius: '10px', padding: '8px', backgroundColor: 'white' }}
-                    />
-                    <input
-                      type="number"
-                      step="0.01"
-                      placeholder="Qty"
-                      value={dyeReceiptQuantity}
-                      onChange={(e) => setDyeReceiptQuantity(e.target.value)}
-                      style={{ border: '1px solid #E2E8F0', borderRadius: '10px', padding: '8px', width: '90px', backgroundColor: 'white' }}
-                    />
-                    <input
-                      type="text"
-                      placeholder="Remark"
-                      value={dyeReceiptRemark}
-                      onChange={(e) => setDyeReceiptRemark(e.target.value)}
-                      style={{ border: '1px solid #E2E8F0', borderRadius: '10px', padding: '8px', flex: 1, minWidth: '120px', backgroundColor: 'white' }}
-                    />
-                    <button
-                      type="button"
-                      onClick={addDyeReceiptEntry}
-                      className="btn btn-primary"
-                      style={{ padding: '10px 14px', borderRadius: '14px', fontSize: '0.85rem' }}
-                    >
-                      Add
-                    </button>
-                  </div>
+            {(isEditing ? editData.fabricJobWorkMill === 'dyingAndPrinting' || editData.fabricJobWorkMill === 'both' : order.fabricJobWorkMill === 'dyingAndPrinting' || order.fabricJobWorkMill === 'both') && (
+              <div style={{ backgroundColor: '#F8FAFC', borderRadius: '16px', padding: '16px', border: '1px solid #E2E8F0' }}>
+                <div style={{ marginBottom: '16px' }}>
+                  <p style={{ margin: '0 0 12px 0', fontWeight: '800', fontSize: '1.05rem', color: '#0F172A' }}>Dying & Printing Receipts</p>
+                  {isEditing && (
+                    <div style={{ 
+                      display: 'grid', 
+                      gap: '12px', 
+                      padding: '16px', 
+                      backgroundColor: 'white', 
+                      borderRadius: '16px', 
+                      border: '1px solid #E2E8F0',
+                      boxShadow: '0 4px 12px rgba(0,0,0,0.03)'
+                    }}>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                        <div style={{ flex: 1 }}>
+                          <p style={{ margin: '0 0 6px 0', fontSize: '0.65rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>Date</p>
+                          <input
+                            type="date"
+                            value={dyeReceiptDate}
+                            onChange={(e) => setDyeReceiptDate(e.target.value)}
+                            style={{ width: '100%', border: '1px solid #E2E8F0', borderRadius: '10px', padding: '10px', fontSize: '0.9rem', outline: 'none', backgroundColor: '#F8FAFC' }}
+                          />
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          <p style={{ margin: '0 0 6px 0', fontSize: '0.65rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>Quantity</p>
+                          <input
+                            type="number"
+                            step="0.01"
+                            placeholder="Meters"
+                            value={dyeReceiptQuantity}
+                            onChange={(e) => setDyeReceiptQuantity(e.target.value)}
+                            style={{ width: '100%', border: '1px solid #E2E8F0', borderRadius: '10px', padding: '10px', fontSize: '0.9rem', outline: 'none', backgroundColor: '#F8FAFC' }}
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <p style={{ margin: '0 0 6px 0', fontSize: '0.65rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>Remark / Note</p>
+                        <input
+                          type="text"
+                          placeholder="Optional remark..."
+                          value={dyeReceiptRemark}
+                          onChange={(e) => setDyeReceiptRemark(e.target.value)}
+                          style={{ width: '100%', border: '1px solid #E2E8F0', borderRadius: '10px', padding: '10px', fontSize: '0.9rem', outline: 'none', backgroundColor: '#F8FAFC' }}
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        onClick={addDyeReceiptEntry}
+                        style={{ 
+                          width: '100%', 
+                          padding: '12px', 
+                          borderRadius: '12px', 
+                          fontSize: '0.9rem', 
+                          fontWeight: '700',
+                          background: 'linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%)',
+                          color: 'white',
+                          border: 'none',
+                          cursor: 'pointer',
+                          boxShadow: '0 4px 12px rgba(79, 70, 229, 0.2)'
+                        }}
+                      >
+                        Add Receipt Entry
+                      </button>
+                    </div>
+                  )}
+                </div>
+                {currentDyeEntries.length > 0 ? (
+                  <>
+                    {currentDyeEntries.map((entry, index) => (
+                      <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', padding: '10px 0', borderBottom: index < currentDyeEntries.length - 1 ? '1px solid #E2E8F0' : 'none' }}>
+                        <div style={{ flex: 1 }}>
+                          <span style={{ color: '#475569' }}>{formatDisplayDate(entry.entryDate)}</span>
+                          {entry.remark && <span style={{ color: '#64748B', fontSize: '0.85rem', marginLeft: '12px' }}>• {entry.remark}</span>}
+                        </div>
+                        <span style={{ fontWeight: '700' }}>{entry.quantity}</span>
+                        {isEditing && (
+                          <button
+                            type="button"
+                            onClick={() => removeDyeReceiptEntry(index)}
+                            style={{ background: 'transparent', border: 'none', color: '#EF4444', cursor: 'pointer', fontSize: '0.9rem' }}
+                          >
+                            Remove
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0 0 0', borderTop: '1px solid #E2E8F0', marginTop: '8px' }}>
+                      <span style={{ color: '#475569', fontWeight: '700' }}>Total Received</span>
+                      <span style={{ fontWeight: '700' }}>{currentDyeTotal}</span>
+                    </div>
+                  </>
+                ) : (
+                  <p style={{ margin: 0, color: '#64748B' }}>No dying/printing receipt entries yet.</p>
                 )}
               </div>
-              {currentDyeEntries.length > 0 ? (
-                <>
-                  {currentDyeEntries.map((entry, index) => (
-                    <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', padding: '10px 0', borderBottom: index < currentDyeEntries.length - 1 ? '1px solid #E2E8F0' : 'none' }}>
-                      <div style={{ flex: 1 }}>
-                        <span style={{ color: '#475569' }}>{formatDisplayDate(entry.entryDate)}</span>
-                        {entry.remark && <span style={{ color: '#64748B', fontSize: '0.85rem', marginLeft: '12px' }}>• {entry.remark}</span>}
+            )}
+            {(isEditing ? editData.fabricJobWorkMill === 'digitalPrinting' || editData.fabricJobWorkMill === 'both' : order.fabricJobWorkMill === 'digitalPrinting' || order.fabricJobWorkMill === 'both') && (
+              <div style={{ backgroundColor: '#F8FAFC', borderRadius: '16px', padding: '16px', border: '1px solid #E2E8F0' }}>
+                <div style={{ marginBottom: '16px' }}>
+                  <p style={{ margin: '0 0 12px 0', fontWeight: '800', fontSize: '1.05rem', color: '#0F172A' }}>Digital Printing Receipts</p>
+                  {isEditing && (
+                    <div style={{ 
+                      display: 'grid', 
+                      gap: '12px', 
+                      padding: '16px', 
+                      backgroundColor: 'white', 
+                      borderRadius: '16px', 
+                      border: '1px solid #E2E8F0',
+                      boxShadow: '0 4px 12px rgba(0,0,0,0.03)'
+                    }}>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                        <div style={{ flex: 1 }}>
+                          <p style={{ margin: '0 0 6px 0', fontSize: '0.65rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>Date</p>
+                          <input
+                            type="date"
+                            value={digitalReceiptDate}
+                            onChange={(e) => setDigitalReceiptDate(e.target.value)}
+                            style={{ width: '100%', border: '1px solid #E2E8F0', borderRadius: '10px', padding: '10px', fontSize: '0.9rem', outline: 'none', backgroundColor: '#F8FAFC' }}
+                          />
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          <p style={{ margin: '0 0 6px 0', fontSize: '0.65rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>Quantity</p>
+                          <input
+                            type="number"
+                            step="0.01"
+                            placeholder="Meters"
+                            value={digitalReceiptQuantity}
+                            onChange={(e) => setDigitalReceiptQuantity(e.target.value)}
+                            style={{ width: '100%', border: '1px solid #E2E8F0', borderRadius: '10px', padding: '10px', fontSize: '0.9rem', outline: 'none', backgroundColor: '#F8FAFC' }}
+                          />
+                        </div>
                       </div>
-                      <span style={{ fontWeight: '700' }}>{entry.quantity}</span>
-                      {isEditing && (
-                        <button
-                          type="button"
-                          onClick={() => removeDyeReceiptEntry(index)}
-                          style={{ background: 'transparent', border: 'none', color: '#EF4444', cursor: 'pointer', fontSize: '0.9rem' }}
-                        >
-                          Remove
-                        </button>
-                      )}
+                      <div>
+                        <p style={{ margin: '0 0 6px 0', fontSize: '0.65rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>Remark / Note</p>
+                        <input
+                          type="text"
+                          placeholder="Optional remark..."
+                          value={digitalReceiptRemark}
+                          onChange={(e) => setDigitalReceiptRemark(e.target.value)}
+                          style={{ width: '100%', border: '1px solid #E2E8F0', borderRadius: '10px', padding: '10px', fontSize: '0.9rem', outline: 'none', backgroundColor: '#F8FAFC' }}
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        onClick={addDigitalReceiptEntry}
+                        style={{ 
+                          width: '100%', 
+                          padding: '12px', 
+                          borderRadius: '12px', 
+                          fontSize: '0.9rem', 
+                          fontWeight: '700',
+                          background: 'linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%)',
+                          color: 'white',
+                          border: 'none',
+                          cursor: 'pointer',
+                          boxShadow: '0 4px 12px rgba(124, 58, 237, 0.2)'
+                        }}
+                      >
+                        Add Receipt Entry
+                      </button>
                     </div>
-                  ))}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0 0 0', borderTop: '1px solid #E2E8F0', marginTop: '8px' }}>
-                    <span style={{ color: '#475569', fontWeight: '700' }}>Total Received</span>
-                    <span style={{ fontWeight: '700' }}>{currentDyeTotal}</span>
-                  </div>
-                </>
-              ) : (
-                <p style={{ margin: 0, color: '#64748B' }}>No dying/printing receipt entries yet.</p>
-              )}
-            </div>
-            <div style={{ backgroundColor: '#F8FAFC', borderRadius: '16px', padding: '16px', border: '1px solid #E2E8F0' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px' }}>
-                <p style={{ margin: '0 0 10px 0', fontWeight: '700', color: '#0F172A' }}>Digital Printing Receipts</p>
-                {isEditing && (
-                  <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                    <input
-                      type="date"
-                      value={digitalReceiptDate}
-                      onChange={(e) => setDigitalReceiptDate(e.target.value)}
-                      style={{ border: '1px solid #E2E8F0', borderRadius: '10px', padding: '8px', backgroundColor: 'white' }}
-                    />
-                    <input
-                      type="number"
-                      step="0.01"
-                      placeholder="Qty"
-                      value={digitalReceiptQuantity}
-                      onChange={(e) => setDigitalReceiptQuantity(e.target.value)}
-                      style={{ border: '1px solid #E2E8F0', borderRadius: '10px', padding: '8px', width: '90px', backgroundColor: 'white' }}
-                    />
-                    <input
-                      type="text"
-                      placeholder="Remark"
-                      value={digitalReceiptRemark}
-                      onChange={(e) => setDigitalReceiptRemark(e.target.value)}
-                      style={{ border: '1px solid #E2E8F0', borderRadius: '10px', padding: '8px', flex: 1, minWidth: '120px', backgroundColor: 'white' }}
-                    />
-                    <button
-                      type="button"
-                      onClick={addDigitalReceiptEntry}
-                      className="btn btn-primary"
-                      style={{ padding: '10px 14px', borderRadius: '14px', fontSize: '0.85rem' }}
-                    >
-                      Add
-                    </button>
-                  </div>
+                  )}
+                </div>
+                {currentDigitalEntries.length > 0 ? (
+                  <>
+                    {currentDigitalEntries.map((entry, index) => (
+                      <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', padding: '10px 0', borderBottom: index < currentDigitalEntries.length - 1 ? '1px solid #E2E8F0' : 'none' }}>
+                        <div style={{ flex: 1 }}>
+                          <span style={{ color: '#475569' }}>{formatDisplayDate(entry.entryDate)}</span>
+                          {entry.remark && <span style={{ color: '#64748B', fontSize: '0.85rem', marginLeft: '12px' }}>• {entry.remark}</span>}
+                        </div>
+                        <span style={{ fontWeight: '700' }}>{entry.quantity}</span>
+                        {isEditing && (
+                          <button
+                            type="button"
+                            onClick={() => removeDigitalReceiptEntry(index)}
+                            style={{ background: 'transparent', border: 'none', color: '#EF4444', cursor: 'pointer', fontSize: '0.9rem' }}
+                          >
+                            Remove
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0 0 0', borderTop: '1px solid #E2E8F0', marginTop: '8px' }}>
+                      <span style={{ color: '#475569', fontWeight: '700' }}>Total Received</span>
+                      <span style={{ fontWeight: '700' }}>{currentDigitalTotal}</span>
+                    </div>
+                  </>
+                ) : (
+                  <p style={{ margin: 0, color: '#64748B' }}>No digital printing receipt entries yet.</p>
                 )}
               </div>
-              {currentDigitalEntries.length > 0 ? (
-                <>
-                  {currentDigitalEntries.map((entry, index) => (
-                    <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', padding: '10px 0', borderBottom: index < currentDigitalEntries.length - 1 ? '1px solid #E2E8F0' : 'none' }}>
-                      <div style={{ flex: 1 }}>
-                        <span style={{ color: '#475569' }}>{formatDisplayDate(entry.entryDate)}</span>
-                        {entry.remark && <span style={{ color: '#64748B', fontSize: '0.85rem', marginLeft: '12px' }}>• {entry.remark}</span>}
-                      </div>
-                      <span style={{ fontWeight: '700' }}>{entry.quantity}</span>
-                      {isEditing && (
-                        <button
-                          type="button"
-                          onClick={() => removeDigitalReceiptEntry(index)}
-                          style={{ background: 'transparent', border: 'none', color: '#EF4444', cursor: 'pointer', fontSize: '0.9rem' }}
-                        >
-                          Remove
-                        </button>
-                      )}
-                    </div>
-                  ))}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0 0 0', borderTop: '1px solid #E2E8F0', marginTop: '8px' }}>
-                    <span style={{ color: '#475569', fontWeight: '700' }}>Total Received</span>
-                    <span style={{ fontWeight: '700' }}>{currentDigitalTotal}</span>
-                  </div>
-                </>
-              ) : (
-                <p style={{ margin: 0, color: '#64748B' }}>No digital printing receipt entries yet.</p>
-              )}
-            </div>
+            )}
           </div>
         </SectionWrapper>
 
@@ -930,38 +1015,67 @@ const OrderDetails = () => {
 
           {/* Dispatch Quantity History */}
           <div style={{ backgroundColor: '#111827', borderRadius: '20px', padding: '18px', border: '1px solid #334155' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', marginBottom: '14px' }}>
-              <p style={{ margin: 0, fontWeight: '700', color: '#F8FAFC' }}>Dispatch Receipt History</p>
+            <div style={{ marginBottom: '20px' }}>
+              <p style={{ margin: '0 0 16px 0', fontWeight: '700', color: '#F8FAFC', fontSize: '1.05rem' }}>Dispatch Receipt History</p>
               {isEditing && (
-                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                  <input
-                    type="date"
-                    value={dispatchReceiptDate}
-                    onChange={(e) => setDispatchReceiptDate(e.target.value)}
-                    style={{ border: '1px solid #334155', borderRadius: '10px', padding: '6px 10px', backgroundColor: '#1F2937', color: 'white', fontSize: '0.85rem' }}
-                  />
-                  <input
-                    type="number"
-                    step="0.01"
-                    placeholder="Qty"
-                    value={dispatchReceiptQuantity}
-                    onChange={(e) => setDispatchReceiptQuantity(e.target.value)}
-                    style={{ border: '1px solid #334155', borderRadius: '10px', padding: '6px 10px', width: '80px', backgroundColor: '#1F2937', color: 'white', fontSize: '0.85rem' }}
-                  />
-                  <input
-                    type="text"
-                    placeholder="Remark"
-                    value={dispatchReceiptRemark}
-                    onChange={(e) => setDispatchReceiptRemark(e.target.value)}
-                    style={{ border: '1px solid #334155', borderRadius: '10px', padding: '6px 10px', flex: 1, minWidth: '120px', backgroundColor: '#1F2937', color: 'white', fontSize: '0.85rem' }}
-                  />
+                <div style={{ 
+                  display: 'grid', 
+                  gap: '12px', 
+                  padding: '18px', 
+                  backgroundColor: '#1F2937', 
+                  borderRadius: '16px', 
+                  border: '1px solid #374151',
+                  marginBottom: '20px'
+                }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                    <div style={{ flex: 1 }}>
+                      <p style={{ margin: '0 0 6px 0', fontSize: '0.65rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>Dispatch Date</p>
+                      <input
+                        type="date"
+                        value={dispatchReceiptDate}
+                        onChange={(e) => setDispatchReceiptDate(e.target.value)}
+                        style={{ width: '100%', border: '1px solid #374151', borderRadius: '10px', padding: '10px', backgroundColor: '#111827', color: 'white', fontSize: '0.9rem', outline: 'none' }}
+                      />
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <p style={{ margin: '0 0 6px 0', fontSize: '0.65rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>Quantity</p>
+                      <input
+                        type="number"
+                        step="0.01"
+                        placeholder="Meters"
+                        value={dispatchReceiptQuantity}
+                        onChange={(e) => setDispatchReceiptQuantity(e.target.value)}
+                        style={{ width: '100%', border: '1px solid #374151', borderRadius: '10px', padding: '10px', backgroundColor: '#111827', color: 'white', fontSize: '0.9rem', outline: 'none' }}
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <p style={{ margin: '0 0 6px 0', fontSize: '0.65rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>Remark</p>
+                    <input
+                      type="text"
+                      placeholder="Add a remark..."
+                      value={dispatchReceiptRemark}
+                      onChange={(e) => setDispatchReceiptRemark(e.target.value)}
+                      style={{ width: '100%', border: '1px solid #374151', borderRadius: '10px', padding: '10px', backgroundColor: '#111827', color: 'white', fontSize: '0.9rem', outline: 'none' }}
+                    />
+                  </div>
                   <button
                     type="button"
                     onClick={addDispatchReceiptEntry}
-                    className="btn btn-primary"
-                    style={{ padding: '6px 12px', borderRadius: '10px', fontSize: '0.8rem', background: '#FBBF24', color: '#111827', fontWeight: '700', border: 'none' }}
+                    style={{ 
+                      width: '100%', 
+                      padding: '12px', 
+                      borderRadius: '12px', 
+                      fontSize: '0.9rem', 
+                      fontWeight: '800', 
+                      background: '#FBBF24', 
+                      color: '#111827', 
+                      border: 'none',
+                      cursor: 'pointer',
+                      transition: 'transform 0.1s active'
+                    }}
                   >
-                    Add
+                    Add Dispatch Record
                   </button>
                 </div>
               )}
