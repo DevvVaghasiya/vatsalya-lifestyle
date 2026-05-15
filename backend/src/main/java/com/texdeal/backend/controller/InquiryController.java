@@ -20,7 +20,10 @@ public class InquiryController {
     private com.texdeal.backend.repository.UserRepository userRepository;
 
     @GetMapping
-    public List<Inquiry> getAllInquiries() {
+    public List<Inquiry> getAllInquiries(@RequestParam(required = false) String accessCode) {
+        if (accessCode != null && !accessCode.isBlank()) {
+            return inquiryRepository.findByAccessCode(accessCode);
+        }
         return inquiryRepository.findAllByOrderByCreatedAtDesc();
     }
 

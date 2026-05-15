@@ -56,4 +56,6 @@ public class Inventory {
 
     @CreationTimestamp
     private LocalDateTime createdAt;
+
+    private String accessCode;
 }
