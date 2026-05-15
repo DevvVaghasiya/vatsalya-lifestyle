@@ -53,11 +53,14 @@ const useSyncUser = () => {
       .then(res => {
         const fresh = res.data;
         if (!fresh) return;
-        // Merge: keep any local-only keys, overwrite with server values
+        // Merge server data into local user
         const merged = { ...user, ...fresh };
         localStorage.setItem('user', JSON.stringify(merged));
-        // Notify components that listen for profile updates
-        window.dispatchEvent(new Event('userProfileUpdated'));
+        // Only notify components if the profile picture actually changed
+        // (avoids interfering with the upload-done banner timer)
+        if (fresh.profilePictureUrl !== user.profilePictureUrl) {
+          window.dispatchEvent(new Event('userProfileUpdated'));
+        }
       })
       .catch(() => {
         // Silently ignore — offline or cold-start, use cached data

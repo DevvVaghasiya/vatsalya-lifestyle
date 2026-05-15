@@ -41,16 +41,22 @@ const saveProfilePicture = async (user, url) => {
 const Profile = () => {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
+  const timerRef = useRef(null);
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user') || '{}'));
   const [uploading, setUploading] = useState(false);
   const [uploadDone, setUploadDone] = useState(false);
   const [uploadError, setUploadError] = useState('');
 
   // Re-read user from localStorage whenever another device/tab syncs it
+  // Note: only update user state — never touch uploadDone here
   useEffect(() => {
     const refresh = () => setUser(JSON.parse(localStorage.getItem('user') || '{}'));
     window.addEventListener('userProfileUpdated', refresh);
-    return () => window.removeEventListener('userProfileUpdated', refresh);
+    return () => {
+      window.removeEventListener('userProfileUpdated', refresh);
+      // Cleanup dismiss timer on unmount
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
   }, []);
 
   const menuItems = user.role === 'ADMIN' ? [
@@ -90,16 +96,21 @@ const Profile = () => {
     setUploading(true);
     setUploadError('');
     setUploadDone(false);
+    // Clear any previous dismiss timer
+    if (timerRef.current) clearTimeout(timerRef.current);
 
     try {
       const url = await uploadToCloudinary(file);
       const updatedUser = await saveProfilePicture(user, url);
       setUser(updatedUser);
       setUploadDone(true);
-      setTimeout(() => setUploadDone(false), 3000);
+      // Auto-dismiss after 3 seconds using a ref so it survives re-renders
+      timerRef.current = setTimeout(() => {
+        setUploadDone(false);
+        timerRef.current = null;
+      }, 3000);
     } catch (err) {
       console.error('Upload failed:', err);
-      // Show the actual error so the user knows what went wrong
       setUploadError(err.message || 'Upload failed. Please try again.');
     } finally {
       setUploading(false);
