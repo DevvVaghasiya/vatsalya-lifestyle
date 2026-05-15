@@ -189,24 +189,73 @@ const Dashboard = () => {
              Textiles That Define Your Vision.
           </p>
 
-          <div className="flex gap-5">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {/* New Order Button */}
             <motion.button
               whileHover={{ scale: 1.02, y: -2 }}
-              whileTap={{ scale: 0.98 }}
+              whileTap={{ scale: 0.97 }}
               onClick={() => navigate('/deals')}
-              className="button"
-              style={{ flex: 1, padding: '18px', fontSize: '1rem', fontWeight: '700', background: 'var(--primary)', color: 'white', borderRadius: '20px', boxShadow: '0 10px 25px rgba(79, 70, 229, 0.2)' }}
+              style={{
+                width: '100%', padding: '18px 20px',
+                background: 'linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%)',
+                border: 'none', borderRadius: '20px',
+                boxShadow: '0 12px 28px rgba(79,70,229,0.35)',
+                cursor: 'pointer',
+                display: 'flex', alignItems: 'center', gap: 16,
+                textAlign: 'left',
+              }}
             >
-              <Plus size={22} style={{ marginRight: 8 }} /> New Order
+              <div style={{
+                width: 46, height: 46, borderRadius: 14, flexShrink: 0,
+                background: 'rgba(255,255,255,0.2)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <Plus size={24} color="white" strokeWidth={2.5} />
+              </div>
+              <div>
+                <div style={{ fontSize: '1.05rem', fontWeight: '800', color: 'white', letterSpacing: '-0.3px' }}>
+                  New Order
+                </div>
+                <div style={{ fontSize: '0.75rem', fontWeight: '600', color: 'rgba(255,255,255,0.65)', marginTop: 2 }}>
+                  Create a new fabric order
+                </div>
+              </div>
+              <ArrowRight size={20} color="rgba(255,255,255,0.6)" style={{ marginLeft: 'auto', flexShrink: 0 }} />
             </motion.button>
+
+            {/* Recent Inquiries Button */}
             <motion.button
               whileHover={{ scale: 1.02, y: -2 }}
-              whileTap={{ scale: 0.98 }}
+              whileTap={{ scale: 0.97 }}
               onClick={() => navigate('/inquiries')}
-              className="button"
-              style={{ flex: 1, padding: '18px', fontSize: '1rem', fontWeight: '700', background: 'white', color: '#1E293B', border: '1px solid #E2E8F0', borderRadius: '20px', boxShadow: 'var(--shadow-sm)' }}
+              style={{
+                width: '100%', padding: '18px 20px',
+                background: 'rgba(255,255,255,0.85)',
+                backdropFilter: 'blur(12px)',
+                border: '1.5px solid rgba(79,70,229,0.15)',
+                borderRadius: '20px',
+                boxShadow: '0 8px 20px rgba(0,0,0,0.06)',
+                cursor: 'pointer',
+                display: 'flex', alignItems: 'center', gap: 16,
+                textAlign: 'left',
+              }}
             >
-              Recent Inquiries <ArrowRight size={22} style={{ marginLeft: 8 }} />
+              <div style={{
+                width: 46, height: 46, borderRadius: 14, flexShrink: 0,
+                background: 'linear-gradient(135deg, #EEF2FF, #E0E7FF)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <Activity size={22} color="#4F46E5" />
+              </div>
+              <div>
+                <div style={{ fontSize: '1.05rem', fontWeight: '800', color: '#1E293B', letterSpacing: '-0.3px' }}>
+                  Recent Inquiries
+                </div>
+                <div style={{ fontSize: '0.75rem', fontWeight: '600', color: '#94A3B8', marginTop: 2 }}>
+                  View & manage inquiries
+                </div>
+              </div>
+              <ArrowRight size={20} color="#94A3B8" style={{ marginLeft: 'auto', flexShrink: 0 }} />
             </motion.button>
           </div>
         </motion.div>
