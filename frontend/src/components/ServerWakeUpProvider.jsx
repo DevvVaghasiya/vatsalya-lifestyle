@@ -12,7 +12,12 @@ const ServerWakeUpContext = createContext({ isWakingUp: false, elapsedSeconds: 0
 
 export const useServerWakeUp = () => useContext(ServerWakeUpContext);
 
-const HEALTH_URL = `${API_BASE}/api/health`;
+// Prefer /api/health (lightweight, no DB). Falls back to /api/auth/login which
+// always exists. Any HTTP response (even 4xx) means the server is awake.
+const PING_URLS = [
+  `${API_BASE}/api/health`,
+  `${API_BASE}/api/auth/login`,
+];
 const FAST_THRESHOLD_MS = 4000; // If backend responds within 4s, no overlay shown
 
 export default function ServerWakeUpProvider({ children }) {
@@ -39,14 +44,28 @@ export default function ServerWakeUpProvider({ children }) {
         }
       }, FAST_THRESHOLD_MS);
 
+      // Try each URL in order — any HTTP response (even 4xx) means server is up
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 120_000); // 2 min max
+
       try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 120_000); // 2 min max
-        await fetch(HEALTH_URL, { signal: controller.signal });
-        clearTimeout(timeoutId);
+        for (const url of PING_URLS) {
+          try {
+            const res = await fetch(url, {
+              method: 'GET',
+              signal: controller.signal,
+            });
+            // Got an HTTP response → server is alive, regardless of status code
+            if (res.status < 600) break;
+          } catch (urlErr) {
+            // This specific URL failed (e.g. 404 thrown as error in some envs) — try next
+            if (urlErr.name === 'AbortError') throw urlErr; // propagate timeout
+          }
+        }
       } catch {
-        // Ignore errors — backend may take time but will eventually respond
+        // Network failure or timeout — still dismiss overlay so app isn't stuck
       } finally {
+        clearTimeout(timeoutId);
         if (!cancelled) {
           clearTimeout(slowStartTimeout);
           clearInterval(timerInterval);
