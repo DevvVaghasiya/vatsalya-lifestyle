@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import DesktopHeader from './components/DesktopHeader';
 import Dashboard from './pages/Dashboard';
@@ -19,6 +20,7 @@ import AddClient from './pages/AddClient';
 import FabricEntryPublic from './pages/FabricEntryPublic';
 import FabricEntryPublicPdf from './pages/FabricEntryPublicPdf';
 import PublicInventoryView from './pages/PublicInventoryView';
+import api from './utils/api';
 
 const ProtectedRoute = ({ children }) => {
   const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
@@ -36,7 +38,35 @@ const HomeRoute = () => {
   return <Dashboard />;
 };
 
+/**
+ * On every app load, silently fetch the latest user data from the backend
+ * and refresh localStorage. This keeps profile picture and other fields
+ * in sync across all devices without requiring a re-login.
+ */
+const useSyncUser = () => {
+  useEffect(() => {
+    const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    if (!isAuthenticated || !user.id) return;
+
+    api.get(`/api/users/${user.id}`)
+      .then(res => {
+        const fresh = res.data;
+        if (!fresh) return;
+        // Merge: keep any local-only keys, overwrite with server values
+        const merged = { ...user, ...fresh };
+        localStorage.setItem('user', JSON.stringify(merged));
+        // Notify components that listen for profile updates
+        window.dispatchEvent(new Event('userProfileUpdated'));
+      })
+      .catch(() => {
+        // Silently ignore — offline or cold-start, use cached data
+      });
+  }, []); // run once on mount
+};
+
 function App() {
+  useSyncUser();
   const location = useLocation();
 
   // Auth pages don't show the navigation header
@@ -81,3 +111,4 @@ function App() {
 }
 
 export default App;
+

@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
   ArrowLeft, User, Edit3, Lock,
   LogOut, ChevronRight, Camera, Users, ClipboardList, ShieldCheck,
@@ -45,6 +45,13 @@ const Profile = () => {
   const [uploading, setUploading] = useState(false);
   const [uploadDone, setUploadDone] = useState(false);
   const [uploadError, setUploadError] = useState('');
+
+  // Re-read user from localStorage whenever another device/tab syncs it
+  useEffect(() => {
+    const refresh = () => setUser(JSON.parse(localStorage.getItem('user') || '{}'));
+    window.addEventListener('userProfileUpdated', refresh);
+    return () => window.removeEventListener('userProfileUpdated', refresh);
+  }, []);
 
   const menuItems = user.role === 'ADMIN' ? [
     { icon: Users,         label: 'User Management',     path: '/',                          desc: 'Manage all platform users',         color: '#4F46E5' },
