@@ -1573,3 +1573,225 @@ html, body {
   flex-direction: column;
   align-items: center;
 }
+
+/* ============================================================ */
+/*  SERVER WAKE-UP OVERLAY                                       */
+/* ============================================================ */
+.wake-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(8, 10, 30, 0.72);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  animation: wake-overlay-in 0.4s ease;
+}
+
+@keyframes wake-overlay-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Animated floating blobs */
+.wake-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.25;
+  animation: wake-blob-float 8s ease-in-out infinite alternate;
+}
+.wake-blob-1 {
+  width: 420px; height: 420px;
+  background: radial-gradient(circle, #4F46E5, #7C3AED);
+  top: -80px; left: -80px;
+  animation-duration: 9s;
+}
+.wake-blob-2 {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, #0D9488, #4F46E5);
+  bottom: -60px; right: -60px;
+  animation-duration: 7s;
+  animation-delay: -3s;
+}
+.wake-blob-3 {
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, #7C3AED, #EC4899);
+  top: 40%; left: 60%;
+  animation-duration: 11s;
+  animation-delay: -5s;
+}
+@keyframes wake-blob-float {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(30px, 20px) scale(1.08); }
+}
+
+/* The card */
+.wake-card {
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 28px;
+  padding: 48px 40px 40px;
+  width: 92%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  box-shadow:
+    0 32px 80px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  animation: wake-card-in 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes wake-card-in {
+  from { opacity: 0; transform: translateY(24px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Spinner ring */
+.wake-spinner-ring {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  margin-bottom: 24px;
+}
+
+.wake-spinner-svg {
+  width: 88px;
+  height: 88px;
+  transform: rotate(-90deg);
+}
+
+.wake-circle-track {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.1);
+  stroke-width: 5;
+}
+
+.wake-circle-arc {
+  fill: none;
+  stroke: #7C3AED;
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-dasharray: 213.6;
+  stroke-dashoffset: 60;
+  animation: wake-arc-spin 2s linear infinite;
+}
+
+@keyframes wake-arc-spin {
+  to { stroke-dashoffset: -213.6; }
+}
+
+.wake-spinner-icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  animation: wake-icon-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes wake-icon-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+/* Text */
+.wake-title {
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: -0.4px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.wake-subtitle {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+  text-align: center;
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+/* Progress bar */
+.wake-progress-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.wake-progress-bar {
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #4F46E5, #7C3AED, #EC4899, #4F46E5);
+  background-size: 200% 100%;
+  transition: width 1s ease;
+  animation: wake-bar-shimmer 2s linear infinite;
+}
+
+@keyframes wake-bar-shimmer {
+  from { background-position: 0% 0; }
+  to   { background-position: 200% 0; }
+}
+
+/* Timer pill */
+.wake-timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 99px;
+  padding: 6px 16px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 20px;
+  letter-spacing: 0.3px;
+}
+
+.wake-timer-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10B981;
+  box-shadow: 0 0 8px #10B981;
+  animation: wake-dot-blink 1s step-start infinite;
+}
+
+@keyframes wake-dot-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+
+/* Rotating tip */
+.wake-tip {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.45);
+  text-align: center;
+  animation: wake-tip-in 0.5s ease;
+}
+
+@keyframes wake-tip-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 480px) {
+  .wake-card {
+    padding: 36px 24px 32px;
+  }
+  .wake-title { font-size: 1.2rem; }
+}

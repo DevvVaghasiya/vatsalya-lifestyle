@@ -60,16 +60,16 @@ const Profile = () => {
   }, []);
 
   const menuItems = user.role === 'ADMIN' ? [
-    { icon: Users,         label: 'User Management',     path: '/',                          desc: 'Manage all platform users',         color: '#4F46E5' },
-    { icon: ClipboardList, label: 'Platform Inquiries',  path: '/',                          desc: 'View all business inquiries',       color: '#0D9488' },
-    { icon: Edit3,         label: 'Edit Profile',        path: '/profile/edit',              desc: 'Update admin details',              color: '#7C3AED' },
-    { icon: Lock,          label: 'Security Settings',   path: '/profile/change-password',   desc: 'Update your password',              color: '#D97706' },
-    { icon: LogOut,        label: 'Sign Out',            isLogout: true,                     desc: 'Exit admin panel',                  color: '#EF4444' },
+    { icon: Users, label: 'User Management', path: '/', desc: 'Manage all platform users', color: '#4F46E5' },
+    { icon: ClipboardList, label: 'Platform Inquiries', path: '/', desc: 'View all business inquiries', color: '#0D9488' },
+    { icon: Edit3, label: 'Edit Profile', path: '/profile/edit', desc: 'Update admin details', color: '#7C3AED' },
+    { icon: Lock, label: 'Security Settings', path: '/profile/change-password', desc: 'Update your password', color: '#D97706' },
+    { icon: LogOut, label: 'Sign Out', isLogout: true, desc: 'Exit admin panel', color: '#EF4444' },
   ] : [
-    { icon: User,     label: 'My Clients',        path: '/clients',                    desc: 'Browse your client list',            color: '#4F46E5' },
-    { icon: Edit3,    label: 'Edit Profile',       path: '/profile/edit',               desc: 'Update authorized details',          color: '#7C3AED' },
-    { icon: Lock,     label: 'Security Settings',  path: '/profile/change-password',    desc: 'Secure your login credentials',      color: '#D97706' },
-    { icon: LogOut,   label: 'Sign Out',           isLogout: true,                      desc: 'Terminate current session',          color: '#EF4444' },
+    { icon: User, label: 'My Clients', path: '/clients', desc: 'Browse your client list', color: '#4F46E5' },
+    { icon: Edit3, label: 'Edit Profile', path: '/profile/edit', desc: 'Update authorized details', color: '#7C3AED' },
+    { icon: Lock, label: 'Security Settings', path: '/profile/change-password', desc: 'Secure your login credentials', color: '#D97706' },
+    { icon: LogOut, label: 'Sign Out', isLogout: true, desc: 'Terminate current session', color: '#EF4444' },
   ];
 
   const handleMenuClick = (item) => {
