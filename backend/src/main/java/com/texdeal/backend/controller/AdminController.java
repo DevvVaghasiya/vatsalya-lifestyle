@@ -61,4 +61,21 @@ public class AdminController {
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
     }
+
+    /** Delete a user */
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+        Optional<AppUser> opt = userRepository.findById(id);
+        if (opt.isEmpty()) return ResponseEntity.notFound().build();
+        
+        try {
+            userRepository.deleteById(id);
+            return ResponseEntity.ok(Map.of("message", "User deleted successfully", "userId", id));
+        } catch (Exception e) {
+            // Usually due to foreign key constraints (Orders/Inquiries)
+            return ResponseEntity.badRequest().body(Map.of(
+                "error", "Cannot delete user. They have associated inquiries or orders. Please reassign or delete those records first."
+            ));
+        }
+    }
 }

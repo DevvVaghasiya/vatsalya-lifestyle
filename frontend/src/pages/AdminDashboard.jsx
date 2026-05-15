@@ -3,7 +3,7 @@ import {
   Users, ClipboardList, Search,
   Clock, CheckCircle, XCircle, ChevronRight,
   Activity, ShieldCheck, Download, Package, Layers,
-  UserCheck, UserX
+  UserCheck, UserX, Trash2
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -146,6 +146,20 @@ const AdminDashboard = () => {
       setPendingUsers(prev => prev.filter(u => u.id !== userId));
     } catch (e) { console.error(e); }
     finally { setApprovingId(null); }
+  };
+
+  const handleDeleteUser = async (userId) => {
+    if (!window.confirm("Are you sure you want to delete this user? This action cannot be undone.")) return;
+    
+    try {
+      await api.delete(`/api/admin/users/${userId}`);
+      setUsers(prev => prev.filter(u => u.id !== userId));
+      alert("User deleted successfully.");
+    } catch (err) {
+      console.error('Error deleting user:', err);
+      const errorMsg = err.response?.data?.error || "Failed to delete user. They may have associated records.";
+      alert(errorMsg);
+    }
   };
 
   const filteredUsers = users.filter(u =>
@@ -493,15 +507,37 @@ const AdminDashboard = () => {
                         <h3 style={{ margin: 0, fontWeight: 800, fontSize: '1rem', color: 'var(--text)' }}>
                           {u.name || 'Unnamed Partner'}
                         </h3>
-                        <span style={{
-                          padding: '3px 10px', borderRadius: 8,
-                          fontSize: '0.65rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.5px',
-                          background: u.role === 'ADMIN' ? '#FEF2F2' : '#EEF2FF',
-                          color: u.role === 'ADMIN' ? '#DC2626' : '#4F46E5',
-                          flexShrink: 0
-                        }}>
-                          {u.role}
-                        </span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+                          <span style={{
+                            padding: '3px 10px', borderRadius: 8,
+                            fontSize: '0.65rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.5px',
+                            background: u.role === 'ADMIN' ? '#FEF2F2' : '#EEF2FF',
+                            color: u.role === 'ADMIN' ? '#DC2626' : '#4F46E5',
+                          }}>
+                            {u.role}
+                          </span>
+                          {u.role !== 'ADMIN' && (
+                            <button
+                              onClick={() => handleDeleteUser(u.id)}
+                              style={{
+                                padding: '6px',
+                                borderRadius: '8px',
+                                border: 'none',
+                                background: '#FEE2E2',
+                                color: '#DC2626',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                transition: 'all 0.2s',
+                                boxShadow: '0 2px 4px rgba(220, 38, 38, 0.1)'
+                              }}
+                              title="Delete User"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          )}
+                        </div>
                       </div>
 
                       <p style={{ margin: '0 0 12px', fontSize: '0.8rem', fontWeight: 600, color: 'var(--muted)' }}>
