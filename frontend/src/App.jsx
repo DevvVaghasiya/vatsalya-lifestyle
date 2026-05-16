@@ -82,33 +82,39 @@ function App() {
     <div className="app-root-wrapper">
       {showHeader && <DesktopHeader />}
       
-      <div className="page-container">
-        <div className="main-content">
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/public/fabric-entry/:id" element={<FabricEntryPublic />} />
-            <Route path="/public/fabric-entry/:id/pdf" element={<FabricEntryPublicPdf />} />
-            <Route path="/f/:id/p" element={<FabricEntryPublicPdf />} />
-            <Route path="/public/inventory/:id" element={<PublicInventoryView />} />
-
-            <Route path="/" element={<ProtectedRoute><HomeRoute /></ProtectedRoute>} />
-            <Route path="/deals" element={<ProtectedRoute><Deals /></ProtectedRoute>} />
-            <Route path="/deal-detail/:id" element={<ProtectedRoute><OrderDetails /></ProtectedRoute>} />
-            <Route path="/add-order" element={<ProtectedRoute><AddOrder /></ProtectedRoute>} />
-            <Route path="/add-deal" element={<Navigate to="/add-order" replace />} />
-            <Route path="/inventory" element={<ProtectedRoute><Inventory /></ProtectedRoute>} />
-            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-            <Route path="/profile/edit" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
-            <Route path="/profile/change-password" element={<ProtectedRoute><ChangePassword /></ProtectedRoute>} />
-            <Route path="/inquiries" element={<ProtectedRoute><Inquiries /></ProtectedRoute>} />
-            <Route path="/add-inquiry" element={<ProtectedRoute><AddInquiry /></ProtectedRoute>} />
-            <Route path="/inquiry/:id" element={<ProtectedRoute><InquiryDetails /></ProtectedRoute>} />
-            <Route path="/clients" element={<ProtectedRoute><Clients /></ProtectedRoute>} />
-            <Route path="/add-client" element={<ProtectedRoute><AddClient /></ProtectedRoute>} />
-          </Routes>
+      {isAuthPage || isPublicPage ? (
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/public/fabric-entry/:id" element={<FabricEntryPublic />} />
+          <Route path="/public/fabric-entry/:id/pdf" element={<FabricEntryPublicPdf />} />
+          <Route path="/f/:id/p" element={<FabricEntryPublicPdf />} />
+          <Route path="/public/inventory/:id" element={<PublicInventoryView />} />
+          <Route path="*" element={<Navigate to="/login" replace />} />
+        </Routes>
+      ) : (
+        <div className="page-container">
+          <div className="main-content">
+            <Routes>
+              <Route path="/" element={<ProtectedRoute><HomeRoute /></ProtectedRoute>} />
+              <Route path="/deals" element={<ProtectedRoute><Deals /></ProtectedRoute>} />
+              <Route path="/deal-detail/:id" element={<ProtectedRoute><OrderDetails /></ProtectedRoute>} />
+              <Route path="/add-order" element={<ProtectedRoute><AddOrder /></ProtectedRoute>} />
+              <Route path="/add-deal" element={<Navigate to="/add-order" replace />} />
+              <Route path="/inventory" element={<ProtectedRoute><Inventory /></ProtectedRoute>} />
+              <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+              <Route path="/profile/edit" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
+              <Route path="/profile/change-password" element={<ProtectedRoute><ChangePassword /></ProtectedRoute>} />
+              <Route path="/inquiries" element={<ProtectedRoute><Inquiries /></ProtectedRoute>} />
+              <Route path="/add-inquiry" element={<ProtectedRoute><AddInquiry /></ProtectedRoute>} />
+              <Route path="/inquiry/:id" element={<ProtectedRoute><InquiryDetails /></ProtectedRoute>} />
+              <Route path="/clients" element={<ProtectedRoute><Clients /></ProtectedRoute>} />
+              <Route path="/add-client" element={<ProtectedRoute><AddClient /></ProtectedRoute>} />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
