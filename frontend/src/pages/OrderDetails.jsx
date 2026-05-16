@@ -243,6 +243,11 @@ const OrderDetails = () => {
       'dispatch': 'DISPATCH & DELIVERY RECORD'
     };
 
+    const primaryColor = '#4F46E5';
+    const secondaryColor = '#0D9488';
+    const accentColor = '#7C3AED';
+    const warningColor = '#F59E0B';
+
     let y = addPdfHeader(doc, typeHeaders[type] || 'ORDER INFORMATION');
 
     const addSection = (title, data, color) => {
