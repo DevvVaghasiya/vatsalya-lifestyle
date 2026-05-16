@@ -45,26 +45,20 @@ const DesktopHeader = () => {
             <span>Dashboard</span>
           </NavLink>
           
-          {!isAdmin && (
-            <NavLink to="/deals" className={({ isActive }) => `header-nav-link ${isActive ? 'active' : ''}`}>
-              <Layers size={18} />
-              <span>Orders</span>
-            </NavLink>
-          )}
+          <NavLink to="/deals" className={({ isActive }) => `header-nav-link ${isActive ? 'active' : ''}`}>
+            <Layers size={18} />
+            <span>Orders</span>
+          </NavLink>
 
-          {!isAdmin && (
-            <NavLink to="/inquiries" className={({ isActive }) => `header-nav-link ${isActive ? 'active' : ''}`}>
-              <MessageSquare size={18} />
-              <span>Inquiries</span>
-            </NavLink>
-          )}
+          <NavLink to="/inquiries" className={({ isActive }) => `header-nav-link ${isActive ? 'active' : ''}`}>
+            <MessageSquare size={18} />
+            <span>Inquiries</span>
+          </NavLink>
 
-          {!isAdmin && (
-            <NavLink to="/inventory" className={({ isActive }) => `header-nav-link ${isActive ? 'active' : ''}`}>
-              <Package size={18} />
-              <span>Inventory</span>
-            </NavLink>
-          )}
+          <NavLink to="/inventory" className={({ isActive }) => `header-nav-link ${isActive ? 'active' : ''}`}>
+            <Package size={18} />
+            <span>Inventory</span>
+          </NavLink>
 
           <NavLink to="/clients" className={({ isActive }) => `header-nav-link ${isActive ? 'active' : ''}`}>
             <Users size={18} />
@@ -74,19 +68,17 @@ const DesktopHeader = () => {
 
         {/* Action Controls Section */}
         <div className="header-actions">
-          {!isAdmin && (
-            <div className="create-dropdown">
-              <motion.button 
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={() => navigate('/add-order')}
-                className="btn-header-create"
-              >
-                <Plus size={18} strokeWidth={2.5} />
-                <span>New Order</span>
-              </motion.button>
-            </div>
-          )}
+          <div className="create-dropdown">
+            <motion.button 
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => navigate('/add-order')}
+              className="btn-header-create"
+            >
+              <Plus size={18} strokeWidth={2.5} />
+              <span>New Order</span>
+            </motion.button>
+          </div>
 
           <div className="header-divider"></div>
 

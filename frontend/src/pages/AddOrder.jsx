@@ -580,8 +580,8 @@ const AddOrder = () => {
                     <input type="text" className="form-input" name="dyeReceiptQuantity" value={formData.dyeReceiptQuantity} onChange={handleChange} placeholder="Enter quantity" style={{ backgroundColor: '#FFFFFF', borderRadius: '16px' }} />
                   </div>
                 </div>
-                <div className="flex gap-4 mb-4">
-                  <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '16px' }}>
+                  <div className="form-group" style={{ marginBottom: 0 }}>
                     <label className="form-label">Entry Date</label>
                     <DatePicker
                       selected={formData.dyeReceiptDate ? new Date(formData.dyeReceiptDate) : null}
@@ -592,19 +592,19 @@ const AddOrder = () => {
                       style={{ backgroundColor: '#FFFFFF', borderRadius: '16px' }}
                     />
                   </div>
-                  <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
+                  <div className="form-group" style={{ marginBottom: 0 }}>
                     <label className="form-label">Remark</label>
                     <input type="text" className="form-input" name="dyeReceiptRemark" value={formData.dyeReceiptRemark} onChange={handleChange} placeholder="Enter remark" style={{ backgroundColor: '#FFFFFF', borderRadius: '16px' }} />
                   </div>
-                  <button
-                    type="button"
-                    onClick={addDyeQuantityReceipt}
-                    className="btn btn-secondary"
-                    style={{ alignSelf: 'flex-end', padding: '14px 18px', borderRadius: '16px', backgroundColor: '#4F46E5', color: 'white', border: 'none' }}
-                  >
-                    Add Receipt Entry
-                  </button>
                 </div>
+                <button
+                  type="button"
+                  onClick={addDyeQuantityReceipt}
+                  className="btn btn-secondary"
+                  style={{ width: '100%', padding: '14px', borderRadius: '16px', backgroundColor: '#4F46E5', color: 'white', border: 'none', fontWeight: '700' }}
+                >
+                  Add Receipt Entry
+                </button>
                 <div style={{ marginTop: '16px' }}>
                   <p style={{ margin: '0 0 8px 0', fontWeight: '700', color: '#0F172A' }}>Received Quantity History</p>
                   {formData.dyeQuantityReceipts.length === 0 ? (
@@ -680,12 +680,12 @@ const AddOrder = () => {
                     style={{ backgroundColor: '#FFFFFF', borderRadius: '16px' }}
                   />
                 </div>
-                <div className="flex gap-4 mb-4">
-                  <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px', marginBottom: '16px' }}>
+                  <div className="form-group" style={{ marginBottom: 0 }}>
                     <label className="form-label">New Quantity Received</label>
                     <input type="text" className="form-input" name="digitalReceiptQuantity" value={formData.digitalReceiptQuantity} onChange={handleChange} placeholder="Enter quantity" style={{ backgroundColor: '#FFFFFF', borderRadius: '16px' }} />
                   </div>
-                  <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
+                  <div className="form-group" style={{ marginBottom: 0 }}>
                     <label className="form-label">Entry Date</label>
                     <DatePicker
                       selected={formData.digitalReceiptDate ? new Date(formData.digitalReceiptDate) : null}
@@ -696,16 +696,16 @@ const AddOrder = () => {
                       style={{ backgroundColor: '#FFFFFF', borderRadius: '16px' }}
                     />
                   </div>
-                  <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
-                    <label className="form-label">Remark</label>
-                    <input type="text" className="form-input" name="digitalReceiptRemark" value={formData.digitalReceiptRemark} onChange={handleChange} placeholder="Enter remark" style={{ backgroundColor: '#FFFFFF', borderRadius: '16px' }} />
-                  </div>
+                </div>
+                <div className="form-group" style={{ marginBottom: '16px' }}>
+                  <label className="form-label">Remark</label>
+                  <input type="text" className="form-input" name="digitalReceiptRemark" value={formData.digitalReceiptRemark} onChange={handleChange} placeholder="Enter remark" style={{ backgroundColor: '#FFFFFF', borderRadius: '16px' }} />
                 </div>
                 <button
                   type="button"
                   onClick={addDigitalQuantityReceipt}
                   className="btn btn-secondary"
-                  style={{ padding: '14px 18px', borderRadius: '16px', backgroundColor: '#4F46E5', color: 'white', border: 'none', marginBottom: '16px' }}
+                  style={{ width: '100%', padding: '14px', borderRadius: '16px', backgroundColor: '#4F46E5', color: 'white', border: 'none', fontWeight: '700' }}
                 >
                   Add Receipt Entry
                 </button>
@@ -770,8 +770,8 @@ const AddOrder = () => {
               </div>
               <div style={{ marginTop: '16px', padding: '18px', borderRadius: '20px', backgroundColor: '#111827', border: '1px solid #334155' }}>
                 <h4 style={{ margin: '0 0 12px 0', color: '#F8FAFC', fontSize: '0.95rem', fontWeight: '700' }}>New Quantity Received</h4>
-                <div className="flex gap-4 mb-4">
-                  <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px', marginBottom: '16px' }}>
+                  <div className="form-group" style={{ marginBottom: 0 }}>
                     <label className="form-label" style={{ color: '#E2E8F0' }}>Entry Date</label>
                     <DatePicker
                       selected={formData.dispatchReceiptDate ? new Date(formData.dispatchReceiptDate) : null}
@@ -782,20 +782,20 @@ const AddOrder = () => {
                       style={{ backgroundColor: '#0F172A', borderRadius: '16px', color: '#E2E8F0', border: '1px solid #475569' }}
                     />
                   </div>
-                  <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
+                  <div className="form-group" style={{ marginBottom: 0 }}>
                     <label className="form-label" style={{ color: '#E2E8F0' }}>Quantity</label>
                     <input type="number" className="form-input" name="dispatchReceiptQuantity" value={formData.dispatchReceiptQuantity} onChange={handleChange} placeholder="Enter quantity" style={{ backgroundColor: '#0F172A', borderRadius: '16px', color: '#E2E8F0', border: '1px solid #475569' }} />
                   </div>
-                  <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
-                    <label className="form-label" style={{ color: '#E2E8F0' }}>Remark</label>
-                    <input type="text" className="form-input" name="dispatchReceiptRemark" value={formData.dispatchReceiptRemark} onChange={handleChange} placeholder="Enter remark" style={{ backgroundColor: '#0F172A', borderRadius: '16px', color: '#E2E8F0', border: '1px solid #475569' }} />
-                  </div>
+                </div>
+                <div className="form-group" style={{ marginBottom: '16px' }}>
+                  <label className="form-label" style={{ color: '#E2E8F0' }}>Remark</label>
+                  <input type="text" className="form-input" name="dispatchReceiptRemark" value={formData.dispatchReceiptRemark} onChange={handleChange} placeholder="Enter remark" style={{ backgroundColor: '#0F172A', borderRadius: '16px', color: '#E2E8F0', border: '1px solid #475569' }} />
                 </div>
                 <button
                   type="button"
                   onClick={addDispatchQuantityReceipt}
                   className="btn btn-secondary"
-                  style={{ padding: '12px 18px', borderRadius: '16px', backgroundColor: '#4F46E5', color: 'white', border: 'none', marginBottom: '16px' }}
+                  style={{ width: '100%', padding: '14px', borderRadius: '16px', backgroundColor: '#4F46E5', color: 'white', border: 'none', fontWeight: '700' }}
                 >
                   Add Dispatch Receipt
                 </button>

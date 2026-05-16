@@ -373,12 +373,10 @@ const Inventory = () => {
                   <Printer size={16} />
                 </button>
               )}
-              {JSON.parse(localStorage.getItem('user') || '{}').role === 'ADMIN' && (
                 <button onClick={() => handleDelete(item.id)}
                   style={{ background: '#FEF2F2', border: 'none', borderRadius: '10px', padding: '8px', cursor: 'pointer', color: '#EF4444' }}>
                   <Trash2 size={16} />
                 </button>
-              )}
             </div>
           </div>
 
@@ -579,8 +577,6 @@ const Inventory = () => {
         ))}
       </div>
 
-      {/* ── Add Button ── */}
-      {JSON.parse(localStorage.getItem('user') || '{}').role === 'ADMIN' && (
         <button
           onClick={() => setShowAddModal(true)}
           className="inv-add-btn"
@@ -593,7 +589,6 @@ const Inventory = () => {
           <Plus size={20} />
           {addLabel[activeTab]}
         </button>
-      )}
 
       {/* ── Available Items ── */}
       <div className="inv-section">
