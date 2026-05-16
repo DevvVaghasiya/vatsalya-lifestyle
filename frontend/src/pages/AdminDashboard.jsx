@@ -5,7 +5,7 @@ import {
   Activity, ShieldCheck, Download, Package, Layers,
   UserCheck, UserX, Trash2
 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '../utils/api';
 import jsPDF from 'jspdf';
@@ -76,7 +76,8 @@ const exportInquiriesPDF = (inquiries) => {
 /* ─── Component ─── */
 const AdminDashboard = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('users');
+  const location = useLocation();
+  const [activeTab, setActiveTab] = useState(location.state?.tab || 'users');
   const [users, setUsers] = useState([]);
   const [pendingUsers, setPendingUsers] = useState([]);
   const [inquiries, setInquiries] = useState([]);

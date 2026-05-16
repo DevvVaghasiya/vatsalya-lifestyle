@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import {
   ArrowLeft, User, Edit3, Lock,
   LogOut, ChevronRight, Camera, Users, ClipboardList, ShieldCheck,
-  Loader2, CheckCircle2
+  Loader2, CheckCircle2, Package, Layers
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -60,8 +60,10 @@ const Profile = () => {
   }, []);
 
   const menuItems = user.role === 'ADMIN' ? [
-    { icon: Users, label: 'User Management', path: '/', desc: 'Manage all platform users', color: '#4F46E5' },
-    { icon: ClipboardList, label: 'Platform Inquiries', path: '/', desc: 'View all business inquiries', color: '#0D9488' },
+    { icon: Users, label: 'User Management', path: '/', tab: 'users', desc: 'Manage all platform users', color: '#4F46E5' },
+    { icon: ClipboardList, label: 'Platform Inquiries', path: '/', tab: 'inquiries', desc: 'View all business inquiries', color: '#0D9488' },
+    { icon: Layers, label: 'Platform Orders', path: '/', tab: 'orders', desc: 'Track all production orders', color: '#6366F1' },
+    { icon: Package, label: 'Global Inventory', path: '/', tab: 'inventory', desc: 'Manage warehouse stock', color: '#F59E0B' },
     { icon: Edit3, label: 'Edit Profile', path: '/profile/edit', desc: 'Update admin details', color: '#7C3AED' },
     { icon: Lock, label: 'Security Settings', path: '/profile/change-password', desc: 'Update your password', color: '#D97706' },
     { icon: LogOut, label: 'Sign Out', isLogout: true, desc: 'Exit admin panel', color: '#EF4444' },
@@ -79,7 +81,7 @@ const Profile = () => {
       localStorage.removeItem('user');
       navigate('/login');
     } else if (item.path) {
-      navigate(item.path);
+      navigate(item.path, { state: { tab: item.tab } });
     }
   };
 
