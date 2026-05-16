@@ -118,14 +118,18 @@ const AdminDashboard = () => {
           const res = await api.get(`/api/orders`);
           setOrders(res.data || []);
         } else if (activeTab === 'inventory') {
-          const [s1, s2, s3] = await Promise.all([
+          const [s1, s2, s3, s4] = await Promise.all([
             api.get('/api/inventory/category/STOCK'),
             api.get('/api/inventory/category/SAMPLE'),
+            api.get('/api/inventory/category/MILL_DEFECT'),
             api.get('/api/inventory/category/FABRIC_ENTRY'),
           ]);
           setInventory([
-            ...(s1.data||[]).map(i=>({...i,category:'Stock'})),
-            ...(s2.data||[]).map(i=>({...i,category:'Sample'})),
+            ...(s1.data||[]).map(i=>({...i,category:'STOCK'})),
+            ...(s2.data||[]).map(i=>({...i,category:'SAMPLE'})),
+            ...(s3.data||[]).map(i=>({...i,category:'MILL_DEFECT'})),
+            ...(s4.data||[]).map(i=>({...i,category:'FABRIC_ENTRY'})),
+          ]);
         } else if (activeTab === 'assets') {
           const res = await api.get(`/api/assets`);
           setAssets(res.data);
@@ -896,8 +900,8 @@ const AdminDashboard = () => {
                         </div>
                       </motion.div>
                     );
-                  })
-                )
+                  })}
+                </motion.div>
               );
             })()
           ) : (
