@@ -8,6 +8,23 @@ import logo from '../assets/logo.webp';
 import dashboardBg from '../assets/dashboard-bg.webp';
 import logo3 from '../assets/logo3.webp';
 
+import fabric1 from '../assets/fabric.webp';
+import fabric2 from '../assets/fabric2.webp';
+import fabric3 from '../assets/fabric3.webp';
+import fabric4 from '../assets/fabric4.webp';
+import fabric5 from '../assets/fabric5.webp';
+import fabric6 from '../assets/fabric6.webp';
+import fabric7 from '../assets/fabric7.webp';
+import fabric8 from '../assets/fabric8.webp';
+import fabric9 from '../assets/fabric9.webp';
+import fabric10 from '../assets/fabric10.webp';
+import fabric11 from '../assets/fabric11.webp';
+import fabric12 from '../assets/fabric12.webp';
+import fabric13 from '../assets/fabric13.webp';
+import fabric14 from '../assets/fabric14.webp';
+import fabric15 from '../assets/fabric15.webp';
+import fabric16 from '../assets/fabric16.webp';
+
 const Dashboard = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(JSON.parse(sessionStorage.getItem('user') || '{}'));
@@ -23,34 +40,23 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [now, setNow] = useState(new Date());
 
+  const localFabrics = [
+    fabric1, fabric2, fabric3, fabric4, fabric5, fabric6, fabric7, fabric8,
+    fabric9, fabric10, fabric11, fabric12, fabric13, fabric14, fabric15, fabric16
+  ];
+
   // Fetch fabric collection from database
   useEffect(() => {
     api.get('/api/assets/type/FABRIC_COLLECTION')
       .then(res => {
-        const images = res.data.map(asset => asset.imageUrl);
-        // If no images in DB, use high-quality placeholders
-        if (images.length === 0) {
-          setFabricImages([
-            "https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?auto=format&fit=crop&q=80&w=800",
-            "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?auto=format&fit=crop&q=80&w=800",
-            "https://images.unsplash.com/photo-1554415707-6e8cfc93fe23?auto=format&fit=crop&q=80&w=800",
-            "https://images.unsplash.com/photo-1544441893-675973e31985?auto=format&fit=crop&q=80&w=800",
-            "https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&q=80&w=800",
-            "https://images.unsplash.com/photo-1574169208507-84376144848b?auto=format&fit=crop&q=80&w=800",
-            "https://images.unsplash.com/photo-1584184924103-e310d9dc82fc?auto=format&fit=crop&q=80&w=800",
-            "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&q=80&w=800"
-          ]);
-        } else {
-          setFabricImages(images);
-        }
+        const dbImages = res.data.map(asset => asset.imageUrl);
+        // Combine DB images with local ones, then shuffle
+        const combined = [...dbImages, ...localFabrics].sort(() => Math.random() - 0.5);
+        setFabricImages(combined);
       })
       .catch(err => {
         console.error('Error fetching collection assets:', err);
-        // Fallback on error
-        setFabricImages([
-          "https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?auto=format&fit=crop&q=80&w=800",
-          "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?auto=format&fit=crop&q=80&w=800"
-        ]);
+        setFabricImages(localFabrics.sort(() => Math.random() - 0.5));
       });
   }, []);
 
