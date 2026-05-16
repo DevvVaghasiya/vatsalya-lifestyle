@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
-import { Plus, Package, MessageSquare, Home, Users, LogOut, Layers } from 'lucide-react';
+import { Plus, Package, MessageSquare, Home, Users, LogOut, Layers, Sun, Moon } from 'lucide-react';
 import { motion } from 'framer-motion';
 import logo from '../assets/logo.jpeg';
 
@@ -8,7 +8,18 @@ const DesktopHeader = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [user, setUser] = useState(JSON.parse(sessionStorage.getItem('user') || '{}'));
-  const isAdmin = user.role === 'ADMIN';
+  const [isDark, setIsDark] = useState(localStorage.getItem('theme') === 'dark');
+
+  // Sync theme with body class and localStorage
+  useEffect(() => {
+    if (isDark) {
+      document.body.classList.add('dark-mode');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.body.classList.remove('dark-mode');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [isDark]);
 
   // Re-read user whenever Profile.jsx dispatches a picture update
   useEffect(() => {
@@ -23,6 +34,8 @@ const DesktopHeader = () => {
     sessionStorage.removeItem('user');
     navigate('/login');
   };
+
+  const toggleTheme = () => setIsDark(!isDark);
 
   return (
     <header className="premium-desktop-header">
@@ -82,8 +95,21 @@ const DesktopHeader = () => {
 
           <div className="header-divider"></div>
 
-          {/* Quick Icons */}
-
+          {/* Theme Toggle Button */}
+          <motion.button
+            whileHover={{ scale: 1.1, rotate: 15 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={toggleTheme}
+            className="header-icon-btn"
+            title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+            style={{ 
+              background: isDark ? 'rgba(56, 189, 248, 0.1)' : 'var(--bg)',
+              color: isDark ? 'var(--primary)' : 'var(--muted)',
+              border: isDark ? '1px solid var(--primary-soft)' : '1px solid var(--border)'
+            }}
+          >
+            {isDark ? <Sun size={18} strokeWidth={2.5} /> : <Moon size={18} strokeWidth={2.5} />}
+          </motion.button>
 
           {/* User Profile / Logout */}
           <div className="header-profile-group">

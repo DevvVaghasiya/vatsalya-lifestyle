@@ -31,6 +31,29 @@
   --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
   --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.06);
   --shadow-lg: 0 16px 40px rgba(79, 70, 229, 0.08);
+
+  --transition-theme: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                      border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                      box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                      color 0.3s ease;
+}
+
+body.dark-mode {
+  --bg: #0B0F1A;
+  --surface: #161B2D;
+  --text: #F8FAFC;
+  --muted: #94A3B8;
+  --border: #2D3748;
+  
+  --primary: #38BDF8;
+  --primary-light: #7DD3FC;
+  --primary-dark: #0EA5E9;
+  --primary-soft: rgba(56, 189, 248, 0.1);
+  --primary-glow: rgba(56, 189, 248, 0.3);
+  
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.5);
 }
 
 * {
@@ -71,6 +94,7 @@ html, body {
   background-color: var(--bg);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  transition: var(--transition-theme);
 }
 
 #root {
@@ -141,16 +165,22 @@ html, body {
   left: 0;
   right: 0;
   height: 76px;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: var(--surface);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
   z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0 32px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-theme);
+}
+
+body.dark-mode .premium-desktop-header {
+  background: rgba(22, 27, 45, 0.85);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .header-inner {
@@ -218,6 +248,7 @@ html, body {
   background: linear-gradient(90deg, var(--text), var(--primary-dark));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  transition: var(--transition-theme);
 }
 
 .brand-tagline {
@@ -226,6 +257,7 @@ html, body {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: var(--primary);
+  transition: var(--transition-theme);
 }
 
 .header-nav {
@@ -417,7 +449,14 @@ html, body {
   position: sticky;
   top: 0;
   z-index: 100;
-  transition: all 0.3s ease;
+  transition: var(--transition-theme);
+}
+
+body.dark-mode .page-header {
+  background: rgba(22, 27, 45, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 /* On desktop, adapt page header slightly so it aligns cleanly under the main Desktop Header */
@@ -458,7 +497,12 @@ html, body {
   border: 1px solid var(--border);
   box-shadow: var(--shadow-sm);
   margin-bottom: 24px;
-  transition: all 0.2s ease;
+  transition: var(--transition-theme);
+}
+
+body.dark-mode .search-container {
+  background-color: rgba(22, 27, 45, 0.6);
+  border-color: rgba(255, 255, 255, 0.05);
 }
 
 .search-container:focus-within {
@@ -498,8 +542,13 @@ html, body {
   font-size: 0.85rem;
   font-weight: 800;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: var(--transition-theme);
   color: var(--muted);
+}
+
+body.dark-mode .tab-item.active {
+  background-color: var(--primary);
+  color: white;
 }
 
 .tab-item:hover {
@@ -520,15 +569,22 @@ html, body {
   margin-bottom: 20px;
   border: 1px solid var(--border);
   box-shadow: var(--shadow-sm);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1), var(--transition-theme);
   position: relative;
   overflow: hidden;
+}
+
+body.dark-mode .card {
+  background: rgba(22, 27, 45, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .card:hover {
   box-shadow: var(--shadow-md);
   transform: translateY(-2px);
-  border-color: rgba(79, 70, 229, 0.2);
+  border-color: var(--primary);
 }
 
 .card:active {
@@ -623,10 +679,11 @@ html, body {
   display: block;
   font-size: 0.85rem;
   font-weight: 800;
-  color: #334155;
+  color: var(--muted);
   margin-bottom: 10px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  transition: var(--transition-theme);
 }
 
 .form-input, .form-select {
@@ -639,8 +696,13 @@ html, body {
   font-weight: 600;
   color: var(--text);
   outline: none;
-  transition: all 0.2s ease;
+  transition: var(--transition-theme);
   box-sizing: border-box;
+}
+
+body.dark-mode .form-input, body.dark-mode .form-select {
+  background: rgba(22, 27, 45, 0.4);
+  border-color: rgba(255, 255, 255, 0.05);
 }
 
 .form-input:focus, .form-select:focus {
@@ -761,23 +823,30 @@ html, body {
   color: #94A3B8;
 }
 
-/* --- UTILITY CLASSES --- */
-.flex { display: flex; }
-.flex-col { display: flex; flex-direction: column; }
-.items-center { align-items: center; }
-.justify-between { justify-content: space-between; }
-.justify-center { justify-content: center; }
-.gap-1 { gap: 4px; }
-.gap-2 { gap: 8px; }
-.gap-3 { gap: 12px; }
-.gap-4 { gap: 16px; }
-.gap-6 { gap: 24px; }
-.mb-2 { margin-bottom: 8px; }
-.mb-4 { margin-bottom: 16px; }
-.mb-6 { margin-bottom: 24px; }
-.mt-2 { margin-top: 8px; }
-.mt-4 { margin-top: 16px; }
-.mt-8 { margin-top: 32px; }
+body.dark-mode .dashboard-sky-bg {
+  filter: brightness(0.2) saturate(0.5);
+  background-color: #030712;
+}
+
+body.dark-mode .hero-card {
+  background: rgba(22, 27, 45, 0.6) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  color: white !important;
+}
+
+body.dark-mode .hero-card h1 {
+  color: white !important;
+}
+
+body.dark-mode .hero-card p {
+  color: var(--muted) !important;
+}
+
+body.dark-mode .pill {
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: white !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
 
 .profile-avatar-small {
   width: 40px;
@@ -1817,4 +1886,81 @@ html, body {
     padding: 36px 24px 32px;
   }
   .wake-title { font-size: 1.2rem; }
+}
+
+/* --- Admin Dashboard Specific Dark Mode --- */
+body.dark-mode .page-header[style*="background: white"],
+body.dark-mode .page-header[style*="background:rgba(255,255,255,0.7)"],
+body.dark-mode .page-header[style*="background: rgba(255, 255, 255, 0.7)"] {
+  background: rgba(22, 27, 45, 0.7) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+body.dark-mode div[style*="background: white"],
+body.dark-mode div[style*="background:white"] {
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+body.dark-mode div[style*="background: #F8FAFC"], 
+body.dark-mode div[style*="background: rgb(248, 250, 252)"],
+body.dark-mode div[style*="background:#F8FAFC"] {
+  background: rgba(255, 255, 255, 0.03) !important;
+}
+
+body.dark-mode .header-nav {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .header-nav-link.active {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 4px 12px var(--primary-glow);
+}
+
+body.dark-mode .header-profile-group {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .header-logout-btn {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .header-logout-btn:hover {
+  background: var(--danger-soft);
+}
+
+/* Global transitions for a smooth feel */
+* {
+  transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+              border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+              color 0.3s ease,
+              box-shadow 0.4s ease,
+              transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Disable transitions for performance-heavy or specific animated items */
+.animate-spin, 
+.shimmer-sweep, 
+.wave, 
+.fabric-layer, 
+.dashboard-sky-bg,
+.motion-div {
+  transition: none !important;
+}
+
+/* Specific button contrast in dark mode */
+body.dark-mode .btn-secondary, 
+body.dark-mode .button-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: var(--text);
+}
+
+body.dark-mode .btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--primary);
 }
