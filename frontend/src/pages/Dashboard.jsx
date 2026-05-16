@@ -212,93 +212,61 @@ const Dashboard = () => {
             />
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
-            {/* Quick Action: New Order */}
-            <motion.div
-              whileHover={{ y: -4, boxShadow: '0 12px 24px rgba(79,70,229,0.15)' }}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => navigate('/add-order')}
-              style={{
-                padding: '20px',
-                background: 'white',
-                borderRadius: '24px',
-                cursor: 'pointer',
-                border: '1px solid rgba(79,70,229,0.1)',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '12px'
-              }}
-            >
-              <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: '#EEF2FF', color: '#4F46E5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Plus size={22} strokeWidth={2.5} />
-              </div>
-              <p style={{ margin: 0, fontWeight: '800', fontSize: '0.9rem', color: '#1E293B' }}>New Order</p>
-            </motion.div>
-
-            {/* Quick Action: Add Stock */}
-            <motion.div
-              whileHover={{ y: -4, boxShadow: '0 12px 24px rgba(16,185,129,0.15)' }}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => navigate('/inventory')}
-              style={{
-                padding: '20px',
-                background: 'white',
-                borderRadius: '24px',
-                cursor: 'pointer',
-                border: '1px solid rgba(16,185,129,0.1)',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '12px'
-              }}
-            >
-              <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: '#ECFDF5', color: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Package size={22} />
-              </div>
-              <p style={{ margin: 0, fontWeight: '800', fontSize: '0.9rem', color: '#1E293B' }}>Add Stock</p>
-            </motion.div>
-
+          <div style={{ display: 'flex', gap: '16px', marginTop: '12px' }}>
             {/* Quick Action: New Inquiry */}
             <motion.div
-              whileHover={{ y: -4, boxShadow: '0 12px 24px rgba(124,58,237,0.15)' }}
-              whileTap={{ scale: 0.97 }}
+              whileHover={{ y: -5, boxShadow: '0 20px 40px rgba(79,70,229,0.2)' }}
+              whileTap={{ scale: 0.96 }}
               onClick={() => navigate('/add-inquiry')}
               style={{
-                padding: '20px',
-                background: 'white',
-                borderRadius: '24px',
+                flex: 1,
+                padding: '24px 20px',
+                background: 'linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%)',
+                borderRadius: '28px',
                 cursor: 'pointer',
-                border: '1px solid rgba(124,58,237,0.1)',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '12px'
+                alignItems: 'center',
+                gap: '12px',
+                boxShadow: '0 12px 30px rgba(79,70,229,0.15)',
+                border: '1px solid rgba(255,255,255,0.2)'
               }}
             >
-              <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: '#F5F3FF', color: '#7C3AED', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <MessageSquare size={20} />
+              <div style={{ width: '52px', height: '52px', borderRadius: '16px', background: 'rgba(255,255,255,0.2)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <MessageSquare size={24} strokeWidth={2.5} />
               </div>
-              <p style={{ margin: 0, fontWeight: '800', fontSize: '0.9rem', color: '#1E293B' }}>New Inquiry</p>
+              <div style={{ textAlign: 'center' }}>
+                <p style={{ margin: 0, fontWeight: '900', fontSize: '1rem', color: 'white', letterSpacing: '-0.3px' }}>Add Inquiry</p>
+                <p style={{ margin: '4px 0 0', fontWeight: '600', fontSize: '0.7rem', color: 'rgba(255,255,255,0.7)' }}>Log new request</p>
+              </div>
             </motion.div>
 
             {/* Quick Action: New Client */}
             <motion.div
-              whileHover={{ y: -4, boxShadow: '0 12px 24px rgba(245,158,11,0.15)' }}
-              whileTap={{ scale: 0.97 }}
+              whileHover={{ y: -5, boxShadow: '0 20px 40px rgba(15,23,42,0.1)' }}
+              whileTap={{ scale: 0.96 }}
               onClick={() => navigate('/add-client')}
               style={{
-                padding: '20px',
+                flex: 1,
+                padding: '24px 20px',
                 background: 'white',
-                borderRadius: '24px',
+                borderRadius: '28px',
                 cursor: 'pointer',
-                border: '1px solid rgba(245,158,11,0.1)',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '12px'
+                alignItems: 'center',
+                gap: '12px',
+                boxShadow: '0 12px 30px rgba(0,0,0,0.04)',
+                border: '1px solid rgba(0,0,0,0.05)'
               }}
             >
-              <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: '#FFFBEB', color: '#F59E0B', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <UserPlus size={20} />
+              <div style={{ width: '52px', height: '52px', borderRadius: '16px', background: '#F8FAFC', color: '#1E293B', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #E2E8F0' }}>
+                <UserPlus size={24} />
               </div>
-              <p style={{ margin: 0, fontWeight: '800', fontSize: '0.9rem', color: '#1E293B' }}>New Client</p>
+              <div style={{ textAlign: 'center' }}>
+                <p style={{ margin: 0, fontWeight: '900', fontSize: '1rem', color: '#1E293B', letterSpacing: '-0.3px' }}>Add Client</p>
+                <p style={{ margin: '4px 0 0', fontWeight: '600', fontSize: '0.7rem', color: '#94A3B8' }}>Register partner</p>
+              </div>
             </motion.div>
           </div>
         </motion.div>
