@@ -5,7 +5,7 @@ import api from '../utils/api';
 
 const EditProfile = () => {
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const user = JSON.parse(sessionStorage.getItem('user') || '{}');
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: user.name || '',
@@ -37,11 +37,11 @@ const EditProfile = () => {
         businessName: formData.businessName,
       });
 
-      // Update localStorage with the server response so the whole app stays in sync
+      // Update sessionStorage with the server response so the whole app stays in sync
       const updatedUser = { ...user, ...res.data };
-      // Don't store password in localStorage
+      // Don't store password in sessionStorage
       delete updatedUser.password;
-      localStorage.setItem('user', JSON.stringify(updatedUser));
+      sessionStorage.setItem('user', JSON.stringify(updatedUser));
 
       alert('Profile updated successfully!');
       navigate('/profile');

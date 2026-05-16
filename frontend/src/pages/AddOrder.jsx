@@ -203,7 +203,7 @@ const AddOrder = () => {
       return;
     }
 
-    const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+    const currentUser = JSON.parse(sessionStorage.getItem('user') || '{}');
     const payload = {
       client: { id: formData.customerId },
       user: { id: currentUser.id },
@@ -252,16 +252,6 @@ const AddOrder = () => {
       transportName: formData.transport,
       dispatchQuantityReceivedEntries: formData.dispatchQuantityReceipts.map(item => ({ entryDate: item.entryDate, quantity: Number(item.quantity), remark: item.remark })),
       digitalQuantityReceivedEntries: formData.digitalQuantityReceipts.map(item => ({ entryDate: item.entryDate, quantity: Number(item.quantity), remark: item.remark })),
-      quantity: formData.quantity,
-      rate: formData.rate,
-      totalAmount: formData.totalAmount,
-      extraExpense: formData.extraExpense,
-      discount: formData.discount,
-      grandTotal: formData.grandTotal,
-      advancePaid: formData.advancePaid,
-      dueDate: formData.dueDate,
-      paymentMethod: formData.paymentMethod,
-      creditDays: formData.creditDays,
       notes: formData.remark,
       priority: formData.priority,
       status: formData.status || 'PENDING'

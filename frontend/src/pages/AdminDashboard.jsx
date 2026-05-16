@@ -89,6 +89,7 @@ const AdminDashboard = () => {
   const [inquiries, setInquiries] = useState([]);
   const [orders, setOrders] = useState([]);
   const [inventory, setInventory] = useState([]);
+  const [assets, setAssets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [showToast, setShowToast] = useState(false);
@@ -98,7 +99,7 @@ const AdminDashboard = () => {
   const [inventorySubTab, setInventorySubTab] = useState('STOCK');
   const [approvingId, setApprovingId] = useState(null);
 
-  const adminUser = JSON.parse(localStorage.getItem('user') || '{}');
+  const adminUser = JSON.parse(sessionStorage.getItem('user') || '{}');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -125,8 +126,9 @@ const AdminDashboard = () => {
           setInventory([
             ...(s1.data||[]).map(i=>({...i,category:'Stock'})),
             ...(s2.data||[]).map(i=>({...i,category:'Sample'})),
-            ...(s3.data||[]).map(i=>({...i,category:'Fabric Entry'})),
-          ]);
+        } else if (activeTab === 'assets') {
+          const res = await api.get(`/api/assets`);
+          setAssets(res.data);
         }
       } catch (err) { console.error('Error fetching admin data:', err); }
       finally { setLoading(false); }
@@ -356,6 +358,7 @@ const AdminDashboard = () => {
             { key: 'inquiries', label: 'Inquiries', Icon: ClipboardList },
             { key: 'orders',    label: 'Orders',    Icon: Package },
             { key: 'inventory', label: 'Inventory', Icon: Layers },
+            { key: 'assets',    label: 'Gallery',   Icon: Activity },
           ].map(({ key, label, Icon, badge }) => (
             <button
               key={key}
@@ -799,7 +802,7 @@ const AdminDashboard = () => {
               );
             })()
 
-          ) : (
+          ) : activeTab === 'inventory' ? (
             /* ── Inventory List ── */
             (() => {
               const filtered = inventory.filter(i => {
@@ -878,16 +881,6 @@ const AdminDashboard = () => {
                             ))}
                           </div>
                         )}
-                        {itemCatKey === 'FABRIC_ENTRY' && (
-                          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                            {[['Composition', item.composition], ['GSM', item.gsm], ['Width', item.width], ['Type', item.fabricType]].filter(([,v])=>v).map(([k,v]) => (
-                              <div key={k} style={{ background: '#FFFBEB', padding: '4px 10px', borderRadius: 8 }}>
-                                <span style={{ fontSize: '0.65rem', color: '#D97706', fontWeight: 700 }}>{k}: </span>
-                                <span style={{ fontSize: '0.78rem', color: '#1E293B', fontWeight: 700 }}>{v}</span>
-                              </div>
-                            ))}
-                          </div>
-                        )}
                         <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 12 }}>
                           <button
                             onClick={(e) => handleDeleteInventory(e, item.id)}
@@ -903,10 +896,54 @@ const AdminDashboard = () => {
                         </div>
                       </motion.div>
                     );
-                  })}
-                </motion.div>
+                  })
+                )
               );
             })()
+          ) : (
+            /* ── Assets management ── */
+            <motion.div key="assets" variants={stagger} initial="hidden" animate="show"
+              style={{ display: 'flex', flexDirection: 'column', gap: 16 }}
+            >
+              <div style={{ background: 'white', borderRadius: 20, padding: 24, border: '1px solid var(--border)', boxShadow: 'var(--shadow-sm)' }}>
+                <h3 style={{ margin: 0, fontWeight: 900, fontSize: '1.1rem', color: 'var(--text)' }}>Dynamic Gallery Assets</h3>
+                <p style={{ margin: '4px 0 20px', fontSize: '0.85rem', color: 'var(--muted)', fontWeight: 600 }}>Manage images displayed on the public dashboard fabric collection.</p>
+                
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 16 }}>
+                  {assets.map(asset => (
+                    <motion.div key={asset.id} layout style={{ position: 'relative', borderRadius: 16, overflow: 'hidden', aspectRatio: '16/10', border: '1px solid var(--border)' }}>
+                      <img src={asset.imageUrl} alt={asset.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'linear-gradient(transparent, rgba(0,0,0,0.8))', padding: '12px 8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ color: 'white', fontSize: '0.7rem', fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{asset.name}</span>
+                        <button 
+                          onClick={async () => {
+                            if (!window.confirm('Remove this asset?')) return;
+                            await api.delete(`/api/assets/${asset.id}`);
+                            setAssets(prev => prev.filter(a => a.id !== asset.id));
+                          }}
+                          style={{ background: '#EF4444', border: 'none', borderRadius: 6, padding: 4, color: 'white', cursor: 'pointer' }}
+                        >
+                          <Trash2 size={12} />
+                        </button>
+                      </div>
+                    </motion.div>
+                  ))}
+                  <div 
+                    onClick={() => {
+                      const name = prompt('Asset Name?');
+                      const url = prompt('Image URL?');
+                      if (name && url) {
+                        api.post('/api/assets', { name, imageUrl: url, type: 'FABRIC_COLLECTION' })
+                          .then(res => setAssets(prev => [...prev, res.data]));
+                      }
+                    }}
+                    style={{ borderRadius: 16, border: '2px dashed #E2E8F0', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8, cursor: 'pointer', color: '#94A3B8', aspectRatio: '16/10' }}>
+                    <Plus size={24} />
+                    <span style={{ fontSize: '0.75rem', fontWeight: 800 }}>Add Asset</span>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
           )}
         </AnimatePresence>
       </div>

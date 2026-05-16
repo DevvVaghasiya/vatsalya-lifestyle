@@ -39,7 +39,7 @@ const AddInquiry = () => {
         let res = await api.get(`/api/clients`);
         let dbClients = res.data;
         if (dbClients.length === 0) {
-          const localClients = JSON.parse(localStorage.getItem('clients') || '[]');
+          const localClients = JSON.parse(sessionStorage.getItem('clients') || '[]');
           if (localClients.length > 0) {
             for (const local of localClients) {
               await api.post(`/api/clients`, {
@@ -49,7 +49,7 @@ const AddInquiry = () => {
             }
             const updatedRes = await api.get(`/api/clients`);
             dbClients = updatedRes.data;
-            localStorage.removeItem('clients');
+            sessionStorage.removeItem('clients');
           }
         }
         setClients(dbClients);
@@ -61,14 +61,14 @@ const AddInquiry = () => {
     };
     fetchClients();
 
-    const draft = localStorage.getItem('inquiry_draft');
+    const draft = sessionStorage.getItem('inquiry_draft');
     if (draft) {
       setFormData(JSON.parse(draft));
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('inquiry_draft', JSON.stringify(formData));
+    sessionStorage.setItem('inquiry_draft', JSON.stringify(formData));
   }, [formData]);
 
   const handleSubmit = async (e) => {
@@ -78,7 +78,7 @@ const AddInquiry = () => {
       return;
     }
 
-    const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+    const currentUser = JSON.parse(sessionStorage.getItem('user') || '{}');
 
     setLoading(true);
     try {
@@ -98,7 +98,7 @@ const AddInquiry = () => {
       }
 
       await api.post(`/api/inquiries`, payload);
-      localStorage.removeItem('inquiry_draft');
+      sessionStorage.removeItem('inquiry_draft');
       alert('Inquiry submitted successfully!');
       navigate('/inquiries');
     } catch (err) {

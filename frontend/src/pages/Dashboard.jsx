@@ -7,44 +7,37 @@ import api from '../utils/api';
 import logo from '../assets/logo.webp';
 import dashboardBg from '../assets/dashboard-bg.webp';
 import logo3 from '../assets/logo3.webp';
-import fab1  from '../assets/fabric.webp';
-import fab2  from '../assets/fabric2.webp';
-import fab3  from '../assets/fabric3.webp';
-import fab4  from '../assets/fabric4.webp';
-import fab5  from '../assets/fabric5.webp';
-import fab6  from '../assets/fabric6.webp';
-import fab7  from '../assets/fabric7.webp';
-import fab8  from '../assets/fabric8.webp';
-import fab9  from '../assets/fabric9.webp';
-import fab10 from '../assets/fabric10.webp';
-import fab11 from '../assets/fabric11.webp';
-import fab12 from '../assets/fabric12.webp';
-import fab13 from '../assets/fabric13.webp';
-import fab14 from '../assets/fabric14.webp';
-import fab15 from '../assets/fabric15.webp';
-import fab16 from '../assets/fabric16.webp';
-
-// Row 1: fab1–fab8, Row 2: fab9–fab16 (no overlap between rows)
-const row1Images = [fab1, fab2, fab3, fab4, fab5, fab6, fab7, fab8];
-const row2Images = [fab9, fab10, fab11, fab12, fab13, fab14, fab15, fab16];
-
-const data = [
-  { name: '1 May', sales: 22000 },
-  { name: '10 May', sales: 45000 },
-  { name: '15 May', sales: 40000 },
-  { name: '20 May', sales: 80000 },
-  { name: '25 May', sales: 55000 },
-  { name: '31 May', sales: 110000 },
-];
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem('user') || '{}'));
+  const [user, setUser] = useState(JSON.parse(sessionStorage.getItem('user') || '{}'));
   const firstName = user.name ? user.name.split(' ')[0] : 'Partner';
+
+  const [fabricImages, setFabricImages] = useState([]);
+  const [stats, setStats] = useState({
+    totalDeals: 0,
+    pendingDues: 0,
+    sales: 0,
+    lowStock: 0,
+  });
+  const [loading, setLoading] = useState(true);
+  const [now, setNow] = useState(new Date());
+
+  // Fetch fabric collection from database
+  useEffect(() => {
+    api.get('/api/assets/type/FABRIC_COLLECTION')
+      .then(res => {
+        setFabricImages(res.data.map(asset => asset.imageUrl));
+      })
+      .catch(err => console.error('Error fetching collection assets:', err));
+  }, []);
+
+  const row1Images = fabricImages.slice(0, Math.ceil(fabricImages.length / 2));
+  const row2Images = fabricImages.slice(Math.ceil(fabricImages.length / 2));
 
   // Sync avatar when profile picture is changed on Profile page
   useEffect(() => {
-    const sync = () => setUser(JSON.parse(localStorage.getItem('user') || '{}'));
+    const sync = () => setUser(JSON.parse(sessionStorage.getItem('user') || '{}'));
     window.addEventListener('userProfileUpdated', sync);
     return () => window.removeEventListener('userProfileUpdated', sync);
   }, []);

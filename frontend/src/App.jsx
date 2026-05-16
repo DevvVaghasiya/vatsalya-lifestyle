@@ -47,7 +47,7 @@ const PageLoader = () => (
 );
 
 const ProtectedRoute = ({ children }) => {
-  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+  const isAuthenticated = sessionStorage.getItem('isAuthenticated') === 'true';
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
@@ -55,7 +55,7 @@ const ProtectedRoute = ({ children }) => {
 };
 
 const HomeRoute = () => {
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const user = JSON.parse(sessionStorage.getItem('user') || '{}');
   if (user.role === 'ADMIN') {
     return <AdminDashboard />;
   }
@@ -64,13 +64,13 @@ const HomeRoute = () => {
 
 /**
  * On every app load, silently fetch the latest user data from the backend
- * and refresh localStorage. This keeps profile picture and other fields
+ * and refresh sessionStorage. This keeps profile picture and other fields
  * in sync across all devices without requiring a re-login.
  */
 const useSyncUser = () => {
   useEffect(() => {
-    const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const isAuthenticated = sessionStorage.getItem('isAuthenticated') === 'true';
+    const user = JSON.parse(sessionStorage.getItem('user') || '{}');
     if (!isAuthenticated || !user.id) return;
 
     api.get(`/api/users/${user.id}`)
@@ -79,7 +79,7 @@ const useSyncUser = () => {
         if (!fresh) return;
         // Merge server data into local user
         const merged = { ...user, ...fresh };
-        localStorage.setItem('user', JSON.stringify(merged));
+        sessionStorage.setItem('user', JSON.stringify(merged));
         // Only notify components if the profile picture actually changed
         // (avoids interfering with the upload-done banner timer)
         if (fresh.profilePictureUrl !== user.profilePictureUrl) {

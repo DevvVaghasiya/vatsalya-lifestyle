@@ -19,9 +19,9 @@ const Login = () => {
     setError('');
     try {
       const response = await api.post(`/api/auth/login`, { phoneNumber, password });
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
-      localStorage.setItem('isAuthenticated', 'true');
+      sessionStorage.setItem('token', response.data.token);
+      sessionStorage.setItem('user', JSON.stringify(response.data.user));
+      sessionStorage.setItem('isAuthenticated', 'true');
       navigate('/');
     } catch (err) {
       const data = err.response?.data;
