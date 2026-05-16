@@ -27,9 +27,31 @@ const Dashboard = () => {
   useEffect(() => {
     api.get('/api/assets/type/FABRIC_COLLECTION')
       .then(res => {
-        setFabricImages(res.data.map(asset => asset.imageUrl));
+        const images = res.data.map(asset => asset.imageUrl);
+        // If no images in DB, use high-quality placeholders
+        if (images.length === 0) {
+          setFabricImages([
+            "https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?auto=format&fit=crop&q=80&w=800",
+            "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?auto=format&fit=crop&q=80&w=800",
+            "https://images.unsplash.com/photo-1554415707-6e8cfc93fe23?auto=format&fit=crop&q=80&w=800",
+            "https://images.unsplash.com/photo-1544441893-675973e31985?auto=format&fit=crop&q=80&w=800",
+            "https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&q=80&w=800",
+            "https://images.unsplash.com/photo-1574169208507-84376144848b?auto=format&fit=crop&q=80&w=800",
+            "https://images.unsplash.com/photo-1584184924103-e310d9dc82fc?auto=format&fit=crop&q=80&w=800",
+            "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&q=80&w=800"
+          ]);
+        } else {
+          setFabricImages(images);
+        }
       })
-      .catch(err => console.error('Error fetching collection assets:', err));
+      .catch(err => {
+        console.error('Error fetching collection assets:', err);
+        // Fallback on error
+        setFabricImages([
+          "https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?auto=format&fit=crop&q=80&w=800",
+          "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?auto=format&fit=crop&q=80&w=800"
+        ]);
+      });
   }, []);
 
   const row1Images = fabricImages.slice(0, Math.ceil(fabricImages.length / 2));
