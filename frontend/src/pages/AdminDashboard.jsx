@@ -912,41 +912,96 @@ const AdminDashboard = () => {
               style={{ display: 'flex', flexDirection: 'column', gap: 16 }}
             >
               <div style={{ background: 'white', borderRadius: 20, padding: 24, border: '1px solid var(--border)', boxShadow: 'var(--shadow-sm)' }}>
-                <h3 style={{ margin: 0, fontWeight: 900, fontSize: '1.1rem', color: 'var(--text)' }}>Dynamic Gallery Assets</h3>
-                <p style={{ margin: '4px 0 20px', fontSize: '0.85rem', color: 'var(--muted)', fontWeight: 600 }}>Manage images displayed on the public dashboard fabric collection.</p>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20 }}>
+                  <div>
+                    <h3 style={{ margin: 0, fontWeight: 900, fontSize: '1.1rem', color: 'var(--text)' }}>Dynamic Gallery Assets</h3>
+                    <p style={{ margin: '4px 0 0', fontSize: '0.85rem', color: 'var(--muted)', fontWeight: 600 }}>Images displayed on the dashboard fabric collection.</p>
+                  </div>
+                  <div style={{ position: 'relative' }}>
+                    <input
+                      type="file"
+                      id="asset-upload"
+                      hidden
+                      accept="image/*"
+                      onChange={async (e) => {
+                        const file = e.target.files[0];
+                        if (!file) return;
+                        
+                        setLoading(true);
+                        const formData = new FormData();
+                        formData.append('file', file);
+                        formData.append('upload_preset', 'vatsalya_unsigned');
+
+                        try {
+                          const cloudRes = await fetch('https://api.cloudinary.com/v1_1/dttv97v9s/image/upload', {
+                            method: 'POST',
+                            body: formData
+                          });
+                          const cloudData = await cloudRes.json();
+                          
+                          if (cloudData.secure_url) {
+                            const res = await api.post('/api/assets', { 
+                              name: file.name, 
+                              imageUrl: cloudData.secure_url, 
+                              type: 'FABRIC_COLLECTION' 
+                            });
+                            setAssets(prev => [...prev, res.data]);
+                            setToastMsg('New gallery image added!');
+                            setShowToast(true);
+                            setTimeout(() => setShowToast(false), 3000);
+                          }
+                        } catch (err) {
+                          console.error('Upload failed:', err);
+                          alert('Failed to upload image.');
+                        } finally {
+                          setLoading(false);
+                        }
+                      }}
+                    />
+                    <label 
+                      htmlFor="asset-upload"
+                      style={{
+                        padding: '10px 16px', borderRadius: 12, background: 'var(--primary)', color: 'white',
+                        fontSize: '0.8rem', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6,
+                        boxShadow: '0 4px 12px var(--primary-glow)'
+                      }}
+                    >
+                      <Plus size={16} strokeWidth={3} /> Upload Image
+                    </label>
+                  </div>
+                </div>
                 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 16 }}>
                   {assets.map(asset => (
-                    <motion.div key={asset.id} layout style={{ position: 'relative', borderRadius: 16, overflow: 'hidden', aspectRatio: '16/10', border: '1px solid var(--border)' }}>
+                    <motion.div key={asset.id} layout style={{ position: 'relative', borderRadius: 16, overflow: 'hidden', aspectRatio: '16/10', border: '1px solid var(--border)', boxShadow: 'var(--shadow-sm)' }}>
                       <img src={asset.imageUrl} alt={asset.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'linear-gradient(transparent, rgba(0,0,0,0.8))', padding: '12px 8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ color: 'white', fontSize: '0.7rem', fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{asset.name}</span>
-                        <button 
-                          onClick={async () => {
-                            if (!window.confirm('Remove this asset?')) return;
-                            await api.delete(`/api/assets/${asset.id}`);
-                            setAssets(prev => prev.filter(a => a.id !== asset.id));
-                          }}
-                          style={{ background: '#EF4444', border: 'none', borderRadius: 6, padding: 4, color: 'white', cursor: 'pointer' }}
-                        >
-                          <Trash2 size={12} />
-                        </button>
+                      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(transparent 50%, rgba(0,0,0,0.8))', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: 12 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span style={{ color: 'white', fontSize: '0.65rem', fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '70%' }}>{asset.name}</span>
+                          <button 
+                            onClick={async (e) => {
+                              e.stopPropagation();
+                              if (!window.confirm('Remove this image from the gallery?')) return;
+                              try {
+                                await api.delete(`/api/assets/${asset.id}`);
+                                setAssets(prev => prev.filter(a => a.id !== asset.id));
+                              } catch (err) { console.error(err); }
+                            }}
+                            style={{ background: 'rgba(239, 68, 68, 0.9)', border: 'none', borderRadius: 6, padding: '4px 6px', color: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                          >
+                            <Trash2 size={12} />
+                          </button>
+                        </div>
                       </div>
                     </motion.div>
                   ))}
-                  <div 
-                    onClick={() => {
-                      const name = prompt('Asset Name?');
-                      const url = prompt('Image URL?');
-                      if (name && url) {
-                        api.post('/api/assets', { name, imageUrl: url, type: 'FABRIC_COLLECTION' })
-                          .then(res => setAssets(prev => [...prev, res.data]));
-                      }
-                    }}
-                    style={{ borderRadius: 16, border: '2px dashed #E2E8F0', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8, cursor: 'pointer', color: '#94A3B8', aspectRatio: '16/10' }}>
-                    <Plus size={24} />
-                    <span style={{ fontSize: '0.75rem', fontWeight: 800 }}>Add Asset</span>
-                  </div>
+
+                  {assets.length === 0 && !loading && (
+                    <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '40px 0', background: '#F8FAFC', borderRadius: 16, border: '2px dashed #E2E8F0' }}>
+                      <p style={{ margin: 0, color: '#94A3B8', fontWeight: 700, fontSize: '0.9rem' }}>No gallery images yet.</p>
+                      <p style={{ margin: '4px 0 0', color: '#CBD5E1', fontSize: '0.75rem', fontWeight: 600 }}>Upload fabric photos to fill the moving carousel.</p>
+                    </div>
+                  )}
                 </div>
               </div>
             </motion.div>
