@@ -513,6 +513,40 @@ const Dashboard = () => {
             </motion.a>
           </motion.div>
         </motion.div>
+        
+        {/* Footer with Developer Info */}
+        <motion.div
+          variants={item}
+          style={{
+            textAlign: 'center',
+            padding: '0 0 60px',
+            opacity: 0.8,
+          }}
+        >
+          <div style={{
+            display: 'inline-flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 8,
+            padding: '20px 32px',
+            background: 'rgba(255,255,255,0.4)',
+            backdropFilter: 'blur(10px)',
+            borderRadius: '24px',
+            border: '1px solid rgba(255,255,255,0.4)',
+          }}>
+            <p style={{ fontSize: '11px', fontWeight: '900', color: '#64748B', margin: 0, textTransform: 'uppercase', letterSpacing: '1.5px' }}>
+              Developed by — <span style={{ color: 'var(--primary)' }}>Dev Vaghasiya</span>
+            </p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '20px', marginTop: '4px' }}>
+              <a href="tel:9408146236" style={{ fontSize: '12px', fontWeight: '800', color: '#1E293B', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ fontSize: '14px' }}>📞</span> 9408146236
+              </a>
+              <a href="mailto:devvaghasiya8047@gmail.com" style={{ fontSize: '12px', fontWeight: '800', color: '#1E293B', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ fontSize: '14px' }}>✉️</span> devvaghasiya8047@gmail.com
+              </a>
+            </div>
+          </div>
+        </motion.div>
       </motion.div>
       </div>
     </div>
