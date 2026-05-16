@@ -1,14 +1,13 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
-// Replace these values with your Firebase project config from the Firebase Console
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.firebasestorage.app",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyDyTtG8TFHa7lRBHNHw-UMmeSYm4Gdb92k",
+  authDomain: "vatsalya-textile.firebaseapp.com",
+  projectId: "vatsalya-textile",
+  storageBucket: "vatsalya-textile.firebasestorage.app",
+  messagingSenderId: "867540245457",
+  appId: "1:867540245457:web:f1b0c223a625c46cf41ef0"
 };
 
 const app = initializeApp(firebaseConfig);
