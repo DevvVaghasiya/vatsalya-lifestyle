@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { User, Phone, Lock, Eye, EyeOff, ArrowLeft, Loader2, ShieldCheck, CheckCircle2, Clock } from 'lucide-react';
+import { User, Phone, Lock, Eye, EyeOff, ArrowLeft, Loader2, ShieldCheck, CheckCircle2, Clock, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '../utils/api';
+import { auth } from '../utils/firebase';
+import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 
 const fieldStyle = {
   width: '100%', padding: '14px 16px 14px 44px',
@@ -23,21 +25,75 @@ const Signup = () => {
   const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
+  const [otp, setOtp] = useState('');
+  const [verificationId, setVerificationId] = useState(null);
+  const [isVerified, setIsVerified] = useState(false);
+  const [showOtpField, setShowOtpField] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [otpLoading, setOtpLoading] = useState(false);
   const [error, setError] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const navigate = useNavigate();
 
+  const setupRecaptcha = () => {
+    if (!window.recaptchaVerifier) {
+      window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+        'size': 'invisible',
+        'callback': () => { console.log('Recaptcha ready'); }
+      });
+    }
+  };
+
+  const handleSendOtp = async () => {
+    if (!phoneNumber || phoneNumber.length < 10) {
+      setError('Please enter a valid 10-digit mobile number.');
+      return;
+    }
+    setOtpLoading(true);
+    setError('');
+    try {
+      setupRecaptcha();
+      const appVerifier = window.recaptchaVerifier;
+      const formattedNumber = `+91${phoneNumber}`;
+      const confirmationResult = await signInWithPhoneNumber(auth, formattedNumber, appVerifier);
+      setVerificationId(confirmationResult);
+      setShowOtpField(true);
+    } catch (err) {
+      console.error('OTP Error:', err);
+      setError('Failed to send OTP. Please check the number.');
+      if (window.recaptchaVerifier) window.recaptchaVerifier.clear();
+    } finally {
+      setOtpLoading(false);
+    }
+  };
+
+  const handleVerifyOtp = async () => {
+    if (!otp) return;
+    setOtpLoading(true);
+    try {
+      await verificationId.confirm(otp);
+      setIsVerified(true);
+      setShowOtpField(false);
+    } catch (err) {
+      setError('Invalid OTP. Please try again.');
+    } finally {
+      setOtpLoading(false);
+    }
+  };
+
   const handleSignup = async (e) => {
     e.preventDefault();
+    if (!isVerified) {
+      setError('Please verify your mobile number first.');
+      return;
+    }
     setLoading(true);
     setError('');
     try {
       await api.post(`/api/auth/signup`, {
         name, phoneNumber, password, role: 'USER'
       });
-      // Don't auto-login — show pending approval screen
       setSubmitted(true);
     } catch (err) {
       setError(err.response?.data || 'Failed to create partner account.');
@@ -267,20 +323,74 @@ const Signup = () => {
             <label style={{ display: 'block', marginBottom: 8, fontSize: '0.78rem', fontWeight: 700, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
               Contact Number
             </label>
-            <div style={{ position: 'relative' }}>
-              <div style={iconWrap}><Phone size={17} /></div>
-              <input
-                type="tel"
-                placeholder="Enter 10-digit contact"
-                value={phoneNumber}
-                onChange={e => setPhoneNumber(e.target.value)}
-                required
-                style={fieldStyle}
-                onFocus={FocusBorder}
-                onBlur={BlurBorder}
-              />
+            <div style={{ position: 'relative', display: 'flex', gap: 10 }}>
+              <div style={{ position: 'relative', flex: 1 }}>
+                <div style={iconWrap}><Phone size={17} /></div>
+                <input
+                  type="tel"
+                  placeholder="Enter 10-digit contact"
+                  value={phoneNumber}
+                  onChange={e => setPhoneNumber(e.target.value)}
+                  disabled={isVerified}
+                  required
+                  style={{ ...fieldStyle, paddingRight: isVerified ? 40 : 16 }}
+                  onFocus={FocusBorder}
+                  onBlur={BlurBorder}
+                />
+                {isVerified && <div style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', color: '#10B981' }}><Check size={18} /></div>}
+              </div>
+              {!isVerified && !showOtpField && (
+                <button
+                  type="button"
+                  onClick={handleSendOtp}
+                  disabled={otpLoading}
+                  style={{
+                    padding: '0 16px', borderRadius: 12, border: 'none',
+                    background: 'rgba(79,70,229,0.2)', color: '#A5B4FC',
+                    fontWeight: 700, fontSize: '0.8rem', cursor: 'pointer',
+                    whiteSpace: 'nowrap'
+                  }}
+                >
+                  {otpLoading ? <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> : 'Send OTP'}
+                </button>
+              )}
             </div>
           </div>
+
+          {/* OTP Field */}
+          <AnimatePresence>
+            {showOtpField && (
+              <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} style={{ overflow: 'hidden' }}>
+                <label style={{ display: 'block', marginBottom: 8, marginTop: 4, fontSize: '0.78rem', fontWeight: 700, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
+                  Enter 6-digit OTP
+                </label>
+                <div style={{ display: 'flex', gap: 10 }}>
+                  <input
+                    type="text"
+                    maxLength={6}
+                    placeholder="000000"
+                    value={otp}
+                    onChange={e => setOtp(e.target.value)}
+                    style={{ ...fieldStyle, paddingLeft: 16, textAlign: 'center', letterSpacing: 4 }}
+                    onFocus={FocusBorder}
+                    onBlur={BlurBorder}
+                  />
+                  <button
+                    type="button"
+                    onClick={handleVerifyOtp}
+                    disabled={otpLoading}
+                    style={{
+                      padding: '0 20px', borderRadius: 12, border: 'none',
+                      background: '#4F46E5', color: 'white',
+                      fontWeight: 700, fontSize: '0.8rem', cursor: 'pointer'
+                    }}
+                  >
+                    {otpLoading ? <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> : 'Verify'}
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Password field with toggle */}
           <div>
@@ -356,6 +466,7 @@ const Signup = () => {
             </Link>
           </p>
         </div>
+        <div id="recaptcha-container"></div>
       </motion.div>
     </div>
   );
