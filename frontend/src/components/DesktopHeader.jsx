@@ -52,10 +52,12 @@ const DesktopHeader = () => {
             </NavLink>
           )}
 
-          <NavLink to="/inquiries" className={({ isActive }) => `header-nav-link ${isActive ? 'active' : ''}`}>
-            <MessageSquare size={18} />
-            <span>Inquiries</span>
-          </NavLink>
+          {!isAdmin && (
+            <NavLink to="/inquiries" className={({ isActive }) => `header-nav-link ${isActive ? 'active' : ''}`}>
+              <MessageSquare size={18} />
+              <span>Inquiries</span>
+            </NavLink>
+          )}
 
           {!isAdmin && (
             <NavLink to="/inventory" className={({ isActive }) => `header-nav-link ${isActive ? 'active' : ''}`}>
@@ -72,7 +74,7 @@ const DesktopHeader = () => {
 
         {/* Action Controls Section */}
         <div className="header-actions">
-          {!isAdmin ? (
+          {!isAdmin && (
             <div className="create-dropdown">
               <motion.button 
                 whileHover={{ scale: 1.03 }}
@@ -84,16 +86,6 @@ const DesktopHeader = () => {
                 <span>New Order</span>
               </motion.button>
             </div>
-          ) : (
-            <motion.button 
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => navigate('/add-inquiry')}
-              className="btn-header-create"
-            >
-              <Plus size={18} strokeWidth={2.5} />
-              <span>Add Inquiry</span>
-            </motion.button>
           )}
 
           <div className="header-divider"></div>
