@@ -189,28 +189,7 @@ const Dashboard = () => {
              Textiles That Define Your Vision.
           </p>
 
-          <div style={{ position: 'relative', marginBottom: '24px' }}>
-            <Search size={18} color="#94A3B8" style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)' }} />
-            <input 
-              type="text" 
-              placeholder="Search orders, clients or stock..." 
-              onClick={() => navigate('/deals')}
-              readOnly
-              style={{
-                width: '100%',
-                padding: '16px 16px 16px 48px',
-                borderRadius: '18px',
-                border: '1px solid rgba(0,0,0,0.05)',
-                background: 'rgba(255,255,255,0.8)',
-                fontSize: '0.95rem',
-                fontWeight: '600',
-                color: '#1E293B',
-                cursor: 'pointer',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.03)',
-                outline: 'none'
-              }}
-            />
-          </div>
+
 
           <div style={{ display: 'flex', gap: '16px', marginTop: '12px' }}>
             {/* Quick Action: New Inquiry */}
