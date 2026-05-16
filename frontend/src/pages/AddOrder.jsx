@@ -324,7 +324,7 @@ const AddOrder = () => {
                 name="customerId"
                 value={formData.customerId}
                 onChange={handleChange}
-                style={{ backgroundColor: 'var(--bg)', borderRadius: '16px' }}
+                style={{ borderRadius: '16px' }}
               >
                 <option value="">{loading ? 'Loading clients...' : 'Choose a client'}</option>
                 {clients.map(client => (
@@ -335,7 +335,7 @@ const AddOrder = () => {
 
             <div className="form-group" style={{ marginBottom: '16px' }}>
               <label className="form-label">Style No</label>
-              <input type="text" className="form-input" name="styleNo" placeholder="ART-5001" value={formData.styleNo} onChange={handleChange} style={{ backgroundColor: '#F8FAFC', borderRadius: '16px' }} />
+              <input type="text" className="form-input" name="styleNo" placeholder="ART-5001" value={formData.styleNo} onChange={handleChange} style={{ borderRadius: '16px' }} />
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
@@ -347,7 +347,7 @@ const AddOrder = () => {
                   dateFormat="dd/MM/yyyy"
                   className="form-input"
                   placeholderText="dd/mm/yyyy"
-                  style={{ backgroundColor: '#F8FAFC', borderRadius: '16px' }}
+                  style={{ borderRadius: '16px' }}
                 />
               </div>
               <div className="form-group" style={{ marginBottom: 0 }}>
@@ -359,7 +359,7 @@ const AddOrder = () => {
                   placeholder="0" 
                   value={formData.days} 
                   onChange={handleChange} 
-                  style={{ backgroundColor: '#F8FAFC', borderRadius: '16px', textAlign: 'center' }} 
+                  style={{ borderRadius: '16px', textAlign: 'center' }} 
                 />
               </div>
             </div>
@@ -372,57 +372,57 @@ const AddOrder = () => {
                 dateFormat="dd/MM/yyyy"
                 className="form-input"
                 placeholderText="dd/mm/yyyy"
-                style={{ backgroundColor: '#F8FAFC', borderRadius: '16px' }}
+                style={{ borderRadius: '16px' }}
               />
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '16px', marginBottom: '16px' }}>
               <div className="form-group" style={{ marginBottom: 0 }}>
                 <label className="form-label">Fabric Name</label>
-                <input type="text" className="form-input" name="fabricName" placeholder="e.g. Cotton Satin" value={formData.fabricName} onChange={handleChange} style={{ backgroundColor: '#F8FAFC', borderRadius: '16px' }} />
+                <input type="text" className="form-input" name="fabricName" placeholder="e.g. Cotton Satin" value={formData.fabricName} onChange={handleChange} style={{ borderRadius: '16px' }} />
               </div>
               <div className="form-group" style={{ marginBottom: 0 }}>
                 <label className="form-label">Reference No</label>
-                <input type="text" className="form-input" name="referenceNo" placeholder="Enter reference no" value={formData.referenceNo} onChange={handleChange} style={{ backgroundColor: '#F8FAFC', borderRadius: '16px' }} />
+                <input type="text" className="form-input" name="referenceNo" placeholder="Enter reference no" value={formData.referenceNo} onChange={handleChange} style={{ borderRadius: '16px' }} />
               </div>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '16px', marginBottom: '16px' }}>
               <div className="form-group" style={{ marginBottom: 0 }}>
                 <label className="form-label">Order Quantity</label>
-                <input type="number" className="form-input" name="orderQuantity" placeholder="Enter quantity" value={formData.orderQuantity} onChange={handleChange} style={{ backgroundColor: '#F8FAFC', borderRadius: '16px' }} />
+                <input type="number" className="form-input" name="orderQuantity" placeholder="Enter quantity" value={formData.orderQuantity} onChange={handleChange} style={{ borderRadius: '16px' }} />
               </div>
               <div className="form-group" style={{ marginBottom: 0 }}>
                 <label className="form-label">Price</label>
-                <input type="number" className="form-input" name="orderPrice" placeholder="Enter price" value={formData.orderPrice} onChange={handleChange} style={{ backgroundColor: '#F8FAFC', borderRadius: '16px' }} />
+                <input type="number" className="form-input" name="orderPrice" placeholder="Enter price" value={formData.orderPrice} onChange={handleChange} style={{ borderRadius: '16px' }} />
               </div>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '16px', marginBottom: '16px' }}>
               <div className="form-group" style={{ marginBottom: 0 }}>
                 <label className="form-label">GSM</label>
-                <input type="text" className="form-input" name="gsm" placeholder="180" value={formData.gsm} onChange={handleChange} style={{ backgroundColor: '#F8FAFC', borderRadius: '16px' }} />
+                <input type="text" className="form-input" name="gsm" placeholder="180" value={formData.gsm} onChange={handleChange} style={{ borderRadius: '16px' }} />
               </div>
               <div className="form-group" style={{ marginBottom: 0 }}>
                 <label className="form-label">Count / Const</label>
-                <input type="text" className="form-input" name="countConst" placeholder="40x40" value={formData.countConst} onChange={handleChange} style={{ backgroundColor: '#F8FAFC', borderRadius: '16px' }} />
+                <input type="text" className="form-input" name="countConst" placeholder="40x40" value={formData.countConst} onChange={handleChange} style={{ borderRadius: '16px' }} />
               </div>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '16px', marginBottom: '16px' }}>
               <div className="form-group" style={{ marginBottom: 0 }}>
                 <label className="form-label">Width</label>
-                <input type="text" className="form-input" name="width" placeholder="e.g. 45 inches" value={formData.width} onChange={handleChange} style={{ backgroundColor: '#F8FAFC', borderRadius: '16px' }} />
+                <input type="text" className="form-input" name="width" placeholder="e.g. 45 inches" value={formData.width} onChange={handleChange} style={{ borderRadius: '16px' }} />
               </div>
               <div className="form-group" style={{ marginBottom: 0 }}>
                 <label className="form-label">Design</label>
-                <input type="text" className="form-input" name="design" placeholder="e.g. Floral Print" value={formData.design} onChange={handleChange} style={{ backgroundColor: '#F8FAFC', borderRadius: '16px' }} />
+                <input type="text" className="form-input" name="design" placeholder="e.g. Floral Print" value={formData.design} onChange={handleChange} style={{ borderRadius: '16px' }} />
               </div>
             </div>
 
             <div className="form-group" style={{ marginBottom: 0 }}>
               <label className="form-label">Client Remark</label>
-              <textarea className="form-input" name="remark" placeholder="Any additional instructions..." style={{ height: '80px', resize: 'none', backgroundColor: '#F8FAFC', borderRadius: '16px' }} value={formData.remark} onChange={handleChange}></textarea>
+              <textarea className="form-input" name="remark" placeholder="Any additional instructions..." style={{ height: '80px', resize: 'none', borderRadius: '16px' }} value={formData.remark} onChange={handleChange}></textarea>
             </div>
           </div>
 
@@ -434,60 +434,60 @@ const AddOrder = () => {
             backgroundColor: 'var(--surface)',
             borderLeft: '8px solid var(--secondary)'
           }}>
-            <SectionHeader icon={Briefcase} title="Fabric Booking" color="var(--secondary)" bgColor="rgba(13, 148, 136, 0.1)" />
+            <SectionHeader icon={Briefcase} title="Fabric Booking" color="var(--secondary)" bgColor="var(--secondary-soft)" />
 
             <div className="flex gap-4 mb-4">
               <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
                 <label className="form-label">Weaver</label>
-                <input type="text" className="form-input" name="weaver" placeholder="Enter weaver name" value={formData.weaver} onChange={handleChange} style={{ backgroundColor: '#F8FAFC', borderRadius: '16px' }} />
+                <input type="text" className="form-input" name="weaver" placeholder="Enter weaver name" value={formData.weaver} onChange={handleChange} style={{ borderRadius: '16px' }} />
               </div>
               <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
                 <label className="form-label">Reference No</label>
-                <input type="text" className="form-input" name="bookingReferenceNo" placeholder="Enter ref no" value={formData.bookingReferenceNo} onChange={handleChange} style={{ backgroundColor: '#F8FAFC', borderRadius: '16px' }} />
+                <input type="text" className="form-input" name="bookingReferenceNo" placeholder="Enter ref no" value={formData.bookingReferenceNo} onChange={handleChange} style={{ borderRadius: '16px' }} />
               </div>
             </div>
 
             <div className="flex gap-4 mb-4">
               <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
                 <label className="form-label">Fabric Name</label>
-                <input type="text" className="form-input" name="bookingFabricName" placeholder="Enter fabric name" value={formData.bookingFabricName} onChange={handleChange} style={{ backgroundColor: '#F8FAFC', borderRadius: '16px' }} />
+                <input type="text" className="form-input" name="bookingFabricName" placeholder="Enter fabric name" value={formData.bookingFabricName} onChange={handleChange} style={{ borderRadius: '16px' }} />
               </div>
               <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
                 <label className="form-label">Quantity</label>
-                <input type="text" className="form-input" name="bookingQuantity" placeholder="Enter quantity" value={formData.bookingQuantity} onChange={handleChange} style={{ backgroundColor: '#F8FAFC', borderRadius: '16px' }} />
+                <input type="text" className="form-input" name="bookingQuantity" placeholder="Enter quantity" value={formData.bookingQuantity} onChange={handleChange} style={{ borderRadius: '16px' }} />
               </div>
             </div>
 
             <div className="flex gap-4 mb-4">
               <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
                 <label className="form-label">Challan</label>
-                <input type="text" className="form-input" name="challan" placeholder="Enter challan" value={formData.challan} onChange={handleChange} style={{ backgroundColor: '#F8FAFC', borderRadius: '16px' }} />
+                <input type="text" className="form-input" name="challan" placeholder="Enter challan" value={formData.challan} onChange={handleChange} style={{ borderRadius: '16px' }} />
               </div>
               <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
                 <label className="form-label">Price</label>
-                <input type="text" className="form-input" name="price" placeholder="Enter price" value={formData.price} onChange={handleChange} style={{ backgroundColor: '#F8FAFC', borderRadius: '16px' }} />
+                <input type="text" className="form-input" name="price" placeholder="Enter price" value={formData.price} onChange={handleChange} style={{ borderRadius: '16px' }} />
               </div>
             </div>
 
             <div className="flex gap-4 mb-4">
               <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
                 <label className="form-label">Count / Const</label>
-                <input type="text" className="form-input" name="bookingCountConst" placeholder="Enter count/const" value={formData.bookingCountConst} onChange={handleChange} style={{ backgroundColor: '#F8FAFC', borderRadius: '16px' }} />
+                <input type="text" className="form-input" name="bookingCountConst" placeholder="Enter count/const" value={formData.bookingCountConst} onChange={handleChange} style={{ borderRadius: '16px' }} />
               </div>
               <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
                 <label className="form-label">Width</label>
-                <input type="text" className="form-input" name="bookingWidth" placeholder="Enter width" value={formData.bookingWidth} onChange={handleChange} style={{ backgroundColor: '#F8FAFC', borderRadius: '16px' }} />
+                <input type="text" className="form-input" name="bookingWidth" placeholder="Enter width" value={formData.bookingWidth} onChange={handleChange} style={{ borderRadius: '16px' }} />
               </div>
             </div>
 
             <div className="flex gap-4 mb-4">
               <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
                 <label className="form-label">Finish GSM</label>
-                <input type="text" className="form-input" name="finishGsm" placeholder="Enter finish gsm" value={formData.finishGsm} onChange={handleChange} style={{ backgroundColor: '#F8FAFC', borderRadius: '16px' }} />
+                <input type="text" className="form-input" name="finishGsm" placeholder="Enter finish gsm" value={formData.finishGsm} onChange={handleChange} style={{ borderRadius: '16px' }} />
               </div>
               <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
                 <label className="form-label">Composition</label>
-                <input type="text" className="form-input" name="bookingComposition" placeholder="Enter composition" value={formData.bookingComposition} onChange={handleChange} style={{ backgroundColor: '#F8FAFC', borderRadius: '16px' }} />
+                <input type="text" className="form-input" name="bookingComposition" placeholder="Enter composition" value={formData.bookingComposition} onChange={handleChange} style={{ borderRadius: '16px' }} />
               </div>
             </div>
 
@@ -499,7 +499,7 @@ const AddOrder = () => {
                 dateFormat="dd/MM/yyyy"
                 className="form-input"
                 placeholderText="dd/mm/yyyy"
-                style={{ backgroundColor: '#F8FAFC', borderRadius: '16px' }}
+                style={{ borderRadius: '16px' }}
               />
             </div>
           </div>
@@ -521,7 +521,7 @@ const AddOrder = () => {
                 name="fabricJobWorkMill"
                 value={formData.fabricJobWorkMill}
                 onChange={handleChange}
-                style={{ backgroundColor: 'var(--bg)', borderRadius: '16px' }}
+                style={{ borderRadius: '16px' }}
               >
                 <option value="">Select mill option</option>
                 <option value="dyingAndPrinting">Dying & Printing Mill</option>
@@ -543,31 +543,31 @@ const AddOrder = () => {
                 <div className="flex gap-4 mb-4">
                   <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
                     <label className="form-label">Mill Name</label>
-                    <input type="text" className="form-input" name="dyeMillName" value={formData.dyeMillName} onChange={handleChange} placeholder="Enter mill name" style={{ backgroundColor: '#FFFFFF', borderRadius: '16px' }} />
+                    <input type="text" className="form-input" name="dyeMillName" value={formData.dyeMillName} onChange={handleChange} placeholder="Enter mill name" style={{ borderRadius: '16px' }} />
                   </div>
                   <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
                     <label className="form-label">Job Charge</label>
-                    <input type="text" className="form-input" name="dyeJobCharge" value={formData.dyeJobCharge} onChange={handleChange} placeholder="Enter job charge" style={{ backgroundColor: '#FFFFFF', borderRadius: '16px' }} />
+                    <input type="text" className="form-input" name="dyeJobCharge" value={formData.dyeJobCharge} onChange={handleChange} placeholder="Enter job charge" style={{ borderRadius: '16px' }} />
                   </div>
                 </div>
                 <div className="flex gap-4 mb-4">
                   <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
                     <label className="form-label">Finish Quantity</label>
-                    <input type="text" className="form-input" name="dyeFinishQuantity" value={formData.dyeFinishQuantity} onChange={handleChange} placeholder="Enter finish quantity" style={{ backgroundColor: '#FFFFFF', borderRadius: '16px' }} />
+                    <input type="text" className="form-input" name="dyeFinishQuantity" value={formData.dyeFinishQuantity} onChange={handleChange} placeholder="Enter finish quantity" style={{ borderRadius: '16px' }} />
                   </div>
                   <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
                     <label className="form-label">Width</label>
-                    <input type="text" className="form-input" name="dyeWidth" value={formData.dyeWidth} onChange={handleChange} placeholder="Enter width" style={{ backgroundColor: '#FFFFFF', borderRadius: '16px' }} />
+                    <input type="text" className="form-input" name="dyeWidth" value={formData.dyeWidth} onChange={handleChange} placeholder="Enter width" style={{ borderRadius: '16px' }} />
                   </div>
                 </div>
                 <div className="flex gap-4 mb-4">
                   <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
                     <label className="form-label">Colour / Design</label>
-                    <input type="text" className="form-input" name="dyeColorDesign" value={formData.dyeColorDesign} onChange={handleChange} placeholder="Enter colour or design" style={{ backgroundColor: '#FFFFFF', borderRadius: '16px' }} />
+                    <input type="text" className="form-input" name="dyeColorDesign" value={formData.dyeColorDesign} onChange={handleChange} placeholder="Enter colour or design" style={{ borderRadius: '16px' }} />
                   </div>
                   <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
                     <label className="form-label">Shortage</label>
-                    <input type="text" className="form-input" name="dyeShortage" value={formData.dyeShortage} onChange={handleChange} placeholder="Enter shortage" style={{ backgroundColor: '#FFFFFF', borderRadius: '16px' }} />
+                    <input type="text" className="form-input" name="dyeShortage" value={formData.dyeShortage} onChange={handleChange} placeholder="Enter shortage" style={{ borderRadius: '16px' }} />
                   </div>
                 </div>
                 <div className="flex gap-4 mb-4">
@@ -579,12 +579,12 @@ const AddOrder = () => {
                     dateFormat="dd/MM/yyyy"
                     className="form-input"
                     placeholderText="dd/mm/yyyy"
-                    style={{ backgroundColor: '#FFFFFF', borderRadius: '16px' }}
+                    style={{ borderRadius: '16px' }}
                   />
                 </div>
                   <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
                     <label className="form-label">New Quantity Received</label>
-                    <input type="text" className="form-input" name="dyeReceiptQuantity" value={formData.dyeReceiptQuantity} onChange={handleChange} placeholder="Enter quantity" style={{ backgroundColor: '#FFFFFF', borderRadius: '16px' }} />
+                    <input type="text" className="form-input" name="dyeReceiptQuantity" value={formData.dyeReceiptQuantity} onChange={handleChange} placeholder="Enter quantity" style={{ borderRadius: '16px' }} />
                   </div>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '16px' }}>
@@ -601,7 +601,7 @@ const AddOrder = () => {
                   </div>
                   <div className="form-group" style={{ marginBottom: 0 }}>
                     <label className="form-label">Remark</label>
-                    <input type="text" className="form-input" name="dyeReceiptRemark" value={formData.dyeReceiptRemark} onChange={handleChange} placeholder="Enter remark" style={{ backgroundColor: '#FFFFFF', borderRadius: '16px' }} />
+                    <input type="text" className="form-input" name="dyeReceiptRemark" value={formData.dyeReceiptRemark} onChange={handleChange} placeholder="Enter remark" style={{ borderRadius: '16px' }} />
                   </div>
                 </div>
                 <button
@@ -650,31 +650,31 @@ const AddOrder = () => {
                 <div className="flex gap-4 mb-4">
                   <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
                     <label className="form-label">Mill Name</label>
-                    <input type="text" className="form-input" name="digitalMillName" value={formData.digitalMillName} onChange={handleChange} placeholder="Enter mill name" style={{ backgroundColor: '#FFFFFF', borderRadius: '16px' }} />
+                    <input type="text" className="form-input" name="digitalMillName" value={formData.digitalMillName} onChange={handleChange} placeholder="Enter mill name" style={{ borderRadius: '16px' }} />
                   </div>
                   <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
                     <label className="form-label">Job Charge</label>
-                    <input type="text" className="form-input" name="digitalJobCharge" value={formData.digitalJobCharge} onChange={handleChange} placeholder="Enter job charge" style={{ backgroundColor: '#FFFFFF', borderRadius: '16px' }} />
+                    <input type="text" className="form-input" name="digitalJobCharge" value={formData.digitalJobCharge} onChange={handleChange} placeholder="Enter job charge" style={{ borderRadius: '16px' }} />
                   </div>
                 </div>
                 <div className="flex gap-4 mb-4">
                   <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
                     <label className="form-label">Finish Quantity</label>
-                    <input type="text" className="form-input" name="digitalFinishQuantity" value={formData.digitalFinishQuantity} onChange={handleChange} placeholder="Enter finish quantity" style={{ backgroundColor: '#FFFFFF', borderRadius: '16px' }} />
+                    <input type="text" className="form-input" name="digitalFinishQuantity" value={formData.digitalFinishQuantity} onChange={handleChange} placeholder="Enter finish quantity" style={{ borderRadius: '16px' }} />
                   </div>
                   <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
                     <label className="form-label">Width</label>
-                    <input type="text" className="form-input" name="digitalWidth" value={formData.digitalWidth} onChange={handleChange} placeholder="Enter width" style={{ backgroundColor: '#FFFFFF', borderRadius: '16px' }} />
+                    <input type="text" className="form-input" name="digitalWidth" value={formData.digitalWidth} onChange={handleChange} placeholder="Enter width" style={{ borderRadius: '16px' }} />
                   </div>
                 </div>
                 <div className="flex gap-4 mb-4">
                   <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
                     <label className="form-label">Design</label>
-                    <input type="text" className="form-input" name="digitalDesign" value={formData.digitalDesign} onChange={handleChange} placeholder="Enter design" style={{ backgroundColor: '#FFFFFF', borderRadius: '16px' }} />
+                    <input type="text" className="form-input" name="digitalDesign" value={formData.digitalDesign} onChange={handleChange} placeholder="Enter design" style={{ borderRadius: '16px' }} />
                   </div>
                   <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
                     <label className="form-label">Shortage</label>
-                    <input type="text" className="form-input" name="digitalShortage" value={formData.digitalShortage} onChange={handleChange} placeholder="Enter shortage" style={{ backgroundColor: '#FFFFFF', borderRadius: '16px' }} />
+                    <input type="text" className="form-input" name="digitalShortage" value={formData.digitalShortage} onChange={handleChange} placeholder="Enter shortage" style={{ borderRadius: '16px' }} />
                   </div>
                 </div>
                 <div className="form-group mb-4">
@@ -685,13 +685,13 @@ const AddOrder = () => {
                     dateFormat="dd/MM/yyyy"
                     className="form-input"
                     placeholderText="dd/mm/yyyy"
-                    style={{ backgroundColor: '#FFFFFF', borderRadius: '16px' }}
+                    style={{ borderRadius: '16px' }}
                   />
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px', marginBottom: '16px' }}>
                   <div className="form-group" style={{ marginBottom: 0 }}>
                     <label className="form-label">New Quantity Received</label>
-                    <input type="text" className="form-input" name="digitalReceiptQuantity" value={formData.digitalReceiptQuantity} onChange={handleChange} placeholder="Enter quantity" style={{ backgroundColor: '#FFFFFF', borderRadius: '16px' }} />
+                    <input type="text" className="form-input" name="digitalReceiptQuantity" value={formData.digitalReceiptQuantity} onChange={handleChange} placeholder="Enter quantity" style={{ borderRadius: '16px' }} />
                   </div>
                   <div className="form-group" style={{ marginBottom: 0 }}>
                     <label className="form-label">Entry Date</label>
@@ -707,7 +707,7 @@ const AddOrder = () => {
                 </div>
                 <div className="form-group" style={{ marginBottom: '16px' }}>
                   <label className="form-label">Remark</label>
-                  <input type="text" className="form-input" name="digitalReceiptRemark" value={formData.digitalReceiptRemark} onChange={handleChange} placeholder="Enter remark" style={{ backgroundColor: '#FFFFFF', borderRadius: '16px' }} />
+                  <input type="text" className="form-input" name="digitalReceiptRemark" value={formData.digitalReceiptRemark} onChange={handleChange} placeholder="Enter remark" style={{ borderRadius: '16px' }} />
                 </div>
                 <button
                   type="button"
@@ -747,57 +747,57 @@ const AddOrder = () => {
               <p style={{ margin: '0 0 18px 0', color: 'var(--muted)', fontSize: '0.95rem' }}>Use this section for final dispatch details and delivery notes.</p>
               <div className="flex gap-4 mb-4">
                 <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
-                  <label className="form-label" style={{ color: '#E2E8F0' }}>Date</label>
+                  <label className="form-label" style={{ color: 'var(--text)' }}>Date</label>
                   <DatePicker
                     selected={formData.dispatchDate ? new Date(formData.dispatchDate) : null}
                     onChange={(date) => handleChange({ target: { name: 'dispatchDate', value: date ? date.toISOString().split('T')[0] : '' } })}
                     dateFormat="dd/MM/yyyy"
                     className="form-input"
                     placeholderText="dd/mm/yyyy"
-                    style={{ backgroundColor: '#0F172A', borderRadius: '16px', color: '#E2E8F0', border: '1px solid #475569' }}
+                    style={{ borderRadius: '16px' }}
                   />
                 </div>
                 <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
-                  <label className="form-label" style={{ color: '#E2E8F0' }}>Inv Number</label>
-                  <input type="text" className="form-input" name="dispatchInvoiceNumber" value={formData.dispatchInvoiceNumber} onChange={handleChange} placeholder="Enter invoice number" style={{ backgroundColor: '#0F172A', borderRadius: '16px', color: '#E2E8F0', border: '1px solid #475569' }} />
+                  <label className="form-label" style={{ color: 'var(--text)' }}>Inv Number</label>
+                  <input type="text" className="form-input" name="dispatchInvoiceNumber" value={formData.dispatchInvoiceNumber} onChange={handleChange} placeholder="Enter invoice number" style={{ borderRadius: '16px' }} />
                 </div>
               </div>
               <div className="flex gap-4 mb-4">
                 <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
-                  <label className="form-label" style={{ color: '#E2E8F0' }}>Meter</label>
-                  <input type="text" className="form-input" name="dispatchMeter" value={formData.dispatchMeter} onChange={handleChange} placeholder="Enter meters" style={{ backgroundColor: '#0F172A', borderRadius: '16px', color: '#E2E8F0', border: '1px solid #475569' }} />
+                  <label className="form-label" style={{ color: 'var(--text)' }}>Meter</label>
+                  <input type="text" className="form-input" name="dispatchMeter" value={formData.dispatchMeter} onChange={handleChange} placeholder="Enter meters" style={{ borderRadius: '16px' }} />
                 </div>
                 <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
-                  <label className="form-label" style={{ color: '#E2E8F0' }}>Design / Colour</label>
-                  <input type="text" className="form-input" name="dispatchDesignColour" value={formData.dispatchDesignColour} onChange={handleChange} placeholder="Enter design or colour" style={{ backgroundColor: '#0F172A', borderRadius: '16px', color: '#E2E8F0', border: '1px solid #475569' }} />
+                  <label className="form-label" style={{ color: 'var(--text)' }}>Design / Colour</label>
+                  <input type="text" className="form-input" name="dispatchDesignColour" value={formData.dispatchDesignColour} onChange={handleChange} placeholder="Enter design or colour" style={{ borderRadius: '16px' }} />
                 </div>
               </div>
               <div className="form-group mb-4">
-                <label className="form-label" style={{ color: '#E2E8F0' }}>Transport</label>
-                <input type="text" className="form-input" name="transport" value={formData.transport} onChange={handleChange} placeholder="Enter transport" style={{ backgroundColor: '#0F172A', borderRadius: '16px', color: '#E2E8F0', border: '1px solid #475569' }} />
+                <label className="form-label" style={{ color: 'var(--text)' }}>Transport</label>
+                <input type="text" className="form-input" name="transport" value={formData.transport} onChange={handleChange} placeholder="Enter transport" style={{ borderRadius: '16px' }} />
               </div>
                 <div style={{ marginTop: '16px', padding: '18px', borderRadius: '20px', backgroundColor: 'var(--surface)', border: '1px solid var(--border)' }}>
                   <h4 style={{ margin: '0 0 12px 0', color: 'var(--text)', fontSize: '0.95rem', fontWeight: '700' }}>New Quantity Received</h4>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px', marginBottom: '16px' }}>
                   <div className="form-group" style={{ marginBottom: 0 }}>
-                    <label className="form-label" style={{ color: '#E2E8F0' }}>Entry Date</label>
+                    <label className="form-label" style={{ color: 'var(--text)' }}>Entry Date</label>
                     <DatePicker
                       selected={formData.dispatchReceiptDate ? new Date(formData.dispatchReceiptDate) : null}
                       onChange={(date) => handleChange({ target: { name: 'dispatchReceiptDate', value: date ? date.toISOString().split('T')[0] : '' } })}
                       dateFormat="dd/MM/yyyy"
                       className="form-input"
                       placeholderText="dd/mm/yyyy"
-                      style={{ backgroundColor: '#0F172A', borderRadius: '16px', color: '#E2E8F0', border: '1px solid #475569' }}
+                      style={{ borderRadius: '16px' }}
                     />
                   </div>
                   <div className="form-group" style={{ marginBottom: 0 }}>
                     <label className="form-label" style={{ color: 'var(--text)' }}>Quantity</label>
-                    <input type="number" className="form-input" name="dispatchReceiptQuantity" value={formData.dispatchReceiptQuantity} onChange={handleChange} placeholder="Enter quantity" style={{ backgroundColor: 'var(--bg)', borderRadius: '16px', color: 'var(--text)', border: '1px solid var(--border)' }} />
+                    <input type="number" className="form-input" name="dispatchReceiptQuantity" value={formData.dispatchReceiptQuantity} onChange={handleChange} placeholder="Enter quantity" style={{ borderRadius: '16px' }} />
                   </div>
                 </div>
                 <div className="form-group" style={{ marginBottom: '16px' }}>
-                  <label className="form-label" style={{ color: '#E2E8F0' }}>Remark</label>
-                  <input type="text" className="form-input" name="dispatchReceiptRemark" value={formData.dispatchReceiptRemark} onChange={handleChange} placeholder="Enter remark" style={{ backgroundColor: '#0F172A', borderRadius: '16px', color: '#E2E8F0', border: '1px solid #475569' }} />
+                  <label className="form-label" style={{ color: 'var(--text)' }}>Remark</label>
+                  <input type="text" className="form-input" name="dispatchReceiptRemark" value={formData.dispatchReceiptRemark} onChange={handleChange} placeholder="Enter remark" style={{ borderRadius: '16px' }} />
                 </div>
                 <button
                   type="button"
@@ -808,26 +808,26 @@ const AddOrder = () => {
                   Add Dispatch Receipt
                 </button>
                 <div style={{ marginTop: '16px' }}>
-                  <p style={{ margin: '0 0 8px 0', fontWeight: '700', color: '#E2E8F0' }}>Received Quantity History</p>
+                  <p style={{ margin: '0 0 8px 0', fontWeight: '700', color: 'var(--text)' }}>Received Quantity History</p>
                   {formData.dispatchQuantityReceipts.length === 0 ? (
-                    <p style={{ margin: 0, color: '#94A3B8' }}>No dispatch receipt entries yet.</p>
+                    <p style={{ margin: 0, color: 'var(--muted)' }}>No dispatch receipt entries yet.</p>
                   ) : (
                     <div style={{ display: 'grid', gap: '10px' }}>
                       {formData.dispatchQuantityReceipts.map((entry, index) => (
-                        <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#111827', borderRadius: '14px', border: '1px solid #334155', padding: '12px' }}>
+                        <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'var(--surface)', borderRadius: '14px', border: '1px solid var(--border)', padding: '12px' }}>
                           <div>
-                            <p style={{ margin: 0, fontWeight: '700', color: '#F8FAFC' }}>{formatDisplayDate(entry.entryDate)}</p>
+                            <p style={{ margin: 0, fontWeight: '700', color: 'var(--text)' }}>{formatDisplayDate(entry.entryDate)}</p>
                             <div style={{ display: 'flex', gap: '15px', marginTop: '4px' }}>
-                              <p style={{ margin: 0, color: '#94A3B8' }}>Qty: {entry.quantity}</p>
-                              {entry.remark && <p style={{ margin: 0, color: '#94A3B8' }}>• {entry.remark}</p>}
+                              <p style={{ margin: 0, color: 'var(--muted)', fontSize: '0.9rem' }}>Qty: {entry.quantity}</p>
+                              {entry.remark && <p style={{ margin: 0, color: 'var(--muted)', fontSize: '0.9rem' }}>• {entry.remark}</p>}
                             </div>
                           </div>
-                          <button type="button" onClick={() => removeDispatchReceipt(index)} style={{ color: '#F87171', background: 'none', border: 'none', fontWeight: '700', cursor: 'pointer' }}>Remove</button>
+                          <button type="button" onClick={() => removeDispatchReceipt(index)} style={{ color: 'var(--danger)', background: 'none', border: 'none', fontWeight: '700', cursor: 'pointer' }}>Remove</button>
                         </div>
                       ))}
                     </div>
                   )}
-                  <p style={{ marginTop: '12px', color: '#CBD5E1', fontWeight: '600' }}>Total received: {totalDispatchReceived}</p>
+                  <p style={{ marginTop: '12px', color: 'var(--muted)', fontWeight: '600' }}>Total received: {totalDispatchReceived}</p>
                 </div>
               </div>
             </div>
