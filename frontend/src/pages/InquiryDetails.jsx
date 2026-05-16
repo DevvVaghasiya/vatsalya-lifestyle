@@ -25,11 +25,11 @@ const formatDisplayDate = (dateStr) => {
 };
 
 const DetailItem = ({ label, value, icon: Icon, name, editable = true, isEditing, editData, onChange, type = "text" }) => (
-  <div className="detail-item">
-    <div className="detail-icon-box">
+  <div className="detail-item" style={{ minWidth: 0 }}>
+    <div className="detail-icon-box" style={{ flexShrink: 0 }}>
       <Icon size={18} />
     </div>
-    <div className="detail-content">
+    <div className="detail-content" style={{ minWidth: 0 }}>
       <p className="detail-label">{label}</p>
       {isEditing && editable ? (
         type === 'date' ? (
@@ -50,7 +50,13 @@ const DetailItem = ({ label, value, icon: Icon, name, editable = true, isEditing
           />
         )
       ) : (
-        <p className="detail-value">{type === 'date' ? formatDisplayDate(value) : (value || 'N/A')}</p>
+        <p className="detail-value" style={{ 
+          whiteSpace: type === 'date' ? 'nowrap' : 'normal',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis'
+        }}>
+          {type === 'date' ? formatDisplayDate(value) : (value || 'N/A')}
+        </p>
       )}
     </div>
   </div>
@@ -72,7 +78,7 @@ const SectionWrapper = ({ title, icon: Icon, color, children }) => {
         </div>
         <h2 className="section-title">{title}</h2>
       </div>
-      <div className="flex-col gap-4">
+      <div style={{ display: 'grid', gap: '16px' }}>
         {children}
       </div>
     </div>

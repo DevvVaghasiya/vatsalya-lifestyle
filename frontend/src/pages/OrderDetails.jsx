@@ -24,12 +24,23 @@ const formatDisplayDate = (dateStr) => {
 };
 
 const DetailItem = ({ label, value, icon: Icon, name, editable = true, isEditing, editData, onChange, type = "text" }) => (
-  <div style={{ flex: 1, display: 'flex', gap: '12px', minWidth: 0 }}>
-    <div style={{ backgroundColor: 'var(--bg)', padding: '10px', borderRadius: '12px', height: 'fit-content', flexShrink: 0 }}>
+  <div style={{ display: 'flex', gap: '12px', minWidth: 0, alignItems: 'center' }}>
+    <div style={{ 
+      backgroundColor: 'var(--bg)', 
+      padding: '10px', 
+      borderRadius: '12px', 
+      height: '42px', 
+      width: '42px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexShrink: 0,
+      border: '1px solid var(--border)'
+    }}>
       <Icon size={18} color="var(--primary)" />
     </div>
     <div style={{ flex: 1, minWidth: 0 }}>
-      <p style={{ margin: 0, fontSize: '0.7rem', color: 'var(--muted)', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{label}</p>
+      <p style={{ margin: 0, fontSize: '0.65rem', color: 'var(--muted)', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{label}</p>
       {isEditing && editable ? (
         <input
           type={type}
@@ -40,7 +51,7 @@ const DetailItem = ({ label, value, icon: Icon, name, editable = true, isEditing
             width: '100%',
             border: '1px solid var(--border)',
             borderRadius: '8px',
-            padding: '4px 8px',
+            padding: '6px 10px',
             marginTop: '4px',
             fontSize: '0.9rem',
             outline: 'none',
@@ -50,11 +61,13 @@ const DetailItem = ({ label, value, icon: Icon, name, editable = true, isEditing
         />
       ) : (
         <p style={{
-          margin: '4px 0 0 0',
+          margin: '2px 0 0 0',
           fontSize: '0.95rem',
-          fontWeight: '600',
+          fontWeight: '700',
           color: 'var(--text)',
-          wordBreak: 'break-word'
+          whiteSpace: type === 'date' ? 'nowrap' : 'normal',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis'
         }}>
           {type === 'date' ? formatDisplayDate(value) : (value || 'N/A')}
         </p>
@@ -613,24 +626,48 @@ const OrderDetails = () => {
             editData={editData}
             onChange={handleChange}
           />
-          <div style={{ display: 'flex', gap: '16px' }}>
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', 
+            gap: '20px',
+            marginBottom: '16px'
+          }}>
             <DetailItem label="Style No" value={order.styleNo} icon={Hash} name="styleNo" isEditing={isEditing} editData={editData} onChange={handleChange} />
             <DetailItem label="Order Date" value={order.dispatchDate} icon={Calendar} name="dispatchDate" isEditing={isEditing} editData={editData} onChange={handleChange} type="date" />
             <DetailItem label="Order Days" value={order.orderDays} icon={Clock} name="orderDays" isEditing={isEditing} editData={editData} onChange={handleChange} type="number" />
           </div>
-          <div style={{ display: 'flex', gap: '16px' }}>
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', 
+            gap: '20px',
+            marginBottom: '16px'
+          }}>
             <DetailItem label="Fabric Name" value={order.fabricName} icon={Package} name="fabricName" isEditing={isEditing} editData={editData} onChange={handleChange} />
             <DetailItem label="Reference No" value={order.referenceNo} icon={Hash} name="referenceNo" isEditing={isEditing} editData={editData} onChange={handleChange} />
           </div>
-          <div style={{ display: 'flex', gap: '16px' }}>
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', 
+            gap: '20px',
+            marginBottom: '16px'
+          }}>
             <DetailItem label="Order Quantity" value={order.orderQuantity} icon={Layers} name="orderQuantity" isEditing={isEditing} editData={editData} onChange={handleChange} type="number" />
             <DetailItem label="Price" value={order.orderPrice} icon={DollarSign} name="orderPrice" isEditing={isEditing} editData={editData} onChange={handleChange} type="number" />
           </div>
-          <div style={{ display: 'flex', gap: '16px' }}>
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', 
+            gap: '20px',
+            marginBottom: '16px'
+          }}>
             <DetailItem label="GSM" value={order.gsm} icon={Hash} name="gsm" isEditing={isEditing} editData={editData} onChange={handleChange} />
             <DetailItem label="Count/Const" value={order.countConst} icon={Hash} name="countConst" isEditing={isEditing} editData={editData} onChange={handleChange} />
           </div>
-          <div style={{ display: 'flex', gap: '16px' }}>
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', 
+            gap: '20px'
+          }}>
             <DetailItem label="Width" value={order.width} icon={Info} name="width" isEditing={isEditing} editData={editData} onChange={handleChange} />
             <DetailItem label="Design" value={order.design} icon={Palette} name="design" isEditing={isEditing} editData={editData} onChange={handleChange} />
           </div>
@@ -691,23 +728,48 @@ const OrderDetails = () => {
         </div>
 
         <SectionWrapper title="Fabric Booking" icon={Layers} color="#0D9488" onDownload={() => generatePDF('booking')}>
-          <div style={{ display: 'flex', gap: '16px' }}>
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', 
+            gap: '20px',
+            marginBottom: '16px'
+          }}>
             <DetailItem label="Weaver" value={order.weaver} icon={User} name="weaver" isEditing={isEditing} editData={editData} onChange={handleChange} />
             <DetailItem label="Reference No" value={order.bookingReferenceNo} icon={Hash} name="bookingReferenceNo" isEditing={isEditing} editData={editData} onChange={handleChange} />
           </div>
-          <div style={{ display: 'flex', gap: '16px' }}>
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', 
+            gap: '20px',
+            marginBottom: '16px'
+          }}>
             <DetailItem label="Fabric Name" value={order.bookingFabricName} icon={Package} name="bookingFabricName" isEditing={isEditing} editData={editData} onChange={handleChange} />
             <DetailItem label="Quantity" value={order.bookingQuantity} icon={Layers} name="bookingQuantity" isEditing={isEditing} editData={editData} onChange={handleChange} />
           </div>
-          <div style={{ display: 'flex', gap: '16px' }}>
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', 
+            gap: '20px',
+            marginBottom: '16px'
+          }}>
             <DetailItem label="Challan" value={order.challan} icon={FileCheck} name="challan" isEditing={isEditing} editData={editData} onChange={handleChange} />
             <DetailItem label="Price" value={order.price} icon={DollarSign} name="price" isEditing={isEditing} editData={editData} onChange={handleChange} />
           </div>
-          <div style={{ display: 'flex', gap: '16px' }}>
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', 
+            gap: '20px',
+            marginBottom: '16px'
+          }}>
             <DetailItem label="Count / Const" value={order.bookingCountConst} icon={Hash} name="bookingCountConst" isEditing={isEditing} editData={editData} onChange={handleChange} />
             <DetailItem label="Width" value={order.bookingWidth} icon={Ruler} name="bookingWidth" isEditing={isEditing} editData={editData} onChange={handleChange} />
           </div>
-          <div style={{ display: 'flex', gap: '16px' }}>
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', 
+            gap: '20px',
+            marginBottom: '16px'
+          }}>
             <DetailItem label="Finish GSM" value={order.finishGsm} icon={Layers} name="finishGsm" isEditing={isEditing} editData={editData} onChange={handleChange} />
             <DetailItem label="Composition" value={order.bookingComposition} icon={Info} name="bookingComposition" isEditing={isEditing} editData={editData} onChange={handleChange} />
           </div>
@@ -742,7 +804,12 @@ const OrderDetails = () => {
             )}
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '16px', marginTop: '16px' }}>
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(135px, 1fr))', 
+            gap: '20px', 
+            marginTop: '16px' 
+          }}>
             {(isEditing ? editData.fabricJobWorkMill === 'dyingAndPrinting' || editData.fabricJobWorkMill === 'both' : order.fabricJobWorkMill === 'dyingAndPrinting' || order.fabricJobWorkMill === 'both') && (
               <>
                 <DetailItem label="Dye Mill Name" value={order.dyeMillName} icon={User} name="dyeMillName" isEditing={isEditing} editData={editData} onChange={handleChange} />
