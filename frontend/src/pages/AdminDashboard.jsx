@@ -210,13 +210,15 @@ const AdminDashboard = () => {
   const filteredUsers = users.filter(u =>
     (u.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
     (u.phoneNumber || '').includes(searchTerm) ||
-    (u.businessName || '').toLowerCase().includes(searchTerm.toLowerCase())
+    (u.businessName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+    String(u.id).includes(searchTerm)
   );
 
   const filteredInquiries = inquiries.filter(inq => {
     const matchSearch =
       (inq.client?.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (inq.styleNo || '').toLowerCase().includes(searchTerm.toLowerCase());
+      (inq.styleNo || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      String(inq.id).includes(searchTerm);
     const matchFilter = filterStatus === 'All' || (inq.status || 'Ongoing') === filterStatus;
     return matchSearch && matchFilter;
   });
@@ -690,7 +692,8 @@ const AdminDashboard = () => {
                 const statusGroup = mapOrderStatus(o);
                 const matchesSubTab = orderSubTab === 'all' ? true : statusGroup.toLowerCase() === orderSubTab;
                 const matchesSearch = (o.client?.name||'').toLowerCase().includes(searchTerm.toLowerCase()) ||
-                                     (o.styleNo||'').toLowerCase().includes(searchTerm.toLowerCase());
+                                     (o.styleNo||'').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                     String(o.id).includes(searchTerm);
                 return matchesSubTab && matchesSearch;
               });
 
@@ -788,7 +791,8 @@ const AdminDashboard = () => {
                 const normalizedCat = (i.category||'').toUpperCase().replace(/\s+/g, '_');
                 const matchesSubTab = normalizedCat === inventorySubTab;
                 const matchesSearch = (i.fabricName||'').toLowerCase().includes(searchTerm.toLowerCase()) ||
-                                     (i.referenceNo||'').toLowerCase().includes(searchTerm.toLowerCase());
+                                     (i.referenceNo||'').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                     String(i.id).includes(searchTerm);
                 return matchesSubTab && matchesSearch;
               });
 

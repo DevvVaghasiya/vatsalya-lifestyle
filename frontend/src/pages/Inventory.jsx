@@ -309,7 +309,8 @@ const Inventory = () => {
 
   const filtered = items.filter(i =>
     (i.fabricName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (i.referenceNo || '').toLowerCase().includes(searchTerm.toLowerCase())
+    (i.referenceNo || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+    String(i.id).includes(searchTerm.toLowerCase())
   );
 
   const availableItems = activeTab === 'FABRIC_ENTRY'

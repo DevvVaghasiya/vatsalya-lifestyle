@@ -59,7 +59,8 @@ const Deals = () => {
       (item.client?.name || '').toLowerCase().includes(search) ||
       (item.styleNo || '').toLowerCase().includes(search) ||
       (item.bookingReferenceNo || '').toLowerCase().includes(search) ||
-      (item.quality || '').toLowerCase().includes(search);
+      (item.quality || '').toLowerCase().includes(search) ||
+      String(item.id).includes(search);
     return matchesTab && searchMatches;
   });
 
