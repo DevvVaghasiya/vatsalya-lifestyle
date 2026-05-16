@@ -126,6 +126,8 @@ const AdminDashboard = () => {
           setInventory([
             ...(s1.data||[]).map(i=>({...i,category:'Stock'})),
             ...(s2.data||[]).map(i=>({...i,category:'Sample'})),
+            ...(s3.data||[]).map(i=>({...i,category:'Fabric Entry'})),
+          ]);
         } else if (activeTab === 'assets') {
           const res = await api.get(`/api/assets`);
           setAssets(res.data);
@@ -846,58 +848,60 @@ const AdminDashboard = () => {
                   
                   {filtered.length === 0 ? (
                     <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--muted)', fontWeight: 700, opacity: 0.5 }}>No {subTabLabels[inventorySubTab]} items found.</div>
-                  ) : filtered.map(item => {
-                    const available = (item.stockQuantity||0) - (item.soldQuantity||0);
-                    const itemCatKey = (item.category||'').toUpperCase().replace(/\s+/g, '_');
-                    const cc = catColor[itemCatKey]||'#4F46E5';
-                    const cb = catBg[itemCatKey]||'#EEF2FF';
-                    return (
-                      <motion.div key={item.id} variants={pop} layout whileHover={{ y: -2 }}
-                        style={{ background: 'white', borderRadius: 20, padding: '18px 20px', border: '1px solid var(--border)', boxShadow: 'var(--shadow-sm)' }}
-                      >
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-                          <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-                            <div style={{ width: 40, height: 40, borderRadius: 12, background: cb, color: cc, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: '1.1rem', flexShrink: 0 }}>
-                              {(item.fabricName||'F').charAt(0).toUpperCase()}
-                            </div>
-                            <div>
-                              <h4 style={{ margin: 0, fontWeight: 800, fontSize: '0.95rem', color: 'var(--text)' }}>{item.fabricName}</h4>
-                              {item.referenceNo && <p style={{ margin: '2px 0 0', fontSize: '0.7rem', fontWeight: 700, color: 'var(--muted)' }}>Ref: {item.referenceNo}</p>}
-                            </div>
-                          </div>
-                          <span style={{ background: cb, color: cc, padding: '4px 10px', borderRadius: 8, fontSize: '0.65rem', fontWeight: 800 }}>{subTabLabels[itemCatKey]}</span>
-                        </div>
-                        {itemCatKey !== 'FABRIC_ENTRY' && (
-                          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, background: '#F8FAFC', borderRadius: 12, padding: '10px 14px' }}>
-                            {[
-                              { label: 'Available', value: `${available} Mtr`, highlight: available > 0 ? '#16A34A' : '#EF4444' },
-                              { label: 'Total', value: `${item.stockQuantity||0} Mtr`, highlight: '#1E293B' },
-                              { label: 'Dispatched', value: `${item.soldQuantity||0} Mtr`, highlight: '#D97706' },
-                            ].map(({ label, value, highlight }) => (
-                              <div key={label}>
-                                <p style={{ margin: 0, fontSize: '0.58rem', color: '#94A3B8', fontWeight: 700, textTransform: 'uppercase' }}>{label}</p>
-                                <p style={{ margin: '3px 0 0', fontSize: '0.85rem', fontWeight: 800, color: highlight }}>{value}</p>
+                  ) : (
+                    filtered.map(item => {
+                      const available = (item.stockQuantity||0) - (item.soldQuantity||0);
+                      const itemCatKey = (item.category||'').toUpperCase().replace(/\s+/g, '_');
+                      const cc = catColor[itemCatKey]||'#4F46E5';
+                      const cb = catBg[itemCatKey]||'#EEF2FF';
+                      return (
+                        <motion.div key={item.id} variants={pop} layout whileHover={{ y: -2 }}
+                          style={{ background: 'white', borderRadius: 20, padding: '18px 20px', border: '1px solid var(--border)', boxShadow: 'var(--shadow-sm)' }}
+                        >
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                            <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+                              <div style={{ width: 40, height: 40, borderRadius: 12, background: cb, color: cc, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: '1.1rem', flexShrink: 0 }}>
+                                {(item.fabricName||'F').charAt(0).toUpperCase()}
                               </div>
-                            ))}
+                              <div>
+                                <h4 style={{ margin: 0, fontWeight: 800, fontSize: '0.95rem', color: 'var(--text)' }}>{item.fabricName}</h4>
+                                {item.referenceNo && <p style={{ margin: '2px 0 0', fontSize: '0.7rem', fontWeight: 700, color: 'var(--muted)' }}>Ref: {item.referenceNo}</p>}
+                              </div>
+                            </div>
+                            <span style={{ background: cb, color: cc, padding: '4px 10px', borderRadius: 8, fontSize: '0.65rem', fontWeight: 800 }}>{subTabLabels[itemCatKey]}</span>
                           </div>
-                        )}
-                        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 12 }}>
-                          <button
-                            onClick={(e) => handleDeleteInventory(e, item.id)}
-                            style={{
-                              background: '#FEE2E2', color: '#DC2626', border: 'none',
-                              padding: '6px 10px', borderRadius: 8, fontSize: '0.7rem',
-                              fontWeight: 800, display: 'flex', alignItems: 'center', gap: 4,
-                              cursor: 'pointer'
-                            }}
-                          >
-                            <Trash2 size={12} /> Delete Item
-                          </button>
-                        </div>
-                      </motion.div>
-                    );
-                  })
-                )
+                          {itemCatKey !== 'FABRIC_ENTRY' && (
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, background: '#F8FAFC', borderRadius: 12, padding: '10px 14px' }}>
+                              {[
+                                { label: 'Available', value: `${available} Mtr`, highlight: available > 0 ? '#16A34A' : '#EF4444' },
+                                { label: 'Total', value: `${item.stockQuantity||0} Mtr`, highlight: '#1E293B' },
+                                { label: 'Dispatched', value: `${item.soldQuantity||0} Mtr`, highlight: '#D97706' },
+                              ].map(({ label, value, highlight }) => (
+                                <div key={label}>
+                                  <p style={{ margin: 0, fontSize: '0.58rem', color: '#94A3B8', fontWeight: 700, textTransform: 'uppercase' }}>{label}</p>
+                                  <p style={{ margin: '3px 0 0', fontSize: '0.85rem', fontWeight: 800, color: highlight }}>{value}</p>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 12 }}>
+                            <button
+                              onClick={(e) => handleDeleteInventory(e, item.id)}
+                              style={{
+                                background: '#FEE2E2', color: '#DC2626', border: 'none',
+                                padding: '6px 10px', borderRadius: 8, fontSize: '0.7rem',
+                                fontWeight: 800, display: 'flex', alignItems: 'center', gap: 4,
+                                cursor: 'pointer'
+                              }}
+                            >
+                              <Trash2 size={12} /> Delete Item
+                            </button>
+                          </div>
+                        </motion.div>
+                      );
+                    })
+                  )}
+                </motion.div>
               );
             })()
           ) : (
