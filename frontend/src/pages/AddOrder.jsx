@@ -339,7 +339,7 @@ const AddOrder = () => {
               <input type="text" className="form-input" name="styleNo" placeholder="ART-5001" value={formData.styleNo} onChange={handleChange} style={{ backgroundColor: '#F8FAFC', borderRadius: '16px' }} />
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))', gap: '16px', marginBottom: '16px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
               <div className="form-group" style={{ marginBottom: 0 }}>
                 <label className="form-label">Order Date</label>
                 <DatePicker
@@ -363,17 +363,18 @@ const AddOrder = () => {
                   style={{ backgroundColor: '#F8FAFC', borderRadius: '16px', textAlign: 'center' }} 
                 />
               </div>
-              <div className="form-group" style={{ marginBottom: 0 }}>
-                <label className="form-label">Complete Date</label>
-                <DatePicker
-                  selected={formData.expectedCompletionDate ? new Date(formData.expectedCompletionDate) : null}
-                  onChange={(date) => handleChange({ target: { name: 'expectedCompletionDate', value: date ? date.toISOString().split('T')[0] : '' } })}
-                  dateFormat="dd/MM/yyyy"
-                  className="form-input"
-                  placeholderText="dd/mm/yyyy"
-                  style={{ backgroundColor: '#F8FAFC', borderRadius: '16px' }}
-                />
-              </div>
+            </div>
+            
+            <div className="form-group" style={{ marginBottom: '16px' }}>
+              <label className="form-label">Complete Date</label>
+              <DatePicker
+                selected={formData.expectedCompletionDate ? new Date(formData.expectedCompletionDate) : null}
+                onChange={(date) => handleChange({ target: { name: 'expectedCompletionDate', value: date ? date.toISOString().split('T')[0] : '' } })}
+                dateFormat="dd/MM/yyyy"
+                className="form-input"
+                placeholderText="dd/mm/yyyy"
+                style={{ backgroundColor: '#F8FAFC', borderRadius: '16px' }}
+              />
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '16px', marginBottom: '16px' }}>
