@@ -157,11 +157,11 @@ const Profile = () => {
     <div style={{ minHeight: '100%', background: 'var(--bg)' }}>
 
       {/* ── Header ── */}
-      <div className="page-header" style={{ background: 'white' }}>
+      <div className="page-header" style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border)' }}>
         <button type="button" className="icon-btn" onClick={() => navigate('/')}>
           <ArrowLeft size={20} />
         </button>
-        <h1 className="page-title">Account Center</h1>
+        <h1 className="page-title" style={{ color: 'var(--text)' }}>Account Center</h1>
         <div className="icon-btn" style={{ color: 'var(--primary)', background: 'var(--primary-soft)', cursor: 'default' }}>
           <ShieldCheck size={20} />
         </div>
@@ -175,7 +175,7 @@ const Profile = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
           style={{
-            background: 'white', borderRadius: 28,
+            background: 'var(--surface)', borderRadius: 28,
             padding: '36px 24px 28px', textAlign: 'center',
             border: '1px solid var(--border)', boxShadow: 'var(--shadow-md)',
             marginBottom: 24, position: 'relative', overflow: 'hidden'
@@ -279,13 +279,13 @@ const Profile = () => {
                 style={{
                   width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 14,
                   padding: '16px 18px',
-                  background: isLogout ? `${item.color}08` : 'white',
-                  border: `1px solid ${isLogout ? `${item.color}22` : 'var(--border)'}`,
+                  background: isLogout ? `${item.color}12` : 'var(--surface)',
+                  border: `1px solid ${isLogout ? `${item.color}33` : 'var(--border)'}`,
                   borderRadius: 18, cursor: 'pointer',
                   boxShadow: 'var(--shadow-sm)', transition: 'all 0.2s ease', textAlign: 'left'
                 }}
               >
-                <div style={{ width: 44, height: 44, borderRadius: 14, flexShrink: 0, background: `${item.color}14`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: item.color }}>
+                <div style={{ width: 44, height: 44, borderRadius: 14, flexShrink: 0, background: `${item.color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: item.color }}>
                   <Icon size={20} />
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
