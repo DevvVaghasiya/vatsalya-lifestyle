@@ -140,29 +140,10 @@ html, body {
 
 .main-content {
   width: 100%;
-  max-width: 1280px;
+  max-width: 1240px;
   margin: 0 auto;
-  padding: 24px;
+  padding: 24px 24px 60px 24px;
   transition: padding 0.3s ease;
-  box-sizing: border-box;
-}
-
-@media (max-width: 1024px) {
-  .main-content {
-    padding: 20px;
-  }
-}
-
-@media (max-width: 768px) {
-  .main-content {
-    padding: 12px 12px 60px 12px;
-  }
-}
-
-@media (max-width: 480px) {
-  .main-content {
-    padding: 8px 8px 80px 8px;
-  }
 }
 
 @media (min-width: 1024px) {
@@ -434,8 +415,8 @@ body.dark-mode .premium-desktop-header {
 /* On narrow viewports (tablets/resized browsers), make header more compact */
 @media (max-width: 768px) {
   .premium-desktop-header {
-    height: 64px;
-    padding: 0 12px;
+    height: 60px;
+    padding: 0 16px;
   }
   .brand-titles {
     display: none;
@@ -444,40 +425,16 @@ body.dark-mode .premium-desktop-header {
     display: none;
   }
   .header-nav {
-    gap: 2px;
-    padding: 2px;
-  }
-  .header-nav-link {
-    padding: 8px 12px;
+    gap: 4px;
   }
   .btn-header-create span {
     display: none;
   }
   .btn-header-create {
-    padding: 8px;
-    width: 40px;
-    height: 40px;
-    justify-content: center;
+    padding: 8px 12px;
   }
-  .header-actions {
-    gap: 8px;
-  }
-  .header-profile-group {
-    padding: 2px;
-    gap: 4px;
-  }
-}
-
-@media (max-width: 480px) {
-  .premium-desktop-header {
-    padding: 0 8px;
-  }
-  .header-nav {
-    background: transparent;
-    border: none;
-  }
-  .header-nav-link {
-    padding: 8px;
+  .main-content {
+    padding: 16px 16px 40px 16px;
   }
 }
 
@@ -493,22 +450,6 @@ body.dark-mode .premium-desktop-header {
   top: 0;
   z-index: 100;
   transition: var(--transition-theme);
-}
-
-@media (max-width: 768px) {
-  .page-header {
-    padding: 12px 16px;
-    top: 0;
-    border-radius: 0;
-    margin-bottom: 12px;
-  }
-}
-
-@media (max-width: 480px) {
-  .page-header {
-    padding: 10px 12px;
-    margin-bottom: 8px;
-  }
 }
 
 body.dark-mode .page-header {
@@ -633,21 +574,6 @@ body.dark-mode .tab-item.active {
   overflow: hidden;
 }
 
-@media (max-width: 768px) {
-  .card {
-    padding: 16px;
-    margin-bottom: 12px;
-    border-radius: var(--radius-md);
-  }
-}
-
-@media (max-width: 480px) {
-  .card {
-    padding: 14px;
-    margin-bottom: 8px;
-  }
-}
-
 body.dark-mode .card {
   background: rgba(22, 27, 45, 0.6);
   backdrop-filter: blur(12px);
@@ -674,12 +600,6 @@ body.dark-mode .card {
 @media (min-width: 768px) {
   .list-grid {
     grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 480px) {
-  .list-grid {
-    gap: 12px;
   }
 }
 
@@ -749,20 +669,6 @@ body.dark-mode .card {
   margin-top: 6px;
 }
 
-@media (max-width: 480px) {
-  .hero-card {
-    padding: 20px 16px !important;
-    border-radius: var(--radius-lg) !important;
-  }
-  .hero-card h1 {
-    font-size: 1.5rem !important;
-  }
-  .hero-card p {
-    font-size: 0.85rem !important;
-    margin-bottom: 20px !important;
-  }
-}
-
 /* Form Elements */
 .form-group {
   margin-bottom: 24px;
@@ -818,35 +724,7 @@ body.dark-mode .form-input, body.dark-mode .form-select {
 
 @media (max-width: 640px) {
   .form-row { grid-template-columns: 1fr; gap: 0; }
-  .section-card { padding: 20px 16px; border-radius: var(--radius-lg); }
-  
-  /* Target detail rows commonly used in Order/Inquiry details */
-  div[style*="display: flex"][style*="gap: 16px"],
-  div[style*="display:flex"][style*="gap:16px"],
-  div[style*="display: flex"][style*="gap: 12px"] {
-    flex-direction: column !important;
-    gap: 12px !important;
-  }
-  
-  /* Ensure children take full width */
-  div[style*="flex: 1"] {
-    width: 100% !important;
-  }
-}
-
-@media (max-width: 480px) {
-  .section-card {
-    padding: 16px 12px;
-    margin-bottom: 16px;
-  }
-  .section-header {
-    margin-bottom: 16px;
-    gap: 12px;
-  }
-  .section-icon {
-    width: 40px;
-    height: 40px;
-  }
+  .section-card { padding: 24px 20px; border-radius: var(--radius-lg); }
 }
 
 /* --- BUTTONS --- */
@@ -1085,13 +963,6 @@ body.dark-mode .pill {
   margin-bottom: 28px;
 }
 
-@media (max-width: 480px) {
-  .stats-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-}
-
 @media (min-width: 1024px) {
   .stats-grid {
     grid-template-columns: repeat(4, 1fr);
@@ -1106,16 +977,6 @@ body.dark-mode .pill {
   text-transform: uppercase;
   letter-spacing: 0.8px;
   margin-bottom: 12px;
-}
-
-@media (max-width: 480px) {
-  .card-title {
-    font-size: 0.65rem;
-    letter-spacing: 0.5px;
-  }
-  .card-value {
-    font-size: 1.25rem !important;
-  }
 }
 
 .card-row {
