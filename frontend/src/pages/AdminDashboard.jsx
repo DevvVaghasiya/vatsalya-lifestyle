@@ -784,7 +784,8 @@ const AdminDashboard = () => {
             /* ── Inventory List ── */
             (() => {
               const filtered = inventory.filter(i => {
-                const matchesSubTab = i.category.toUpperCase() === inventorySubTab.replace(' ', '_');
+                const normalizedCat = (i.category||'').toUpperCase().replace(/\s+/g, '_');
+                const matchesSubTab = normalizedCat === inventorySubTab;
                 const matchesSearch = (i.fabricName||'').toLowerCase().includes(searchTerm.toLowerCase()) ||
                                      (i.referenceNo||'').toLowerCase().includes(searchTerm.toLowerCase());
                 return matchesSubTab && matchesSearch;
@@ -824,7 +825,7 @@ const AdminDashboard = () => {
                     <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--muted)', fontWeight: 700, opacity: 0.5 }}>No {subTabLabels[inventorySubTab]} items found.</div>
                   ) : filtered.map(item => {
                     const available = (item.stockQuantity||0) - (item.soldQuantity||0);
-                    const itemCatKey = item.category.toUpperCase().replace(' ', '_');
+                    const itemCatKey = (item.category||'').toUpperCase().replace(/\s+/g, '_');
                     const cc = catColor[itemCatKey]||'#4F46E5';
                     const cb = catBg[itemCatKey]||'#EEF2FF';
                     return (
