@@ -6,6 +6,7 @@ import {
 import { useNavigate, useLocation } from 'react-router-dom';
 import api from '../utils/api';
 import jsPDF from 'jspdf';
+import { addPdfHeader } from '../utils/pdfHeader';
 
 /* ── PDF helper ── */
 const formatDateShort = (dateStr) => {
@@ -19,18 +20,13 @@ const generateInquiryPDF = (item) => {
   try {
     const doc = new jsPDF('p', 'mm', 'a4');
     const pageW = doc.internal.pageSize.getWidth();
-    let y = 0;
-
-    // ── Header band ──
-    doc.setFillColor(79, 70, 229);
-    doc.rect(0, 0, pageW, 38, 'F');
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(18);
-    doc.setFont(undefined, 'bold');
-    doc.text('INQUIRY DETAILS REPORT', pageW / 2, 14, { align: 'center' });
+    y = addPdfHeader(doc, 'INQUIRY DETAILS REPORT');
+    
     doc.setFontSize(9);
     doc.setFont(undefined, 'normal');
-    doc.text(`Generated: ${new Date().toLocaleDateString('en-GB')}  |  ID: #${item.id || '—'}`, pageW / 2, 24, { align: 'center' });
+    doc.setTextColor(100, 116, 139);
+    doc.text(`Generated: ${new Date().toLocaleDateString('en-GB')}  |  ID: #${item.id || '—'}`, pageW / 2, y + 2, { align: 'center' });
+    y += 10;
 
     // Status pill
     const statusColor = (item.status || '').toLowerCase() === 'completed'

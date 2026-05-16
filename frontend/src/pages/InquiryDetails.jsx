@@ -9,6 +9,7 @@ import api from '../utils/api';
 import jsPDF from 'jspdf';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { addPdfHeader } from '../utils/pdfHeader';
 
 // Helper components moved outside to prevent focus loss on re-render
 const formatDisplayDate = (dateStr) => {
@@ -153,19 +154,14 @@ const InquiryDetails = () => {
 
 
       // Header with gradient effect
-      doc.setFillColor(79, 70, 229);
-      doc.rect(0, 0, pageWidth, 35, 'F');
-      doc.setTextColor(255, 255, 255);
-      doc.setFontSize(24);
-      doc.setFont(undefined, 'bold');
-      doc.text('INQUIRY DETAILS REPORT', pageWidth / 2, 12, { align: 'center' });
+      yPosition = addPdfHeader(doc, 'INQUIRY DETAILS REPORT');
       
-      doc.setFontSize(10);
+      doc.setFontSize(9);
       doc.setFont(undefined, 'normal');
+      doc.setTextColor(100, 116, 139);
       const reportDate = new Date().toLocaleDateString('en-GB');
-      doc.text(`Generated: ${reportDate}`, pageWidth / 2, 22, { align: 'center' });
-      
-      yPosition = 45;
+      doc.text(`Generated: ${reportDate}`, pageWidth / 2, yPosition + 2, { align: 'center' });
+      yPosition += 10;
 
       // Status Section
       doc.setTextColor(0, 0, 0);

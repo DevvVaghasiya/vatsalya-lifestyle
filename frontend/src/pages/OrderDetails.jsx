@@ -9,6 +9,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import api from '../utils/api';
 import { motion } from 'framer-motion';
 import { jsPDF } from 'jspdf';
+import { addPdfHeader } from '../utils/pdfHeader';
 
 const formatDisplayDate = (dateStr) => {
   if (!dateStr) return 'N/A';
@@ -233,21 +234,6 @@ const OrderDetails = () => {
 
   const generatePDF = (type) => {
     const doc = new jsPDF();
-    const primaryColor = '#4F46E5';
-    const secondaryColor = '#0D9488';
-    const accentColor = '#7C3AED';
-    const warningColor = '#F59E0B';
-
-    doc.setFillColor(79, 70, 229);
-    doc.rect(0, 0, 210, 40, 'F');
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(22);
-    doc.setFont('helvetica', 'bold');
-    doc.text('VATSALYA LIFESTYLE', 20, 25);
-    doc.setFontSize(10);
-    doc.setFont('helvetica', 'normal');
-    doc.text('Textile Manufacturing & Quality Assurance', 20, 32);
-
     const typeHeaders = {
       'full': 'FULL ORDER INFORMATION',
       'client': "CLIENT'S ORDER DETAILS",
@@ -257,13 +243,7 @@ const OrderDetails = () => {
       'dispatch': 'DISPATCH & DELIVERY RECORD'
     };
 
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(14);
-    doc.text(typeHeaders[type] || 'ORDER INFORMATION', 190, 25, { align: 'right' });
-    doc.setFontSize(10);
-    doc.text(`Ref: ${order.styleNo || 'N/A'}`, 190, 32, { align: 'right' });
-
-    let y = 55;
+    let y = addPdfHeader(doc, typeHeaders[type] || 'ORDER INFORMATION');
 
     const addSection = (title, data, color) => {
       if (y > 250) { doc.addPage(); y = 25; }

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import api from '../utils/api';
 import { jsPDF } from 'jspdf';
+import { addPdfHeader } from '../utils/pdfHeader';
 
 const safePdfText = (v) => {
   const s = (v ?? '').toString().trim();
@@ -12,23 +13,10 @@ const buildFabricPdf = (item) => {
   const doc = new jsPDF({ unit: 'pt', format: 'a4' });
   const pageWidth = doc.internal.pageSize.getWidth();
   const marginX = 40;
-  let currentY;
   const rowH = 34;
   const tableWidth = pageWidth - marginX * 2;
   const col1W = Math.floor(tableWidth * 0.40);
-
-  doc.setDrawColor(200);
-  doc.setLineWidth(1);
-  doc.rect(marginX, 40, tableWidth, 450);
-
-  doc.setFillColor(79, 70, 229);
-  doc.rect(marginX, 40, tableWidth, 50, 'F');
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(20);
-  doc.setTextColor(255, 255, 255);
-  doc.text('VATSALYA LIFESTYLE LLP', pageWidth / 2, 72, { align: 'center' });
-
-  currentY = 90;
+  let currentY = addPdfHeader(doc, 'FABRIC SPECIFICATION SHEET');
   doc.setFillColor(248, 250, 252);
   doc.rect(marginX, currentY, tableWidth, 30, 'F');
   doc.setDrawColor(226, 232, 240);

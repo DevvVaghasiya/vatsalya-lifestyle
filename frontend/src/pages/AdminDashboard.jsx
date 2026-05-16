@@ -9,6 +9,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '../utils/api';
 import jsPDF from 'jspdf';
+import { addPdfHeader } from '../utils/pdfHeader';
 
 /* ─── Status helpers ─── */
 const STATUS_MAP = {
@@ -29,15 +30,13 @@ const getAvatarColor = (name) => {
 const exportInquiriesPDF = (inquiries) => {
   const doc = new jsPDF('p', 'mm', 'a4');
   const pw = doc.internal.pageSize.getWidth();
-  doc.setFillColor(79, 70, 229);
-  doc.rect(0, 0, pw, 32, 'F');
-  doc.setTextColor(255,255,255);
-  doc.setFontSize(16); doc.setFont(undefined,'bold');
-  doc.text('VATSALYA LIFESTYLE — INQUIRY REPORT', pw / 2, 13, { align: 'center' });
+  let y = addPdfHeader(doc, 'INQUIRY REPORT');
   doc.setFontSize(9); doc.setFont(undefined,'normal');
-  doc.text(`Generated: ${new Date().toLocaleDateString('en-GB')}  |  Total: ${inquiries.length} inquiries`, pw / 2, 23, { align: 'center' });
+  doc.setTextColor(100, 116, 139);
+  doc.text(`Generated: ${new Date().toLocaleDateString('en-GB')}  |  Total: ${inquiries.length} inquiries`, pw / 2, y + 2, { align: 'center' });
+  y += 10;
 
-  let y = 42;
+  y = 42;
   const headers = ['Client', 'Style No', 'Quality', 'Status', 'Date'];
   const xs = [14, 69, 104, 144, 172];
 
