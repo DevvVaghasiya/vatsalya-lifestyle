@@ -38,13 +38,15 @@ const Login = () => {
   };
 
   return (
-    <div style={{
       minHeight: '100vh', width: '100%',
       background: 'linear-gradient(135deg, #0F0C29 0%, #302B63 50%, #24243e 100%)',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
-      padding: '24px', fontFamily: '"Inter", sans-serif',
-      position: 'relative', overflow: 'hidden'
+      padding: '40px 24px', fontFamily: '"Inter", sans-serif',
+      position: 'relative', overflowY: 'auto'
     }}>
+      <style>{`
+        body { background: #0F0C29 !important; }
+      `}</style>
       {/* Dynamic Background Elements */}
       <div style={{
         position: 'absolute', top: '-10%', left: '-10%',
@@ -94,7 +96,8 @@ const Login = () => {
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 36 }}>
           <div style={{
             width: 48, height: 48, borderRadius: 16,
-            background: 'white',
+            background: 'rgba(255,255,255,0.08)',
+            border: '1px solid rgba(255,255,255,0.15)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             boxShadow: '0 8px 24px rgba(0,0,0,0.2)',
             overflow: 'hidden',

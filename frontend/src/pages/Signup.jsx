@@ -137,13 +137,15 @@ const Signup = () => {
   }
 
   return (
-    <div style={{
       minHeight: '100vh', width: '100%',
       background: 'linear-gradient(135deg, #0F0C29 0%, #302B63 50%, #24243e 100%)',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
-      padding: '24px', fontFamily: '"Inter", sans-serif',
-      position: 'relative', overflow: 'hidden'
+      padding: '60px 24px', fontFamily: '"Inter", sans-serif',
+      position: 'relative', overflowY: 'auto'
     }}>
+      <style>{`
+        body { background: #0F0C29 !important; }
+      `}</style>
       {/* Dynamic Background Elements */}
       <div style={{
         position: 'absolute', top: '-15%', right: '-10%',
@@ -189,8 +191,8 @@ const Signup = () => {
             onClick={() => navigate('/login')}
             style={{
               width: 40, height: 40, borderRadius: 12,
-              background: 'rgba(255,255,255,0.08)',
-              border: '1px solid rgba(255,255,255,0.12)',
+              background: 'rgba(255,255,255,0.06)',
+              border: '1px solid rgba(255,255,255,0.1)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               color: 'rgba(255,255,255,0.7)', cursor: 'pointer', flexShrink: 0
             }}
