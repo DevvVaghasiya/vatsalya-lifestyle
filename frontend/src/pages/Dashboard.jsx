@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, ArrowRight, Activity, Zap, FileCheck, Clock, CheckCircle } from 'lucide-react';
+import { Plus, ArrowRight, Activity, Zap, FileCheck, Clock, CheckCircle, Search, UserPlus, Package, MessageSquare } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -189,74 +189,117 @@ const Dashboard = () => {
              Textiles That Define Your Vision.
           </p>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            {/* New Order Button */}
-            <motion.button
-              whileHover={{ scale: 1.02, y: -2 }}
-              whileTap={{ scale: 0.97 }}
+          <div style={{ position: 'relative', marginBottom: '24px' }}>
+            <Search size={18} color="#94A3B8" style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)' }} />
+            <input 
+              type="text" 
+              placeholder="Search orders, clients or stock..." 
               onClick={() => navigate('/deals')}
+              readOnly
               style={{
-                width: '100%', padding: '18px 20px',
-                background: 'linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%)',
-                border: 'none', borderRadius: '20px',
-                boxShadow: '0 12px 28px rgba(79,70,229,0.35)',
+                width: '100%',
+                padding: '16px 16px 16px 48px',
+                borderRadius: '18px',
+                border: '1px solid rgba(0,0,0,0.05)',
+                background: 'rgba(255,255,255,0.8)',
+                fontSize: '0.95rem',
+                fontWeight: '600',
+                color: '#1E293B',
                 cursor: 'pointer',
-                display: 'flex', alignItems: 'center', gap: 16,
-                textAlign: 'left',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.03)',
+                outline: 'none'
               }}
-            >
-              <div style={{
-                width: 46, height: 46, borderRadius: 14, flexShrink: 0,
-                background: 'rgba(255,255,255,0.2)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}>
-                <Plus size={24} color="white" strokeWidth={2.5} />
-              </div>
-              <div>
-                <div style={{ fontSize: '1.05rem', fontWeight: '800', color: 'white', letterSpacing: '-0.3px' }}>
-                  New Order
-                </div>
-                <div style={{ fontSize: '0.75rem', fontWeight: '600', color: 'rgba(255,255,255,0.65)', marginTop: 2 }}>
-                  Create a new fabric order
-                </div>
-              </div>
-              <ArrowRight size={20} color="rgba(255,255,255,0.6)" style={{ marginLeft: 'auto', flexShrink: 0 }} />
-            </motion.button>
+            />
+          </div>
 
-            {/* Recent Inquiries Button */}
-            <motion.button
-              whileHover={{ scale: 1.02, y: -2 }}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+            {/* Quick Action: New Order */}
+            <motion.div
+              whileHover={{ y: -4, boxShadow: '0 12px 24px rgba(79,70,229,0.15)' }}
               whileTap={{ scale: 0.97 }}
-              onClick={() => navigate('/inquiries')}
+              onClick={() => navigate('/add-order')}
               style={{
-                width: '100%', padding: '18px 20px',
-                background: 'rgba(255,255,255,0.85)',
-                backdropFilter: 'blur(12px)',
-                border: '1.5px solid rgba(79,70,229,0.15)',
-                borderRadius: '20px',
-                boxShadow: '0 8px 20px rgba(0,0,0,0.06)',
+                padding: '20px',
+                background: 'white',
+                borderRadius: '24px',
                 cursor: 'pointer',
-                display: 'flex', alignItems: 'center', gap: 16,
-                textAlign: 'left',
+                border: '1px solid rgba(79,70,229,0.1)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '12px'
               }}
             >
-              <div style={{
-                width: 46, height: 46, borderRadius: 14, flexShrink: 0,
-                background: 'linear-gradient(135deg, #EEF2FF, #E0E7FF)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}>
-                <Activity size={22} color="#4F46E5" />
+              <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: '#EEF2FF', color: '#4F46E5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Plus size={22} strokeWidth={2.5} />
               </div>
-              <div>
-                <div style={{ fontSize: '1.05rem', fontWeight: '800', color: '#1E293B', letterSpacing: '-0.3px' }}>
-                  Recent Inquiries
-                </div>
-                <div style={{ fontSize: '0.75rem', fontWeight: '600', color: '#94A3B8', marginTop: 2 }}>
-                  View & manage inquiries
-                </div>
+              <p style={{ margin: 0, fontWeight: '800', fontSize: '0.9rem', color: '#1E293B' }}>New Order</p>
+            </motion.div>
+
+            {/* Quick Action: Add Stock */}
+            <motion.div
+              whileHover={{ y: -4, boxShadow: '0 12px 24px rgba(16,185,129,0.15)' }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => navigate('/inventory')}
+              style={{
+                padding: '20px',
+                background: 'white',
+                borderRadius: '24px',
+                cursor: 'pointer',
+                border: '1px solid rgba(16,185,129,0.1)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '12px'
+              }}
+            >
+              <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: '#ECFDF5', color: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Package size={22} />
               </div>
-              <ArrowRight size={20} color="#94A3B8" style={{ marginLeft: 'auto', flexShrink: 0 }} />
-            </motion.button>
+              <p style={{ margin: 0, fontWeight: '800', fontSize: '0.9rem', color: '#1E293B' }}>Add Stock</p>
+            </motion.div>
+
+            {/* Quick Action: New Inquiry */}
+            <motion.div
+              whileHover={{ y: -4, boxShadow: '0 12px 24px rgba(124,58,237,0.15)' }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => navigate('/add-inquiry')}
+              style={{
+                padding: '20px',
+                background: 'white',
+                borderRadius: '24px',
+                cursor: 'pointer',
+                border: '1px solid rgba(124,58,237,0.1)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '12px'
+              }}
+            >
+              <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: '#F5F3FF', color: '#7C3AED', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <MessageSquare size={20} />
+              </div>
+              <p style={{ margin: 0, fontWeight: '800', fontSize: '0.9rem', color: '#1E293B' }}>New Inquiry</p>
+            </motion.div>
+
+            {/* Quick Action: New Client */}
+            <motion.div
+              whileHover={{ y: -4, boxShadow: '0 12px 24px rgba(245,158,11,0.15)' }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => navigate('/add-client')}
+              style={{
+                padding: '20px',
+                background: 'white',
+                borderRadius: '24px',
+                cursor: 'pointer',
+                border: '1px solid rgba(245,158,11,0.1)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '12px'
+              }}
+            >
+              <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: '#FFFBEB', color: '#F59E0B', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <UserPlus size={20} />
+              </div>
+              <p style={{ margin: 0, fontWeight: '800', fontSize: '0.9rem', color: '#1E293B' }}>New Client</p>
+            </motion.div>
           </div>
         </motion.div>
 
