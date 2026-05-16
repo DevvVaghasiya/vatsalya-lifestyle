@@ -19,7 +19,7 @@ export const addPdfHeader = (doc, title) => {
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(18);
   doc.setFont('helvetica', 'bold');
-  doc.text('VATTSALYA LIFESTYLE LLP', pageWidth / 2, 22, { align: 'center' });
+  doc.text('VATSALYA LIFESTYLE LLP', pageWidth / 2, 22, { align: 'center' });
   
   // Subtitle/Title on the right or below (if provided)
   if (title) {

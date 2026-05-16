@@ -20,7 +20,7 @@ const generateInquiryPDF = (item) => {
   try {
     const doc = new jsPDF('p', 'mm', 'a4');
     const pageW = doc.internal.pageSize.getWidth();
-    y = addPdfHeader(doc, 'INQUIRY DETAILS REPORT');
+    let y = addPdfHeader(doc, 'INQUIRY DETAILS REPORT');
     
     doc.setFontSize(9);
     doc.setFont(undefined, 'normal');
