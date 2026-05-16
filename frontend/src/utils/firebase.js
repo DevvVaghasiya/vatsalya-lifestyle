@@ -2,12 +2,12 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDyTtG8TFHa7lRBHNHw-UMmeSYm4Gdb92k",
-  authDomain: "vatsalya-textile.firebaseapp.com",
-  projectId: "vatsalya-textile",
-  storageBucket: "vatsalya-textile.firebasestorage.app",
-  messagingSenderId: "867540245457",
-  appId: "1:867540245457:web:f1b0c223a625c46cf41ef0"
+  apiKey: "AIzaSyCEhHagf3Tb3Cv58VSHgLituXFhWwj8Ius",
+  authDomain: "textile-standard-auth.firebaseapp.com",
+  projectId: "textile-standard-auth",
+  storageBucket: "textile-standard-auth.firebasestorage.app",
+  messagingSenderId: "286005828305",
+  appId: "1:286005828305:web:b2ee273cbd0f107c3003f0"
 };
 
 const app = initializeApp(firebaseConfig);
