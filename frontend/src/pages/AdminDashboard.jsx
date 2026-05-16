@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import api from '../utils/api';
 import jsPDF from 'jspdf';
 import { addPdfHeader } from '../utils/pdfHeader';
+import Toast from '../components/Toast';
 
 /* ─── Status helpers ─── */
 const STATUS_MAP = {
@@ -28,7 +29,8 @@ const getAvatarColor = (name) => {
 
 /* ─── Quick PDF export for all inquiries ─── */
 const exportInquiriesPDF = (inquiries) => {
-  const doc = new jsPDF('p', 'mm', 'a4');
+  try {
+    const doc = new jsPDF('p', 'mm', 'a4');
   const pw = doc.internal.pageSize.getWidth();
   let y = addPdfHeader(doc, 'INQUIRY REPORT');
   doc.setFontSize(9); doc.setFont(undefined,'normal');
@@ -69,7 +71,12 @@ const exportInquiriesPDF = (inquiries) => {
   doc.setTextColor(148, 163, 184); doc.setFontSize(7);
   doc.text('Vatsalya Lifestyle — Admin Report', pw / 2, ph - 4, { align: 'center' });
 
-  doc.save(`Admin_Inquiries_${new Date().toLocaleDateString('en-GB').replace(/\//g,'-')}.pdf`);
+    doc.save(`Admin_Inquiries_${new Date().toLocaleDateString('en-GB').replace(/\//g,'-')}.pdf`);
+    return true;
+  } catch (err) {
+    console.error('PDF error:', err);
+    return false;
+  }
 };
 
 /* ─── Component ─── */
@@ -84,6 +91,8 @@ const AdminDashboard = () => {
   const [inventory, setInventory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [showToast, setShowToast] = useState(false);
+  const [toastMsg, setToastMsg] = useState('');
   const [filterStatus, setFilterStatus] = useState('All');
   const [orderSubTab, setOrderSubTab] = useState('ongoing');
   const [inventorySubTab, setInventorySubTab] = useState('STOCK');
@@ -428,7 +437,14 @@ const AdminDashboard = () => {
 
             {/* Export PDF */}
             <button
-              onClick={() => exportInquiriesPDF(filteredInquiries)}
+              onClick={async () => {
+                const success = await exportInquiriesPDF(filteredInquiries);
+                if (success) {
+                  setToastMsg('Inquiry Summary PDF downloaded!');
+                  setShowToast(true);
+                  setTimeout(() => setShowToast(false), 4000);
+                }
+              }}
               title="Export as PDF"
               style={{
                 marginLeft: 'auto', padding: '8px 16px', borderRadius: 20,
@@ -894,6 +910,11 @@ const AdminDashboard = () => {
           )}
         </AnimatePresence>
       </div>
+      <Toast 
+        show={showToast} 
+        message={toastMsg} 
+        onClose={() => setShowToast(false)} 
+      />
     </div>
   );
 };

@@ -7,6 +7,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import api from '../utils/api';
 import jsPDF from 'jspdf';
 import { addPdfHeader } from '../utils/pdfHeader';
+import Toast from '../components/Toast';
 
 /* ── PDF helper ── */
 const formatDateShort = (dateStr) => {
@@ -122,9 +123,10 @@ const generateInquiryPDF = (item) => {
     const fileName = `Inquiry_${item.client?.name || 'Unknown'}_${item.id || ''}.pdf`
       .replace(/\s+/g, '_');
     doc.save(fileName);
+    return true; // Indicate success
   } catch (err) {
     console.error('PDF error:', err);
-    alert('Failed to generate PDF');
+    return false; // Indicate failure
   }
 };
 
@@ -136,6 +138,8 @@ const Inquiries = () => {
   const [allInquiries, setAllInquiries] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [showToast, setShowToast] = useState(false);
+  const [toastMsg, setToastMsg] = useState('');
 
   useEffect(() => {
     const fetchInquiries = async () => {
@@ -307,7 +311,17 @@ const Inquiries = () => {
                     {/* PDF Download Button */}
                     <button
                       type="button"
-                      onClick={(e) => { e.stopPropagation(); generateInquiryPDF(item); }}
+                      onClick={async (e) => { 
+                        e.stopPropagation(); 
+                        const success = await generateInquiryPDF(item); 
+                        if (success) {
+                          setToastMsg(`Inquiry PDF for ${item.client?.name || 'Client'} downloaded!`);
+                          setShowToast(true);
+                          setTimeout(() => setShowToast(false), 4000);
+                        } else {
+                          alert('Failed to generate PDF');
+                        }
+                      }}
                       title="Download Inquiry PDF"
                       style={{
                         width: 36, height: 36, borderRadius: 10,
@@ -337,6 +351,11 @@ const Inquiries = () => {
           )}
         </div>
       </div>
+      <Toast 
+        show={showToast} 
+        message={toastMsg} 
+        onClose={() => setShowToast(false)} 
+      />
     </div>
   );
 };

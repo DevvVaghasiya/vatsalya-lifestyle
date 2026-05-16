@@ -10,6 +10,7 @@ import api from '../utils/api';
 import { motion } from 'framer-motion';
 import { jsPDF } from 'jspdf';
 import { addPdfHeader } from '../utils/pdfHeader';
+import Toast from '../components/Toast';
 
 const formatDisplayDate = (dateStr) => {
   if (!dateStr) return 'N/A';
@@ -173,6 +174,8 @@ const OrderDetails = () => {
   const [dispatchReceiptDate, setDispatchReceiptDate] = useState(today);
   const [dispatchReceiptQuantity, setDispatchReceiptQuantity] = useState('');
   const [dispatchReceiptRemark, setDispatchReceiptRemark] = useState('');
+  const [showToast, setShowToast] = useState(false);
+  const [toastMsg, setToastMsg] = useState('');
 
   const fetchOrderDetails = useCallback(async () => {
     setLoading(true);
@@ -405,6 +408,9 @@ const OrderDetails = () => {
     }
 
     doc.save(`${order.styleNo || 'Order'}_${type}_Report.pdf`);
+    setToastMsg(`${type.toUpperCase()} Report downloaded successfully!`);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 4000);
   };
 
   const handleChange = (e) => {
@@ -1260,6 +1266,11 @@ const OrderDetails = () => {
           </div>
         )}
       </div>
+      <Toast 
+        show={showToast} 
+        message={toastMsg} 
+        onClose={() => setShowToast(false)} 
+      />
     </div>
   );
 };

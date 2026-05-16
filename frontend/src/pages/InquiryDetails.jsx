@@ -10,6 +10,7 @@ import jsPDF from 'jspdf';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { addPdfHeader } from '../utils/pdfHeader';
+import Toast from '../components/Toast';
 
 // Helper components moved outside to prevent focus loss on re-render
 const formatDisplayDate = (dateStr) => {
@@ -83,6 +84,8 @@ const InquiryDetails = () => {
   const { id } = useParams();
   const [inquiry, setInquiry] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMsg, setToastMsg] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({});
 
@@ -273,6 +276,9 @@ const InquiryDetails = () => {
       // Save PDF
       const fileName = `Inquiry_${inquiry.id || id}_${new Date().toISOString().split('T')[0]}.pdf`;
       doc.save(fileName);
+      setToastMsg(`Inquiry report downloaded successfully!`);
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 4000);
     } catch (err) {
       console.error('Error generating PDF:', err);
       alert('Failed to generate PDF');
@@ -522,6 +528,11 @@ const InquiryDetails = () => {
           </div>
         )}
       </div>
+      <Toast 
+        show={showToast} 
+        message={toastMsg} 
+        onClose={() => setShowToast(false)} 
+      />
     </div>
   );
 };
