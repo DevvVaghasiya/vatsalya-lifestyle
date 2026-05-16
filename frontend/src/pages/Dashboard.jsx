@@ -160,12 +160,12 @@ const Dashboard = () => {
         initial="hidden"
         animate="show"
       >
-        <motion.div variants={item} className="hero-card" style={{
+        <motion.div variants={item} className="hero-card card" style={{
           background: 'rgba(255,255,255,0.5)',
           backdropFilter: 'blur(24px)',
           border: '1px solid rgba(255,255,255,0.5)',
-          borderRadius: '32px',
-          padding: '24px', // Reduced padding for better mobile fit
+          borderRadius: 'var(--radius-xl)',
+          padding: '24px', 
           boxShadow: '0 20px 40px rgba(0,0,0,0.05)'
         }}>
           <div className="flex justify-between items-start mb-6">
