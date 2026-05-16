@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 import { useState, useEffect } from 'react';
-import { ArrowLeft, Search, Plus, ChevronRight, MessageSquare } from 'lucide-react';
+import { ArrowLeft, Search, Plus, ChevronRight, MessageSquare, User, Tag, Calendar, Clock, CheckCircle, XCircle } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import api from '../utils/api';
 
@@ -68,15 +68,15 @@ const Deals = () => {
     const normalized = mapStatus(item).toLowerCase();
     switch (normalized) {
       case 'ongoing':
-        return { bg: '#EEF2FF', color: '#4F46E5' };
+        return { bg: 'var(--primary-soft)', color: 'var(--primary)' };
       case 'completed':
-        return { bg: '#DCFCE7', color: '#166534' };
+        return { bg: 'var(--status-success-bg)', color: 'var(--status-success-text)' };
       case 'canceled':
-        return { bg: '#FEE2E2', color: '#B91C1C' };
+        return { bg: 'var(--status-danger-bg)', color: 'var(--status-danger-text)' };
       case 'delayed':
-        return { bg: '#FEF2F2', color: '#EF4444' };
+        return { bg: 'var(--status-warning-bg)', color: 'var(--status-warning-text)' };
       default:
-        return { bg: '#E2E8F0', color: '#475569' };
+        return { bg: 'var(--bg)', color: 'var(--muted)' };
     }
   };
 
@@ -137,8 +137,8 @@ const Deals = () => {
                 borderRadius: '24px',
                 border: '2px dashed #E2E8F0'
               }}>
-                <MessageSquare size={48} color="#CBD5E1" style={{ marginBottom: '16px' }} />
-                <p style={{ color: '#64748B', fontWeight: '500' }}>No {activeTab} orders found</p>
+                <MessageSquare size={48} color="var(--border)" style={{ marginBottom: '16px' }} />
+                <p style={{ color: 'var(--muted)', fontWeight: '500' }}>No {activeTab} orders found</p>
               </div>
             ) : (
               filteredOrders.map((order) => {
@@ -154,7 +154,7 @@ const Deals = () => {
                   >
                     {/* Order ID at top */}
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontSize: '0.7rem', fontWeight: '800', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                      <span style={{ fontSize: '0.7rem', fontWeight: '800', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>
                         ID: #{order.id}
                       </span>
                       <div style={{
@@ -170,36 +170,74 @@ const Deals = () => {
                       </div>
                     </div>
 
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '10px' }}>
-                      <div style={{ flex: 1.5 }}>
-                        <p style={{ margin: 0, fontSize: '0.6rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>Customer</p>
-                        <h3 style={{ margin: '2px 0 0', fontSize: '1rem', fontWeight: '800', color: '#1E293B' }}>{order.client?.name || 'N/A'}</h3>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px' }}>
+                      <div style={{ flex: 1, display: 'flex', gap: '12px', alignItems: 'center', minWidth: 0 }}>
+                        <div style={{ 
+                          background: 'var(--primary-soft)', 
+                          padding: '10px', 
+                          borderRadius: '12px', 
+                          color: 'var(--primary)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          flexShrink: 0
+                        }}>
+                          <User size={20} />
+                        </div>
+                        <div style={{ minWidth: 0 }}>
+                          <p style={{ margin: 0, fontSize: '0.65rem', color: 'var(--muted)', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Customer</p>
+                          <h3 style={{ 
+                            margin: '2px 0 0', 
+                            fontSize: '1.05rem', 
+                            fontWeight: '800', 
+                            color: 'var(--text)', 
+                            lineHeight: '1.2',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                          }}>
+                            {order.client?.name || 'N/A'}
+                          </h3>
+                        </div>
                       </div>
-                      <div style={{ flex: 1 }}>
-                        <p style={{ margin: 0, fontSize: '0.6rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>Style No</p>
-                        <p style={{ margin: '2px 0 0', fontSize: '0.9rem', fontWeight: '800', color: 'var(--primary)' }}>{order.styleNo || 'N/A'}</p>
+                      <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                        <p style={{ margin: 0, fontSize: '0.65rem', color: 'var(--muted)', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Style No</p>
+                        <p style={{ 
+                          margin: '2px 0 0', 
+                          fontSize: '0.9rem', 
+                          fontWeight: '800', 
+                          color: 'var(--primary)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'flex-end',
+                          gap: '4px'
+                        }}>
+                          <Tag size={14} />
+                          {order.styleNo || 'N/A'}
+                        </p>
                       </div>
                     </div>
 
-                    <div style={{ display: 'flex', gap: '20px', padding: '12px 16px', backgroundColor: '#F8FAFC', borderRadius: '16px' }}>
+                    <div style={{ display: 'flex', gap: '20px', padding: '12px 16px', backgroundColor: 'var(--bg)', borderRadius: '16px', border: '1px solid var(--border)' }}>
                       <div style={{ flex: 1 }}>
-                        <p style={{ margin: 0, fontSize: '0.6rem', color: '#64748B', fontWeight: '700', textTransform: 'uppercase' }}>Booking</p>
-                        <p style={{ margin: '2px 0 0', fontSize: '1rem', fontWeight: '800', color: '#1E293B' }}>{order.bookingQuantity || '0'} <span style={{ fontSize: '0.7rem', color: '#94A3B8' }}>mtr</span></p>
+                        <p style={{ margin: 0, fontSize: '0.6rem', color: 'var(--muted)', fontWeight: '700', textTransform: 'uppercase' }}>Booking</p>
+                        <p style={{ margin: '2px 0 0', fontSize: '1rem', fontWeight: '800', color: 'var(--text)' }}>{order.bookingQuantity || '0'} <span style={{ fontSize: '0.7rem', color: 'var(--muted)' }}>mtr</span></p>
                       </div>
                       <div style={{ flex: 1 }}>
-                        <p style={{ margin: 0, fontSize: '0.6rem', color: '#64748B', fontWeight: '700', textTransform: 'uppercase' }}>Dispatch</p>
-                        <p style={{ margin: '2px 0 0', fontSize: '1rem', fontWeight: '800', color: '#FBBF24' }}>{dispatchTotal} <span style={{ fontSize: '0.7rem', color: '#94A3B8' }}>mtr</span></p>
+                        <p style={{ margin: 0, fontSize: '0.6rem', color: 'var(--muted)', fontWeight: '700', textTransform: 'uppercase' }}>Dispatch</p>
+                        <p style={{ margin: '2px 0 0', fontSize: '1rem', fontWeight: '800', color: 'var(--warning)' }}>{dispatchTotal} <span style={{ fontSize: '0.7rem', color: 'var(--muted)' }}>mtr</span></p>
                       </div>
                     </div>
 
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '8px', borderTop: '1px solid #F1F5F9' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '8px', borderTop: '1px solid var(--border)' }}>
                       <div>
-                        <p style={{ margin: 0, fontSize: '0.6rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>Delivery</p>
-                        <p style={{ margin: '2px 0 0', fontSize: '0.85rem', fontWeight: '700', color: '#475569' }}>
+                        <p style={{ margin: 0, fontSize: '0.6rem', color: 'var(--muted)', fontWeight: '700', textTransform: 'uppercase' }}>Delivery</p>
+                        <p style={{ margin: '2px 0 0', fontSize: '0.85rem', fontWeight: '700', color: 'var(--text)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                          <Calendar size={13} color="var(--muted)" />
                           {order.completionDate ? new Date(order.completionDate).toLocaleDateString('en-GB') : 'Not specified'}
                         </p>
                       </div>
-                      <div style={{ color: '#CBD5E1' }}>
+                      <div style={{ color: 'var(--border)' }}>
                         <ChevronRight size={18} />
                       </div>
                     </div>
