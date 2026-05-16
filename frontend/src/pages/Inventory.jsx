@@ -655,7 +655,8 @@ const Inventory = () => {
             </button>
           </div>
         ) : loading ? (
-             {[1, 2, 3, 4, 5, 6].map(i => (
+          <div className="inventory-grid">
+            {[1, 2, 3, 4, 5, 6].map(i => (
               <div key={i} className="inventory-card skeleton-card" style={{ 
                 minHeight: '160px', 
                 background: 'var(--surface-glass-heavy)', 

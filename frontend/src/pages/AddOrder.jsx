@@ -618,6 +618,7 @@ const AddOrder = () => {
                     <p style={{ margin: 0, color: 'var(--muted)' }}>No entries yet.</p>
                   ) : (
                     <div style={{ display: 'grid', gap: '10px' }}>
+                      {formData.dyeQuantityReceipts.map((entry, index) => (
                         <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'var(--surface)', borderRadius: '14px', border: '1px solid var(--border)', padding: '12px' }}>
                           <div>
                             <p style={{ margin: 0, fontWeight: '700' }}>{formatDisplayDate(entry.entryDate)}</p>

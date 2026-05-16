@@ -837,7 +837,8 @@ const OrderDetails = () => {
                       </button>
                     </div>
                   )}
-                </div>                 {currentDyeEntries.length > 0 ? (
+                </div>
+                {currentDyeEntries.length > 0 ? (
                   <>
                     {currentDyeEntries.map((entry, index) => (
                       <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', padding: '10px 0', borderBottom: index < currentDyeEntries.length - 1 ? '1px solid var(--border)' : 'none' }}>
@@ -862,6 +863,8 @@ const OrderDetails = () => {
                       <span style={{ fontWeight: '700', color: 'var(--text)' }}>{currentDyeTotal}</span>
                     </div>
                   </>
+                ) : (
+                  <p style={{ margin: 0, color: 'var(--muted)' }}>No dying receipt entries yet.</p>
                 )}
               </div>
             )}
