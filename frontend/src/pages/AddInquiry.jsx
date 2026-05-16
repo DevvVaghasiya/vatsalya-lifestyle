@@ -137,12 +137,12 @@ const AddInquiry = () => {
 
               <div className="section-card section-blue">
                 <div className="section-header">
-                  <div className="section-icon" style={{ backgroundColor: '#EEF2FF', color: '#4F46E5' }}>
+                  <div className="section-icon" style={{ backgroundColor: 'var(--status-warning-bg)', color: 'var(--status-warning-text)' }}>
                     <User size={22} />
                   </div>
                   <div>
                     <h2 className="section-title">Client's Inquiry</h2>
-                    <div className="section-underline" style={{ backgroundColor: '#4F46E5' }} />
+                    <div className="section-underline" style={{ backgroundColor: 'var(--primary)' }} />
                   </div>
                 </div>
 
@@ -207,12 +207,12 @@ const AddInquiry = () => {
 
               <div className="section-card section-teal">
                 <div className="section-header">
-                  <div className="section-icon" style={{ backgroundColor: '#F0FDFA', color: '#0D9488' }}>
+                  <div className="section-icon" style={{ backgroundColor: 'var(--status-success-bg)', color: 'var(--status-success-text)' }}>
                     <Briefcase size={22} />
                   </div>
                   <div>
                     <h2 className="section-title">What we are doing?</h2>
-                    <div className="section-underline" style={{ backgroundColor: '#0D9488' }} />
+                    <div className="section-underline" style={{ backgroundColor: 'var(--secondary)' }} />
                   </div>
                 </div>
 
@@ -241,12 +241,12 @@ const AddInquiry = () => {
 
               <div className="section-card section-amber">
                 <div className="section-header">
-                  <div className="section-icon" style={{ backgroundColor: '#FFFBEB', color: '#D97706' }}>
+                  <div className="section-icon" style={{ backgroundColor: 'var(--warning-soft)', color: 'var(--warning)' }}>
                     <FileCheck size={22} />
                   </div>
                   <div>
                     <h2 className="section-title">Submission Details</h2>
-                    <div className="section-underline" style={{ backgroundColor: '#D97706' }} />
+                    <div className="section-underline" style={{ backgroundColor: 'var(--warning)' }} />
                   </div>
                 </div>
 

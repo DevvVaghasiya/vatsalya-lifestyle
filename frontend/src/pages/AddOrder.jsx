@@ -22,7 +22,7 @@ const SectionHeader = ({ icon: Icon, title, color, bgColor }) => (
       <Icon size={24} />
     </div>
     <div>
-      <h2 style={{ fontSize: '1.2rem', fontWeight: '800', color: '#1E293B', margin: 0 }}>{title}</h2>
+      <h2 style={{ fontSize: '1.2rem', fontWeight: '800', color: 'var(--text)', margin: 0 }}>{title}</h2>
       <div style={{ height: '3px', width: '30px', backgroundColor: color, borderRadius: '2px', marginTop: '4px' }}></div>
     </div>
   </div>
@@ -283,7 +283,7 @@ const AddOrder = () => {
 
   return (
     <div className="page-shell">
-      <div className="page-header" style={{ position: 'sticky', top: 0, zIndex: 10, backgroundColor: 'white', boxShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>
+      <div className="page-header" style={{ position: 'sticky', top: 0, zIndex: 10, backgroundColor: 'var(--surface)', borderBottom: '1px solid var(--border)' }}>
         <button type="button" className="icon-btn" onClick={() => navigate(-1)}>
           <ArrowLeft size={20} />
         </button>
@@ -296,20 +296,19 @@ const AddOrder = () => {
       <div className="page-container" style={{ padding: '20px', paddingBottom: '100px' }}>
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
 
-          {/* Section 1: Client's Order - Blue Theme */}
           <div className="card" style={{
             padding: '28px',
             borderRadius: '32px',
             border: 'none',
-            boxShadow: '0 10px 30px rgba(79, 70, 229, 0.08)',
-            backgroundColor: 'white',
-            borderLeft: '8px solid #4F46E5'
+            boxShadow: 'var(--shadow-lg)',
+            backgroundColor: 'var(--surface)',
+            borderLeft: '8px solid var(--primary)'
           }}>
-            <SectionHeader icon={User} title="Client's Order" color="#4F46E5" bgColor="#EEF2FF" />
+            <SectionHeader icon={User} title="Client's Order" color="var(--primary)" bgColor="var(--primary-soft)" />
 
             <div className="form-group">
               <div className="flex justify-between items-center mb-2">
-                <label className="form-label" style={{ fontWeight: '600', color: '#475569' }}>Select Client</label>
+                <label className="form-label" style={{ fontWeight: '600', color: 'var(--muted)' }}>Select Client</label>
                 <button
                   type="button"
                   onClick={() => navigate('/add-client')}
@@ -325,7 +324,7 @@ const AddOrder = () => {
                 name="customerId"
                 value={formData.customerId}
                 onChange={handleChange}
-                style={{ backgroundColor: '#F8FAFC', borderRadius: '16px' }}
+                style={{ backgroundColor: 'var(--bg)', borderRadius: '16px' }}
               >
                 <option value="">{loading ? 'Loading clients...' : 'Choose a client'}</option>
                 {clients.map(client => (
@@ -427,16 +426,15 @@ const AddOrder = () => {
             </div>
           </div>
 
-          {/* Section 2: Fabric Booking - Teal Theme */}
           <div className="card" style={{
             padding: '28px',
             borderRadius: '32px',
             border: 'none',
-            boxShadow: '0 10px 30px rgba(13, 148, 136, 0.08)',
-            backgroundColor: 'white',
-            borderLeft: '8px solid #0D9488'
+            boxShadow: 'var(--shadow-lg)',
+            backgroundColor: 'var(--surface)',
+            borderLeft: '8px solid var(--secondary)'
           }}>
-            <SectionHeader icon={Briefcase} title="Fabric Booking" color="#0D9488" bgColor="#F0FDFA" />
+            <SectionHeader icon={Briefcase} title="Fabric Booking" color="var(--secondary)" bgColor="rgba(13, 148, 136, 0.1)" />
 
             <div className="flex gap-4 mb-4">
               <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
@@ -510,11 +508,11 @@ const AddOrder = () => {
             padding: '28px',
             borderRadius: '32px',
             border: 'none',
-            boxShadow: '0 10px 30px rgba(79, 70, 229, 0.08)',
-            backgroundColor: 'white',
-            borderLeft: '8px solid #4F46E5'
+            boxShadow: 'var(--shadow-lg)',
+            backgroundColor: 'var(--surface)',
+            borderLeft: '8px solid var(--primary)'
           }}>
-            <SectionHeader icon={Layers} title="Fabric Job Work" color="#4F46E5" bgColor="#EEF2FF" />
+            <SectionHeader icon={Layers} title="Fabric Job Work" color="var(--primary)" bgColor="var(--primary-soft)" />
 
             <div className="form-group" style={{ marginBottom: '20px' }}>
               <label className="form-label">Mill</label>
@@ -523,7 +521,7 @@ const AddOrder = () => {
                 name="fabricJobWorkMill"
                 value={formData.fabricJobWorkMill}
                 onChange={handleChange}
-                style={{ backgroundColor: '#F8FAFC', borderRadius: '16px' }}
+                style={{ backgroundColor: 'var(--bg)', borderRadius: '16px' }}
               >
                 <option value="">Select mill option</option>
                 <option value="dyingAndPrinting">Dying & Printing Mill</option>
@@ -536,12 +534,12 @@ const AddOrder = () => {
               <div className="card" style={{
                 padding: '20px',
                 borderRadius: '24px',
-                backgroundColor: '#F8FAFC',
-                border: '1px solid #E2E8F0',
+                backgroundColor: 'var(--bg)',
+                border: '1px solid var(--border)',
                 marginBottom: '18px'
               }}>
-                <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: '700', color: '#0F172A' }}>Dying & Printing Mill Details</h3>
-                <p style={{ margin: '8px 0 16px', color: '#475569', fontSize: '0.9rem' }}>Fill in the dying and printing-specific fields below.</p>
+                <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: '700', color: 'var(--text)' }}>Dying & Printing Mill Details</h3>
+                <p style={{ margin: '8px 0 16px', color: 'var(--muted)', fontSize: '0.9rem' }}>Fill in the dying and printing-specific fields below.</p>
                 <div className="flex gap-4 mb-4">
                   <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
                     <label className="form-label">Mill Name</label>
@@ -615,26 +613,26 @@ const AddOrder = () => {
                   Add Receipt Entry
                 </button>
                 <div style={{ marginTop: '16px' }}>
-                  <p style={{ margin: '0 0 8px 0', fontWeight: '700', color: '#0F172A' }}>Received Quantity History</p>
+                  <p style={{ margin: '0 0 8px 0', fontWeight: '700', color: 'var(--text)' }}>Received Quantity History</p>
                   {formData.dyeQuantityReceipts.length === 0 ? (
-                    <p style={{ margin: 0, color: '#64748B' }}>No entries yet.</p>
+                    <p style={{ margin: 0, color: 'var(--muted)' }}>No entries yet.</p>
                   ) : (
                     <div style={{ display: 'grid', gap: '10px' }}>
-                      {formData.dyeQuantityReceipts.map((entry, index) => (
-                        <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#FFFFFF', borderRadius: '14px', border: '1px solid #E2E8F0', padding: '12px' }}>
+                        <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'var(--surface)', borderRadius: '14px', border: '1px solid var(--border)', padding: '12px' }}>
                           <div>
                             <p style={{ margin: 0, fontWeight: '700' }}>{formatDisplayDate(entry.entryDate)}</p>
                             <div style={{ display: 'flex', gap: '15px', marginTop: '4px' }}>
-                              <p style={{ margin: 0, color: '#475569', fontSize: '0.9rem' }}>Qty: {entry.quantity}</p>
-                              {entry.remark && <p style={{ margin: 0, color: '#475569', fontSize: '0.9rem' }}>• {entry.remark}</p>}
+                              <p style={{ margin: 0, color: 'var(--muted)', fontSize: '0.9rem' }}>Qty: {entry.quantity}</p>
+                              {entry.remark && <p style={{ margin: 0, color: 'var(--muted)', fontSize: '0.9rem' }}>• {entry.remark}</p>}
                             </div>
                           </div>
-                          <button type="button" onClick={() => removeDyeReceipt(index)} style={{ color: '#EF4444', background: 'none', border: 'none', fontWeight: '700', cursor: 'pointer' }}>Remove</button>
+                          <button type="button" onClick={() => removeDyeReceipt(index)} style={{ color: 'var(--danger)', background: 'none', border: 'none', fontWeight: '700', cursor: 'pointer' }}>Remove</button>
                         </div>
                       ))}
                     </div>
                   )}
-                  <p style={{ marginTop: '12px', color: '#475569', fontWeight: '600' }}>Dispatch Qty: {totalDyeReceived}</p>
+                  <p style={{ marginTop: '12px', color: 'var(--muted)', fontWeight: '600' }}>Dispatch Qty: {totalDyeReceived}</p>
+
                 </div>
               </div>
             )}
@@ -643,11 +641,11 @@ const AddOrder = () => {
               <div className="card" style={{
                 padding: '20px',
                 borderRadius: '24px',
-                backgroundColor: '#F8FAFC',
-                border: '1px solid #E2E8F0'
+                backgroundColor: 'var(--bg)',
+                border: '1px solid var(--border)'
               }}>
-                <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: '700', color: '#0F172A' }}>Digital Printing & Value Addition Details</h3>
-                <p style={{ margin: '8px 0 16px', color: '#475569', fontSize: '0.9rem' }}>Fill in the digital printing and value addition-specific fields below.</p>
+                <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: '700', color: 'var(--text)' }}>Digital Printing & Value Addition Details</h3>
+                <p style={{ margin: '8px 0 16px', color: 'var(--muted)', fontSize: '0.9rem' }}>Fill in the digital printing and value addition-specific fields below.</p>
                 <div className="flex gap-4 mb-4">
                   <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
                     <label className="form-label">Mill Name</label>
@@ -719,33 +717,33 @@ const AddOrder = () => {
                   Add Receipt Entry
                 </button>
                 <div style={{ marginTop: '16px' }}>
-                  <p style={{ margin: '0 0 8px 0', fontWeight: '700', color: '#0F172A' }}>Received Quantity History</p>
+                  <p style={{ margin: '0 0 8px 0', fontWeight: '700', color: 'var(--text)' }}>Received Quantity History</p>
                   {formData.digitalQuantityReceipts.length === 0 ? (
-                    <p style={{ margin: 0, color: '#64748B' }}>No entries yet.</p>
+                    <p style={{ margin: 0, color: 'var(--muted)' }}>No entries yet.</p>
                   ) : (
                     <div style={{ display: 'grid', gap: '10px' }}>
                       {formData.digitalQuantityReceipts.map((entry, index) => (
-                        <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#FFFFFF', borderRadius: '14px', border: '1px solid #E2E8F0', padding: '12px' }}>
+                        <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'var(--surface)', borderRadius: '14px', border: '1px solid var(--border)', padding: '12px' }}>
                           <div>
                             <p style={{ margin: 0, fontWeight: '700' }}>{formatDisplayDate(entry.entryDate)}</p>
                             <div style={{ display: 'flex', gap: '15px', marginTop: '4px' }}>
-                              <p style={{ margin: 0, color: '#475569', fontSize: '0.9rem' }}>Qty: {entry.quantity}</p>
-                              {entry.remark && <p style={{ margin: 0, color: '#475569', fontSize: '0.9rem' }}>• {entry.remark}</p>}
+                              <p style={{ margin: 0, color: 'var(--muted)', fontSize: '0.9rem' }}>Qty: {entry.quantity}</p>
+                              {entry.remark && <p style={{ margin: 0, color: 'var(--muted)', fontSize: '0.9rem' }}>• {entry.remark}</p>}
                             </div>
                           </div>
-                          <button type="button" onClick={() => removeDigitalReceipt(index)} style={{ color: '#EF4444', background: 'none', border: 'none', fontWeight: '700', cursor: 'pointer' }}>Remove</button>
+                          <button type="button" onClick={() => removeDigitalReceipt(index)} style={{ color: 'var(--danger)', background: 'none', border: 'none', fontWeight: '700', cursor: 'pointer' }}>Remove</button>
                         </div>
                       ))}
                     </div>
                   )}
-                  <p style={{ marginTop: '12px', color: '#475569', fontWeight: '600' }}>Total received: {totalDigitalReceived}</p>
+                  <p style={{ marginTop: '12px', color: 'var(--muted)', fontWeight: '600' }}>Total received: {totalDigitalReceived}</p>
                 </div>
               </div>
             )}
 
-            <div style={{ marginTop: '20px', padding: '22px', borderRadius: '24px', backgroundColor: '#1F2937', border: '1px solid #334155', boxShadow: '0 12px 30px rgba(15, 23, 42, 0.08)' }}>
-              <h3 style={{ margin: '0 0 14px 0', fontSize: '1rem', fontWeight: '800', color: '#FBBF24', letterSpacing: '0.02em' }}>Dispatch & Delivery</h3>
-              <p style={{ margin: '0 0 18px 0', color: '#CBD5E1', fontSize: '0.95rem' }}>Use this section for final dispatch details and delivery notes.</p>
+            <div style={{ marginTop: '20px', padding: '22px', borderRadius: '24px', backgroundColor: 'var(--bg)', border: '1px solid var(--border)', boxShadow: 'var(--shadow-md)' }}>
+              <h3 style={{ margin: '0 0 14px 0', fontSize: '1rem', fontWeight: '800', color: 'var(--warning)', letterSpacing: '0.02em' }}>Dispatch & Delivery</h3>
+              <p style={{ margin: '0 0 18px 0', color: 'var(--muted)', fontSize: '0.95rem' }}>Use this section for final dispatch details and delivery notes.</p>
               <div className="flex gap-4 mb-4">
                 <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
                   <label className="form-label" style={{ color: '#E2E8F0' }}>Date</label>
@@ -777,8 +775,8 @@ const AddOrder = () => {
                 <label className="form-label" style={{ color: '#E2E8F0' }}>Transport</label>
                 <input type="text" className="form-input" name="transport" value={formData.transport} onChange={handleChange} placeholder="Enter transport" style={{ backgroundColor: '#0F172A', borderRadius: '16px', color: '#E2E8F0', border: '1px solid #475569' }} />
               </div>
-              <div style={{ marginTop: '16px', padding: '18px', borderRadius: '20px', backgroundColor: '#111827', border: '1px solid #334155' }}>
-                <h4 style={{ margin: '0 0 12px 0', color: '#F8FAFC', fontSize: '0.95rem', fontWeight: '700' }}>New Quantity Received</h4>
+                <div style={{ marginTop: '16px', padding: '18px', borderRadius: '20px', backgroundColor: 'var(--surface)', border: '1px solid var(--border)' }}>
+                  <h4 style={{ margin: '0 0 12px 0', color: 'var(--text)', fontSize: '0.95rem', fontWeight: '700' }}>New Quantity Received</h4>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px', marginBottom: '16px' }}>
                   <div className="form-group" style={{ marginBottom: 0 }}>
                     <label className="form-label" style={{ color: '#E2E8F0' }}>Entry Date</label>
@@ -792,8 +790,8 @@ const AddOrder = () => {
                     />
                   </div>
                   <div className="form-group" style={{ marginBottom: 0 }}>
-                    <label className="form-label" style={{ color: '#E2E8F0' }}>Quantity</label>
-                    <input type="number" className="form-input" name="dispatchReceiptQuantity" value={formData.dispatchReceiptQuantity} onChange={handleChange} placeholder="Enter quantity" style={{ backgroundColor: '#0F172A', borderRadius: '16px', color: '#E2E8F0', border: '1px solid #475569' }} />
+                    <label className="form-label" style={{ color: 'var(--text)' }}>Quantity</label>
+                    <input type="number" className="form-input" name="dispatchReceiptQuantity" value={formData.dispatchReceiptQuantity} onChange={handleChange} placeholder="Enter quantity" style={{ backgroundColor: 'var(--bg)', borderRadius: '16px', color: 'var(--text)', border: '1px solid var(--border)' }} />
                   </div>
                 </div>
                 <div className="form-group" style={{ marginBottom: '16px' }}>

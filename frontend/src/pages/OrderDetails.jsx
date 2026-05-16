@@ -25,11 +25,11 @@ const formatDisplayDate = (dateStr) => {
 
 const DetailItem = ({ label, value, icon: Icon, name, editable = true, isEditing, editData, onChange, type = "text" }) => (
   <div style={{ flex: 1, display: 'flex', gap: '12px', minWidth: 0 }}>
-    <div style={{ backgroundColor: '#F1F5F9', padding: '10px', borderRadius: '12px', height: 'fit-content', flexShrink: 0 }}>
+    <div style={{ backgroundColor: 'var(--bg)', padding: '10px', borderRadius: '12px', height: 'fit-content', flexShrink: 0 }}>
       <Icon size={18} color="var(--primary)" />
     </div>
     <div style={{ flex: 1, minWidth: 0 }}>
-      <p style={{ margin: 0, fontSize: '0.7rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{label}</p>
+      <p style={{ margin: 0, fontSize: '0.7rem', color: 'var(--muted)', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{label}</p>
       {isEditing && editable ? (
         <input
           type={type}
@@ -38,13 +38,14 @@ const DetailItem = ({ label, value, icon: Icon, name, editable = true, isEditing
           onChange={onChange}
           style={{
             width: '100%',
-            border: '1px solid #E2E8F0',
+            border: '1px solid var(--border)',
             borderRadius: '8px',
             padding: '4px 8px',
             marginTop: '4px',
             fontSize: '0.9rem',
             outline: 'none',
-            backgroundColor: '#F8FAFC'
+            backgroundColor: 'var(--bg)',
+            color: 'var(--text)'
           }}
         />
       ) : (
@@ -52,7 +53,7 @@ const DetailItem = ({ label, value, icon: Icon, name, editable = true, isEditing
           margin: '4px 0 0 0',
           fontSize: '0.95rem',
           fontWeight: '600',
-          color: '#1E293B',
+          color: 'var(--text)',
           wordBreak: 'break-word'
         }}>
           {type === 'date' ? formatDisplayDate(value) : (value || 'N/A')}
@@ -67,11 +68,11 @@ const SectionWrapper = ({ title, icon: Icon, children, color = "#4F46E5", onDown
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     style={{
-      backgroundColor: 'white',
+      backgroundColor: 'var(--surface)',
       borderRadius: '32px',
       padding: '24px',
-      boxShadow: '0 10px 25px rgba(0,0,0,0.03)',
-      border: '1px solid rgba(0,0,0,0.05)',
+      boxShadow: 'var(--shadow-sm)',
+      border: '1px solid var(--border)',
       marginBottom: '20px'
     }}
   >
@@ -80,7 +81,7 @@ const SectionWrapper = ({ title, icon: Icon, children, color = "#4F46E5", onDown
         <div style={{ backgroundColor: `${color}15`, padding: '10px', borderRadius: '14px', color }}>
           <Icon size={20} />
         </div>
-        <h2 style={{ fontSize: '1.1rem', fontWeight: '800', color: '#1E293B', margin: 0 }}>{title}</h2>
+        <h2 style={{ fontSize: '1.1rem', fontWeight: '800', color: 'var(--text)', margin: 0 }}>{title}</h2>
       </div>
       {onDownload && (
         <button
@@ -513,13 +514,13 @@ const OrderDetails = () => {
   const currentDispatchTotal = currentDispatchEntries.reduce((sum, entry) => sum + Number(entry.quantity || 0), 0);
 
   const getStatusStyle = (order) => {
-    if (!order) return { bg: '#F1F5F9', color: '#64748B', icon: null, label: 'N/A' };
+    if (!order) return { bg: 'var(--surface)', color: 'var(--muted)', icon: null, label: 'N/A' };
     const status = order.status;
     const s = (status || 'PENDING').toUpperCase();
 
-    if (s === 'COMPLETED') return { bg: '#F0FDF4', color: '#16A34A', icon: <CheckCircle size={16} />, label: 'COMPLETED' };
-    if (['CANCELED', 'CANCELLED'].includes(s)) return { bg: '#FEF2F2', color: '#DC2626', icon: <XCircle size={16} />, label: 'CANCELLED' };
-    if (s === 'DELAYED') return { bg: '#FEF2F2', color: '#EF4444', icon: <Clock size={16} />, label: 'DELAYED' };
+    if (s === 'COMPLETED') return { bg: 'var(--status-success-bg)', color: 'var(--status-success-text)', icon: <CheckCircle size={16} />, label: 'COMPLETED' };
+    if (['CANCELED', 'CANCELLED'].includes(s)) return { bg: 'var(--status-danger-bg)', color: 'var(--status-danger-text)', icon: <XCircle size={16} />, label: 'CANCELLED' };
+    if (s === 'DELAYED') return { bg: 'var(--status-danger-bg)', color: 'var(--status-danger-text)', icon: <Clock size={16} />, label: 'DELAYED' };
 
     // Dynamic delay check
     if (order.completionDate) {
@@ -527,20 +528,20 @@ const OrderDetails = () => {
       today.setHours(0, 0, 0, 0);
       const completion = new Date(order.completionDate);
       if (completion < today && ['PENDING', 'PROCESSING', 'ONGOING'].includes(s)) {
-        return { bg: '#FEF2F2', color: '#EF4444', icon: <Clock size={16} />, label: 'DELAYED' };
+        return { bg: 'var(--status-danger-bg)', color: 'var(--status-danger-text)', icon: <Clock size={16} />, label: 'DELAYED' };
       }
     }
 
-    if (['PENDING', 'PROCESSING', 'ONGOING'].includes(s)) return { bg: '#EEF2FF', color: '#4F46E5', icon: <Clock size={16} />, label: s };
-    return { bg: '#F1F5F9', color: '#64748B', icon: null, label: s };
+    if (['PENDING', 'PROCESSING', 'ONGOING'].includes(s)) return { bg: 'var(--status-warning-bg)', color: 'var(--status-warning-text)', icon: <Clock size={16} />, label: s };
+    return { bg: 'var(--surface)', color: 'var(--muted)', icon: null, label: s };
   };
 
   const statusInfo = getStatusStyle(order);
   const isOngoing = ['PENDING', 'PROCESSING', 'ONGOING', 'DELAYED'].includes((order.status || 'PENDING').toUpperCase()) || statusInfo.label === 'DELAYED';
 
   return (
-    <div className="page-shell" style={{ backgroundColor: '#F0F2F5', minHeight: '100vh', paddingBottom: '100px' }}>
-      <div className="page-header" style={{ position: 'sticky', top: 0, zIndex: 50, backgroundColor: 'white', boxShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>
+    <div className="page-shell" style={{ backgroundColor: 'var(--bg)', minHeight: '100vh', paddingBottom: '100px' }}>
+      <div className="page-header" style={{ position: 'sticky', top: 0, zIndex: 50, backgroundColor: 'var(--surface)', boxShadow: 'var(--shadow-sm)', borderBottom: '1px solid var(--border)' }}>
         <div className="flex items-center gap-4">
           <ArrowLeft onClick={() => navigate('/deals')} style={{ cursor: 'pointer' }} />
           <h1 style={{ fontSize: '1.2rem', fontWeight: '700' }}>Order Details</h1>
@@ -640,11 +641,11 @@ const OrderDetails = () => {
                 name="notes"
                 value={editData.notes || ''}
                 onChange={handleChange}
-                style={{ width: '100%', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '12px', fontSize: '0.9rem', outline: 'none', minHeight: '80px', backgroundColor: '#F8FAFC' }}
+                style={{ width: '100%', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px', fontSize: '0.9rem', outline: 'none', minHeight: '80px', backgroundColor: 'var(--bg)', color: 'var(--text)' }}
               />
             ) : (
-              <div style={{ backgroundColor: '#F8FAFC', padding: '16px', borderRadius: '16px', border: '1px solid #E2E8F0' }}>
-                <p style={{ margin: 0, fontSize: '0.9rem', color: '#475569', lineHeight: '1.5' }}>{order.notes || 'No remarks provided'}</p>
+              <div style={{ backgroundColor: 'var(--bg)', padding: '16px', borderRadius: '16px', border: '1px solid var(--border)' }}>
+                <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--text)', lineHeight: '1.5' }}>{order.notes || 'No remarks provided'}</p>
               </div>
             )}
           </div>
@@ -652,23 +653,23 @@ const OrderDetails = () => {
         
         {/* Audit Info Section */}
         <div style={{
-          backgroundColor: 'white',
+          backgroundColor: 'var(--surface)',
           borderRadius: '24px',
           padding: '20px',
-          boxShadow: '0 4px 15px rgba(0,0,0,0.03)',
-          border: '1px solid rgba(0,0,0,0.05)',
+          boxShadow: 'var(--shadow-sm)',
+          border: '1px solid var(--border)',
           marginBottom: '20px',
           display: 'flex',
           flexDirection: 'column',
           gap: '12px'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ backgroundColor: '#F1F5F9', padding: '8px', borderRadius: '10px', color: '#64748B' }}>
+            <div style={{ backgroundColor: 'var(--bg)', padding: '8px', borderRadius: '10px', color: 'var(--muted)' }}>
               <User size={16} />
             </div>
             <div>
-              <p style={{ margin: 0, fontSize: '0.65rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Added By</p>
-              <p style={{ margin: '2px 0 0 0', fontSize: '0.85rem', fontWeight: '600', color: '#1E293B' }}>
+              <p style={{ margin: 0, fontSize: '0.65rem', color: 'var(--muted)', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Added By</p>
+              <p style={{ margin: '2px 0 0 0', fontSize: '0.85rem', fontWeight: '600', color: 'var(--text)' }}>
                 {order.user?.name || 'System'}
               </p>
             </div>
@@ -676,12 +677,12 @@ const OrderDetails = () => {
 
           {order.lastEditedBy && (
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <div style={{ backgroundColor: '#F1F5F9', padding: '8px', borderRadius: '10px', color: '#64748B' }}>
+              <div style={{ backgroundColor: 'var(--bg)', padding: '8px', borderRadius: '10px', color: 'var(--muted)' }}>
                 <Edit3 size={16} />
               </div>
               <div>
-                <p style={{ margin: 0, fontSize: '0.65rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Last Edited By</p>
-                <p style={{ margin: '2px 0 0 0', fontSize: '0.85rem', fontWeight: '600', color: '#1E293B' }}>
+                <p style={{ margin: 0, fontSize: '0.65rem', color: 'var(--muted)', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Last Edited By</p>
+                <p style={{ margin: '2px 0 0 0', fontSize: '0.85rem', fontWeight: '600', color: 'var(--text)' }}>
                   {order.lastEditedBy?.name}
                 </p>
               </div>
@@ -786,34 +787,34 @@ const OrderDetails = () => {
                     }}>
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                         <div style={{ flex: 1 }}>
-                          <p style={{ margin: '0 0 6px 0', fontSize: '0.65rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>Date</p>
+                          <p style={{ margin: '0 0 6px 0', fontSize: '0.65rem', color: 'var(--muted)', fontWeight: '700', textTransform: 'uppercase' }}>Date</p>
                           <input
                             type="date"
                             value={dyeReceiptDate}
                             onChange={(e) => setDyeReceiptDate(e.target.value)}
-                            style={{ width: '100%', border: '1px solid #E2E8F0', borderRadius: '10px', padding: '10px', fontSize: '0.9rem', outline: 'none', backgroundColor: '#F8FAFC' }}
+                            style={{ width: '100%', border: '1px solid var(--border)', borderRadius: '10px', padding: '10px', fontSize: '0.9rem', outline: 'none', backgroundColor: 'var(--bg)', color: 'var(--text)' }}
                           />
                         </div>
                         <div style={{ flex: 1 }}>
-                          <p style={{ margin: '0 0 6px 0', fontSize: '0.65rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>Quantity</p>
+                          <p style={{ margin: '0 0 6px 0', fontSize: '0.65rem', color: 'var(--muted)', fontWeight: '700', textTransform: 'uppercase' }}>Quantity</p>
                           <input
                             type="number"
                             step="0.01"
                             placeholder="Meters"
                             value={dyeReceiptQuantity}
                             onChange={(e) => setDyeReceiptQuantity(e.target.value)}
-                            style={{ width: '100%', border: '1px solid #E2E8F0', borderRadius: '10px', padding: '10px', fontSize: '0.9rem', outline: 'none', backgroundColor: '#F8FAFC' }}
+                            style={{ width: '100%', border: '1px solid var(--border)', borderRadius: '10px', padding: '10px', fontSize: '0.9rem', outline: 'none', backgroundColor: 'var(--bg)', color: 'var(--text)' }}
                           />
                         </div>
                       </div>
                       <div>
-                        <p style={{ margin: '0 0 6px 0', fontSize: '0.65rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>Remark / Note</p>
+                        <p style={{ margin: '0 0 6px 0', fontSize: '0.65rem', color: 'var(--muted)', fontWeight: '700', textTransform: 'uppercase' }}>Remark / Note</p>
                         <input
                           type="text"
                           placeholder="Optional remark..."
                           value={dyeReceiptRemark}
                           onChange={(e) => setDyeReceiptRemark(e.target.value)}
-                          style={{ width: '100%', border: '1px solid #E2E8F0', borderRadius: '10px', padding: '10px', fontSize: '0.9rem', outline: 'none', backgroundColor: '#F8FAFC' }}
+                          style={{ width: '100%', border: '1px solid var(--border)', borderRadius: '10px', padding: '10px', fontSize: '0.9rem', outline: 'none', backgroundColor: 'var(--bg)', color: 'var(--text)' }}
                         />
                       </div>
                       <button
@@ -836,16 +837,15 @@ const OrderDetails = () => {
                       </button>
                     </div>
                   )}
-                </div>
-                {currentDyeEntries.length > 0 ? (
+                </div>                 {currentDyeEntries.length > 0 ? (
                   <>
                     {currentDyeEntries.map((entry, index) => (
-                      <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', padding: '10px 0', borderBottom: index < currentDyeEntries.length - 1 ? '1px solid #E2E8F0' : 'none' }}>
+                      <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', padding: '10px 0', borderBottom: index < currentDyeEntries.length - 1 ? '1px solid var(--border)' : 'none' }}>
                         <div style={{ flex: 1 }}>
-                          <span style={{ color: '#475569' }}>{formatDisplayDate(entry.entryDate)}</span>
-                          {entry.remark && <span style={{ color: '#64748B', fontSize: '0.85rem', marginLeft: '12px' }}>• {entry.remark}</span>}
+                          <span style={{ color: 'var(--text)' }}>{formatDisplayDate(entry.entryDate)}</span>
+                          {entry.remark && <span style={{ color: 'var(--muted)', fontSize: '0.85rem', marginLeft: '12px' }}>• {entry.remark}</span>}
                         </div>
-                        <span style={{ fontWeight: '700' }}>{entry.quantity}</span>
+                        <span style={{ fontWeight: '700', color: 'var(--text)' }}>{entry.quantity}</span>
                         {isEditing && (
                           <button
                             type="button"
@@ -857,13 +857,11 @@ const OrderDetails = () => {
                         )}
                       </div>
                     ))}
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0 0 0', borderTop: '1px solid #E2E8F0', marginTop: '8px' }}>
-                      <span style={{ color: '#475569', fontWeight: '700' }}>Total Received</span>
-                      <span style={{ fontWeight: '700' }}>{currentDyeTotal}</span>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0 0 0', borderTop: '1px solid var(--border)', marginTop: '8px' }}>
+                      <span style={{ color: 'var(--text)', fontWeight: '700' }}>Total Received</span>
+                      <span style={{ fontWeight: '700', color: 'var(--text)' }}>{currentDyeTotal}</span>
                     </div>
                   </>
-                ) : (
-                  <p style={{ margin: 0, color: '#64748B' }}>No dying/printing receipt entries yet.</p>
                 )}
               </div>
             )}
@@ -883,34 +881,34 @@ const OrderDetails = () => {
                     }}>
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                         <div style={{ flex: 1 }}>
-                          <p style={{ margin: '0 0 6px 0', fontSize: '0.65rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>Date</p>
+                          <p style={{ margin: '0 0 6px 0', fontSize: '0.65rem', color: 'var(--muted)', fontWeight: '700', textTransform: 'uppercase' }}>Date</p>
                           <input
                             type="date"
                             value={digitalReceiptDate}
                             onChange={(e) => setDigitalReceiptDate(e.target.value)}
-                            style={{ width: '100%', border: '1px solid #E2E8F0', borderRadius: '10px', padding: '10px', fontSize: '0.9rem', outline: 'none', backgroundColor: '#F8FAFC' }}
+                            style={{ width: '100%', border: '1px solid var(--border)', borderRadius: '10px', padding: '10px', fontSize: '0.9rem', outline: 'none', backgroundColor: 'var(--bg)', color: 'var(--text)' }}
                           />
                         </div>
                         <div style={{ flex: 1 }}>
-                          <p style={{ margin: '0 0 6px 0', fontSize: '0.65rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>Quantity</p>
+                          <p style={{ margin: '0 0 6px 0', fontSize: '0.65rem', color: 'var(--muted)', fontWeight: '700', textTransform: 'uppercase' }}>Quantity</p>
                           <input
                             type="number"
                             step="0.01"
                             placeholder="Meters"
                             value={digitalReceiptQuantity}
                             onChange={(e) => setDigitalReceiptQuantity(e.target.value)}
-                            style={{ width: '100%', border: '1px solid #E2E8F0', borderRadius: '10px', padding: '10px', fontSize: '0.9rem', outline: 'none', backgroundColor: '#F8FAFC' }}
+                            style={{ width: '100%', border: '1px solid var(--border)', borderRadius: '10px', padding: '10px', fontSize: '0.9rem', outline: 'none', backgroundColor: 'var(--bg)', color: 'var(--text)' }}
                           />
                         </div>
                       </div>
                       <div>
-                        <p style={{ margin: '0 0 6px 0', fontSize: '0.65rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>Remark / Note</p>
+                        <p style={{ margin: '0 0 6px 0', fontSize: '0.65rem', color: 'var(--muted)', fontWeight: '700', textTransform: 'uppercase' }}>Remark / Note</p>
                         <input
                           type="text"
                           placeholder="Optional remark..."
                           value={digitalReceiptRemark}
                           onChange={(e) => setDigitalReceiptRemark(e.target.value)}
-                          style={{ width: '100%', border: '1px solid #E2E8F0', borderRadius: '10px', padding: '10px', fontSize: '0.9rem', outline: 'none', backgroundColor: '#F8FAFC' }}
+                          style={{ width: '100%', border: '1px solid var(--border)', borderRadius: '10px', padding: '10px', fontSize: '0.9rem', outline: 'none', backgroundColor: 'var(--bg)', color: 'var(--text)' }}
                         />
                       </div>
                       <button
@@ -937,12 +935,12 @@ const OrderDetails = () => {
                 {currentDigitalEntries.length > 0 ? (
                   <>
                     {currentDigitalEntries.map((entry, index) => (
-                      <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', padding: '10px 0', borderBottom: index < currentDigitalEntries.length - 1 ? '1px solid #E2E8F0' : 'none' }}>
+                      <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', padding: '10px 0', borderBottom: index < currentDigitalEntries.length - 1 ? '1px solid var(--border)' : 'none' }}>
                         <div style={{ flex: 1 }}>
-                          <span style={{ color: '#475569' }}>{formatDisplayDate(entry.entryDate)}</span>
-                          {entry.remark && <span style={{ color: '#64748B', fontSize: '0.85rem', marginLeft: '12px' }}>• {entry.remark}</span>}
+                          <span style={{ color: 'var(--text)' }}>{formatDisplayDate(entry.entryDate)}</span>
+                          {entry.remark && <span style={{ color: 'var(--muted)', fontSize: '0.85rem', marginLeft: '12px' }}>• {entry.remark}</span>}
                         </div>
-                        <span style={{ fontWeight: '700' }}>{entry.quantity}</span>
+                        <span style={{ fontWeight: '700', color: 'var(--text)' }}>{entry.quantity}</span>
                         {isEditing && (
                           <button
                             type="button"
@@ -954,13 +952,13 @@ const OrderDetails = () => {
                         )}
                       </div>
                     ))}
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0 0 0', borderTop: '1px solid #E2E8F0', marginTop: '8px' }}>
-                      <span style={{ color: '#475569', fontWeight: '700' }}>Total Received</span>
-                      <span style={{ fontWeight: '700' }}>{currentDigitalTotal}</span>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0 0 0', borderTop: '1px solid var(--border)', marginTop: '8px' }}>
+                      <span style={{ color: 'var(--text)', fontWeight: '700' }}>Total Received</span>
+                      <span style={{ fontWeight: '700', color: 'var(--text)' }}>{currentDigitalTotal}</span>
                     </div>
                   </>
                 ) : (
-                  <p style={{ margin: 0, color: '#64748B' }}>No digital printing receipt entries yet.</p>
+                  <p style={{ margin: 0, color: 'var(--muted)' }}>No digital printing receipt entries yet.</p>
                 )}
               </div>
             )}
@@ -1039,7 +1037,7 @@ const OrderDetails = () => {
                       }}
                     />
                   ) : (
-                    <p style={{ margin: '4px 0 0 0', fontSize: '0.95rem', fontWeight: '600', color: '#F8FAFC' }}>
+                    <p style={{ margin: '4px 0 0 0', fontSize: '0.95rem', fontWeight: '600', color: 'var(--text)' }}>
                       {item.type === 'date' ? formatDisplayDate(item.value) : (item.value || 'N/A')}
                     </p>
                   )}
@@ -1119,12 +1117,12 @@ const OrderDetails = () => {
             {currentDispatchEntries.length > 0 ? (
               <>
                 {currentDispatchEntries.map((entry, index) => (
-                  <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: index < currentDispatchEntries.length - 1 ? '1px solid #334155' : 'none' }}>
+                  <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: index < currentDispatchEntries.length - 1 ? '1px solid var(--border)' : 'none' }}>
                     <div style={{ flex: 1 }}>
-                      <span style={{ color: '#94A3B8', fontSize: '0.9rem' }}>{formatDisplayDate(entry.entryDate)}</span>
-                      {entry.remark && <span style={{ color: '#64748B', fontSize: '0.85rem', marginLeft: '12px' }}>• {entry.remark}</span>}
+                      <span style={{ color: 'var(--text)', fontSize: '0.9rem' }}>{formatDisplayDate(entry.entryDate)}</span>
+                      {entry.remark && <span style={{ color: 'var(--muted)', fontSize: '0.85rem', marginLeft: '12px' }}>• {entry.remark}</span>}
                     </div>
-                    <span style={{ fontWeight: '700', color: '#F8FAFC' }}>{entry.quantity}</span>
+                    <span style={{ fontWeight: '700', color: 'var(--text)' }}>{entry.quantity}</span>
                     {isEditing && (
                       <button
                         type="button"
@@ -1136,13 +1134,13 @@ const OrderDetails = () => {
                     )}
                   </div>
                 ))}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0 0 0', borderTop: '1px solid #334155', marginTop: '8px' }}>
-                  <span style={{ color: '#94A3B8', fontWeight: '700' }}>Total Dispatched</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0 0 0', borderTop: '1px solid var(--border)', marginTop: '8px' }}>
+                  <span style={{ color: 'var(--muted)', fontWeight: '700' }}>Total Dispatched</span>
                   <span style={{ fontWeight: '800', color: '#FBBF24', fontSize: '1.1rem' }}>{currentDispatchTotal}</span>
                 </div>
               </>
             ) : (
-              <p style={{ margin: 0, color: '#64748B', fontSize: '0.9rem' }}>No dispatch receipt entries yet.</p>
+              <p style={{ margin: 0, color: 'var(--muted)', fontSize: '0.9rem' }}>No dispatch receipt entries yet.</p>
             )}
           </div>
         </div>
@@ -1154,14 +1152,14 @@ const OrderDetails = () => {
               onClick={() => updateStatus('CANCELLED')}
               style={{
                 flex: 1,
-                backgroundColor: 'white',
+                backgroundColor: 'var(--surface)',
                 color: '#EF4444',
-                border: '1px solid #FEE2E2',
+                border: '1px solid var(--border)',
                 padding: '16px',
                 borderRadius: '20px',
                 fontWeight: '700',
                 fontSize: '1rem',
-                boxShadow: '0 4px 12px rgba(239, 68, 68, 0.1)'
+                boxShadow: 'var(--shadow-sm)'
               }}
             >
               Cancel Order
@@ -1190,9 +1188,9 @@ const OrderDetails = () => {
               onClick={() => { setIsEditing(false); setEditData(order); }}
               style={{
                 flex: 1,
-                backgroundColor: 'white',
-                color: '#64748B',
-                border: '1px solid #E2E8F0',
+                backgroundColor: 'var(--surface)',
+                color: 'var(--muted)',
+                border: '1px solid var(--border)',
                 padding: '16px',
                 borderRadius: '20px',
                 fontWeight: '700',
@@ -1245,9 +1243,9 @@ const OrderDetails = () => {
               }}
               style={{
                 width: '100%',
-                backgroundColor: '#FEF2F2',
-                color: '#DC2626',
-                border: '1px solid #FEE2E2',
+                backgroundColor: 'var(--status-danger-bg)',
+                color: 'var(--status-danger-text)',
+                border: '1px solid var(--border)',
                 padding: '16px',
                 borderRadius: '20px',
                 fontWeight: '700',

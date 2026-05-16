@@ -6,13 +6,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import api from '../utils/api';
 
 const AVATAR_COLORS = [
-  ['#4F46E5', '#EEF2FF'],
-  ['#0D9488', '#F0FDFA'],
-  ['#D97706', '#FFFBEB'],
-  ['#7C3AED', '#F5F3FF'],
-  ['#DC2626', '#FEF2F2'],
-  ['#0EA5E9', '#F0F9FF'],
-  ['#16A34A', '#F0FDF4'],
+  ['#4F46E5', 'rgba(79, 70, 229, 0.12)'],
+  ['#0D9488', 'rgba(13, 148, 136, 0.12)'],
+  ['#D97706', 'rgba(217, 119, 6, 0.12)'],
+  ['#7C3AED', 'rgba(124, 58, 237, 0.12)'],
+  ['#DC2626', 'rgba(220, 38, 38, 0.12)'],
+  ['#0EA5E9', 'rgba(14, 165, 233, 0.12)'],
+  ['#16A34A', 'rgba(22, 163, 74, 0.12)'],
 ];
 
 const getAvatarColor = (name) => {
@@ -93,7 +93,7 @@ const Clients = () => {
     <div style={{ minHeight: '100%', background: 'var(--bg)' }}>
 
       {/* ── Premium Page Header ── */}
-      <div className="page-header" style={{ background: 'white' }}>
+      <div className="page-header" style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
           <button type="button" className="icon-btn" onClick={() => navigate(-1)}>
             <ArrowLeft size={20} />
@@ -175,7 +175,7 @@ const Clients = () => {
           transition={{ delay: 0.1 }}
           style={{
             display: 'flex', alignItems: 'center', gap: 12,
-            background: 'white', borderRadius: 16,
+            background: 'var(--surface)', borderRadius: 16,
             padding: '14px 18px', marginBottom: 20,
             border: '1px solid var(--border)',
             boxShadow: 'var(--shadow-sm)',
@@ -216,7 +216,7 @@ const Clients = () => {
             animate={{ opacity: 1, scale: 1 }}
             style={{
               textAlign: 'center', padding: '52px 32px',
-              background: 'white', borderRadius: 24,
+              background: 'var(--surface)', borderRadius: 24,
               border: '2px dashed #FCA5A5'
             }}
           >
@@ -262,7 +262,7 @@ const Clients = () => {
             animate={{ opacity: 1, scale: 1 }}
             style={{
               textAlign: 'center', padding: '72px 32px',
-              background: 'white', borderRadius: 24,
+              background: 'var(--surface)', borderRadius: 24,
               border: '2px dashed var(--border)'
             }}
           >
@@ -327,7 +327,7 @@ const Clients = () => {
                       layout
                       whileHover={{ y: -2, boxShadow: '0 12px 32px rgba(15,23,42,0.08)' }}
                       style={{
-                        background: 'white',
+                        background: 'var(--surface)',
                         borderRadius: 20,
                         padding: '18px 20px',
                         border: '1px solid var(--border)',
@@ -383,7 +383,7 @@ const Clients = () => {
                           ) : (
                             <span style={{
                               display: 'inline-flex', alignItems: 'center', gap: 5,
-                              background: '#FFF7ED', color: '#D97706',
+                              background: 'var(--status-warning-bg)', color: 'var(--status-warning-text)',
                               padding: '3px 10px', borderRadius: 8,
                               fontSize: '0.72rem', fontWeight: 700
                             }}>
@@ -396,14 +396,14 @@ const Clients = () => {
                       {/* Actions */}
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
                         <motion.button
-                          whileHover={{ scale: 1.1, background: '#FEE2E2', color: '#EF4444' }}
+                          whileHover={{ scale: 1.1, background: 'var(--status-danger-bg)', color: 'var(--status-danger-text)' }}
                           whileTap={{ scale: 0.95 }}
                           onClick={(e) => handleDeleteClient(e, client.id, client.name)}
                           style={{
                             width: 32, height: 32, borderRadius: 10,
                             background: 'var(--bg)', border: 'none',
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            color: '#94A3B8', cursor: 'pointer',
+                            color: 'var(--muted)', cursor: 'pointer',
                             transition: 'all 0.2s'
                           }}
                           title="Remove Client"
@@ -430,7 +430,7 @@ const Clients = () => {
             onClick={() => navigate('/add-client')}
             style={{
               width: '100%', marginTop: 16, padding: '14px',
-              background: 'white',
+              background: 'var(--surface)',
               border: '2px dashed var(--primary)',
               borderRadius: 18,
               display: 'flex', alignItems: 'center', justifyContent: 'center',

@@ -291,13 +291,13 @@ const InquiryDetails = () => {
   };
 
   if (loading) return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: '#F8F9FB' }}>
-      <p style={{ color: '#64748B', fontWeight: '500' }}>Loading inquiry details...</p>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: 'var(--bg)' }}>
+      <p style={{ color: 'var(--muted)', fontWeight: '500' }}>Loading inquiry details...</p>
     </div>
   );
 
   if (!inquiry) return (
-    <div style={{ padding: '20px', textAlign: 'center', backgroundColor: '#F8F9FB', minHeight: '100vh' }}>
+    <div style={{ padding: '20px', textAlign: 'center', backgroundColor: 'var(--bg)', minHeight: '100vh' }}>
       <p>Inquiry not found.</p>
       <button onClick={() => navigate('/inquiries')} className="btn btn-primary" style={{ marginTop: '20px' }}>Go Back</button>
     </div>
@@ -306,10 +306,10 @@ const InquiryDetails = () => {
   const getStatusStyle = (status) => {
     const s = (status || 'Ongoing').toLowerCase();
     switch (s) {
-      case 'ongoing': return { bg: '#EEF2FF', color: '#4F46E5', icon: <Clock size={16} /> };
-      case 'completed': return { bg: '#F0FDF4', color: '#16A34A', icon: <CheckCircle size={16} /> };
-      case 'canceled': return { bg: '#FEF2F2', color: '#DC2626', icon: <XCircle size={16} /> };
-      default: return { bg: '#F1F5F9', color: '#64748B', icon: null };
+      case 'ongoing': return { bg: 'var(--status-warning-bg)', color: 'var(--status-warning-text)', icon: <Clock size={16} /> };
+      case 'completed': return { bg: 'var(--status-success-bg)', color: 'var(--status-success-text)', icon: <CheckCircle size={16} /> };
+      case 'canceled': return { bg: 'var(--status-danger-bg)', color: 'var(--status-danger-text)', icon: <XCircle size={16} /> };
+      default: return { bg: 'var(--surface)', color: 'var(--muted)', icon: null };
     }
   };
 
@@ -317,7 +317,7 @@ const InquiryDetails = () => {
   const isOngoing = (inquiry.status || 'Ongoing').toLowerCase() === 'ongoing';
 
   return (
-    <div style={{ backgroundColor: '#F8F9FB', minHeight: '100vh', paddingBottom: '100px' }}>
+    <div style={{ backgroundColor: 'var(--bg)', minHeight: '100vh', paddingBottom: '100px' }}>
       <div className="inquiry-header">
         <div className="inquiry-header-left">
           <button type="button" className="inquiry-header-back" onClick={() => navigate('/inquiries')}>
@@ -439,12 +439,12 @@ const InquiryDetails = () => {
         <div className="inquiry-section" style={{ borderLeftColor: '#94A3B8', marginTop: '24px', padding: '16px 24px' }}>
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-3">
-              <div style={{ backgroundColor: '#F1F5F9', padding: '8px', borderRadius: '10px', color: '#64748B' }}>
+              <div style={{ backgroundColor: 'var(--surface)', padding: '8px', borderRadius: '10px', color: 'var(--muted)' }}>
                 <User size={16} />
               </div>
               <div>
-                <p style={{ margin: 0, fontSize: '0.65rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>Added By</p>
-                <p style={{ margin: '2px 0 0 0', fontSize: '0.85rem', fontWeight: '600', color: '#1E293B' }}>
+                <p style={{ margin: 0, fontSize: '0.65rem', color: 'var(--muted)', fontWeight: '700', textTransform: 'uppercase' }}>Added By</p>
+                <p style={{ margin: '2px 0 0 0', fontSize: '0.85rem', fontWeight: '600', color: 'var(--text)' }}>
                   {inquiry.createdBy?.name || 'System'}
                 </p>
               </div>
@@ -452,12 +452,12 @@ const InquiryDetails = () => {
 
             {inquiry.lastEditedBy && (
               <div className="flex items-center gap-3">
-                <div style={{ backgroundColor: '#F1F5F9', padding: '8px', borderRadius: '10px', color: '#64748B' }}>
+                <div style={{ backgroundColor: 'var(--surface)', padding: '8px', borderRadius: '10px', color: 'var(--muted)' }}>
                   <Edit3 size={16} />
                 </div>
                 <div>
-                  <p style={{ margin: 0, fontSize: '0.65rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>Last Edited By</p>
-                  <p style={{ margin: '2px 0 0 0', fontSize: '0.85rem', fontWeight: '600', color: '#1E293B' }}>
+                  <p style={{ margin: 0, fontSize: '0.65rem', color: 'var(--muted)', fontWeight: '700', textTransform: 'uppercase' }}>Last Edited By</p>
+                  <p style={{ margin: '2px 0 0 0', fontSize: '0.85rem', fontWeight: '600', color: 'var(--text)' }}>
                     {inquiry.lastEditedBy?.name}
                   </p>
                 </div>
@@ -520,7 +520,7 @@ const InquiryDetails = () => {
                 }
               }}
               className="action-btn"
-              style={{ flex: 1, background: '#FEF2F2', color: '#DC2626', border: '1px solid #FEE2E2' }}
+              style={{ flex: 1, background: 'var(--status-danger-bg)', color: 'var(--status-danger-text)', border: '1px solid var(--border)' }}
             >
               <Trash2 size={20} />
               Delete Inquiry (Admin Only)

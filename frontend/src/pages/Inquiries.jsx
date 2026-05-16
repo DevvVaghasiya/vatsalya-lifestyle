@@ -170,9 +170,9 @@ const Inquiries = () => {
   });
 
   const TAB_STYLES = {
-    ongoing: { bg: '#FFF7ED', color: '#EA580C', icon: <Clock size={12} /> },
-    completed: { bg: '#F0FDF4', color: '#16A34A', icon: <CheckCircle size={12} /> },
-    canceled: { bg: '#FEF2F2', color: '#DC2626', icon: <XCircle size={12} /> },
+    ongoing: { bg: 'var(--status-warning-bg)', color: 'var(--status-warning-text)', icon: <Clock size={12} /> },
+    completed: { bg: 'var(--status-success-bg)', color: 'var(--status-success-text)', icon: <CheckCircle size={12} /> },
+    canceled: { bg: 'var(--status-danger-bg)', color: 'var(--status-danger-text)', icon: <XCircle size={12} /> },
   };
 
   const getStatusStyle = (status) =>
@@ -237,9 +237,9 @@ const Inquiries = () => {
           ) : filteredInquiries.length === 0 ? (
             <div style={{
               textAlign: 'center', padding: '72px 32px',
-              background: 'white', borderRadius: 24, border: '2px dashed var(--border)'
+              background: 'var(--surface)', borderRadius: 24, border: '2px dashed var(--border)'
             }}>
-              <MessageSquare size={44} color="#CBD5E1" style={{ marginBottom: 14 }} />
+              <MessageSquare size={44} color="var(--muted)" style={{ marginBottom: 14 }} />
               <p style={{ color: 'var(--muted)', fontWeight: 600 }}>
                 No {activeTab} inquiries found
               </p>
@@ -297,12 +297,12 @@ const Inquiries = () => {
                       onClick={() => navigate(`/inquiry/${item.id}`)}
                     >
                       <div>
-                        <p style={{ margin: 0, fontSize: '0.58rem', color: '#94A3B8', fontWeight: 700, textTransform: 'uppercase' }}>Quality</p>
-                        <p style={{ margin: '4px 0 0', fontSize: '0.88rem', fontWeight: 700, color: '#334155' }}>{item.quality || 'N/A'}</p>
+                        <p style={{ margin: 0, fontSize: '0.58rem', color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase' }}>Quality</p>
+                        <p style={{ margin: '4px 0 0', fontSize: '0.88rem', fontWeight: 700, color: 'var(--text)' }}>{item.quality || 'N/A'}</p>
                       </div>
                       <div>
-                        <p style={{ margin: 0, fontSize: '0.58rem', color: '#94A3B8', fontWeight: 700, textTransform: 'uppercase' }}>Date</p>
-                        <p style={{ margin: '4px 0 0', fontSize: '0.88rem', fontWeight: 700, color: '#334155' }}>
+                        <p style={{ margin: 0, fontSize: '0.58rem', color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase' }}>Date</p>
+                        <p style={{ margin: '4px 0 0', fontSize: '0.88rem', fontWeight: 700, color: 'var(--text)' }}>
                           {item.createdAt ? new Date(item.createdAt).toLocaleDateString('en-GB') : 'N/A'}
                         </p>
                       </div>

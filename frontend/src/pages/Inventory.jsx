@@ -332,10 +332,10 @@ const Inventory = () => {
     : filtered.filter(i => i.status === 'sold');
 
   const tabs = [
-    { key: 'STOCK', label: 'Stock', icon: Package, color: '#4F46E5', bg: '#EEF2FF' },
-    { key: 'SAMPLE', label: 'Sample & Yardage', icon: Layers, color: '#0D9488', bg: '#F0FDFA' },
-    { key: 'MILL_DEFECT', label: 'Mill Defect', icon: Package, color: '#DC2626', bg: '#FEF2F2' },
-    { key: 'FABRIC_ENTRY', label: 'Fabric Entry', icon: FileText, color: '#D97706', bg: '#FFFBEB' },
+    { key: 'STOCK', label: 'Stock', icon: Package, color: '#4F46E5', bg: 'var(--status-warning-bg)' },
+    { key: 'SAMPLE', label: 'Sample & Yardage', icon: Layers, color: '#0D9488', bg: 'var(--status-success-bg)' },
+    { key: 'MILL_DEFECT', label: 'Mill Defect', icon: Package, color: '#DC2626', bg: 'var(--status-danger-bg)' },
+    { key: 'FABRIC_ENTRY', label: 'Fabric Entry', icon: FileText, color: '#D97706', bg: 'var(--status-warning-bg)' },
   ];
   const currentTab = tabs.find(t => t.key === activeTab);
   const addLabel = { STOCK: 'Add New Stock', SAMPLE: 'Add New Sample', MILL_DEFECT: 'Add New Defect', FABRIC_ENTRY: 'Add New Entry' };
@@ -360,10 +360,10 @@ const Inventory = () => {
               }}>
                 {(item.fabricName || 'F').charAt(0).toUpperCase()}
               </div>
-              <div style={{ flex: 1 }}>
-                <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: '700', color: '#1E293B' }}>{item.fabricName}</h4>
+               <div style={{ flex: 1 }}>
+                <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: '700', color: 'var(--text)' }}>{item.fabricName}</h4>
                 {item.referenceNo && (
-                  <p style={{ margin: '2px 0 0', fontSize: '0.75rem', color: '#64748B' }}>Ref: {item.referenceNo}</p>
+                  <p style={{ margin: '2px 0 0', fontSize: '0.75rem', color: 'var(--muted)' }}>Ref: {item.referenceNo}</p>
                 )}
               </div>
             </div>
@@ -396,38 +396,38 @@ const Inventory = () => {
             <div className="fabric-details-grid">
                 {item.composition && (
                   <div>
-                    <p style={{ margin: 0, fontSize: '0.6rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>Composition</p>
-                    <p style={{ margin: '2px 0 0', fontSize: '0.9rem', fontWeight: '700', color: '#1E293B' }}>{item.composition}</p>
+                    <p style={{ margin: 0, fontSize: '0.6rem', color: 'var(--muted)', fontWeight: '700', textTransform: 'uppercase' }}>Composition</p>
+                    <p style={{ margin: '2px 0 0', fontSize: '0.9rem', fontWeight: '700', color: 'var(--text)' }}>{item.composition}</p>
                   </div>
                 )}
                 {item.fabricType && (
                   <div>
-                    <p style={{ margin: 0, fontSize: '0.6rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>Fabric Type</p>
-                    <p style={{ margin: '2px 0 0', fontSize: '0.9rem', fontWeight: '700', color: '#1E293B' }}>{item.fabricType}</p>
+                    <p style={{ margin: 0, fontSize: '0.6rem', color: 'var(--muted)', fontWeight: '700', textTransform: 'uppercase' }}>Fabric Type</p>
+                    <p style={{ margin: '2px 0 0', fontSize: '0.9rem', fontWeight: '700', color: 'var(--text)' }}>{item.fabricType}</p>
                   </div>
                 )}
                 {item.gsm && (
                   <div>
-                    <p style={{ margin: 0, fontSize: '0.6rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>GSM</p>
-                    <p style={{ margin: '2px 0 0', fontSize: '0.9rem', fontWeight: '700', color: '#1E293B' }}>{item.gsm}</p>
+                    <p style={{ margin: 0, fontSize: '0.6rem', color: 'var(--muted)', fontWeight: '700', textTransform: 'uppercase' }}>GSM</p>
+                    <p style={{ margin: '2px 0 0', fontSize: '0.9rem', fontWeight: '700', color: 'var(--text)' }}>{item.gsm}</p>
                   </div>
                 )}
                 {item.width && (
                   <div>
-                    <p style={{ margin: 0, fontSize: '0.6rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>Width</p>
-                    <p style={{ margin: '2px 0 0', fontSize: '0.9rem', fontWeight: '700', color: '#1E293B' }}>{item.width}</p>
+                    <p style={{ margin: 0, fontSize: '0.6rem', color: 'var(--muted)', fontWeight: '700', textTransform: 'uppercase' }}>Width</p>
+                    <p style={{ margin: '2px 0 0', fontSize: '0.9rem', fontWeight: '700', color: 'var(--text)' }}>{item.width}</p>
                   </div>
                 )}
                 {item.countConst && (
                   <div>
-                    <p style={{ margin: 0, fontSize: '0.6rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>Count / Const</p>
-                    <p style={{ margin: '2px 0 0', fontSize: '0.9rem', fontWeight: '700', color: '#1E293B' }}>{item.countConst}</p>
+                    <p style={{ margin: 0, fontSize: '0.6rem', color: 'var(--muted)', fontWeight: '700', textTransform: 'uppercase' }}>Count / Const</p>
+                    <p style={{ margin: '2px 0 0', fontSize: '0.9rem', fontWeight: '700', color: 'var(--text)' }}>{item.countConst}</p>
                   </div>
                 )}
                 {item.remark && (
                   <div>
-                    <p style={{ margin: 0, fontSize: '0.6rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>Remark</p>
-                    <p style={{ margin: '2px 0 0', fontSize: '0.9rem', fontWeight: '700', color: '#1E293B' }}>{item.remark}</p>
+                    <p style={{ margin: 0, fontSize: '0.6rem', color: 'var(--muted)', fontWeight: '700', textTransform: 'uppercase' }}>Remark</p>
+                    <p style={{ margin: '2px 0 0', fontSize: '0.9rem', fontWeight: '700', color: 'var(--text)' }}>{item.remark}</p>
                   </div>
                 )}
             </div>
@@ -435,44 +435,43 @@ const Inventory = () => {
             /* Quick Stats */
             <div className="stats-row">
               <div className="stat-item">
-                <p style={{ margin: 0, fontSize: '0.6rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>Available</p>
+                <p style={{ margin: 0, fontSize: '0.6rem', color: 'var(--muted)', fontWeight: '700', textTransform: 'uppercase' }}>Available</p>
                 <p style={{ margin: '2px 0 0', fontSize: '0.95rem', fontWeight: '800', color: available > 0 ? '#16A34A' : '#EF4444' }}>{available} Mtr</p>
               </div>
               <div className="stat-item">
-                <p style={{ margin: 0, fontSize: '0.6rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>Total</p>
-                <p style={{ margin: '2px 0 0', fontSize: '0.95rem', fontWeight: '700', color: '#1E293B' }}>{item.stockQuantity || 0} Mtr</p>
+                <p style={{ margin: 0, fontSize: '0.6rem', color: 'var(--muted)', fontWeight: '700', textTransform: 'uppercase' }}>Total</p>
+                <p style={{ margin: '2px 0 0', fontSize: '0.95rem', fontWeight: '700', color: 'var(--text)' }}>{item.stockQuantity || 0} Mtr</p>
               </div>
               <div className="stat-item">
-                <p style={{ margin: 0, fontSize: '0.6rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>Dispatched</p>
+                <p style={{ margin: 0, fontSize: '0.6rem', color: 'var(--muted)', fontWeight: '700', textTransform: 'uppercase' }}>Dispatched</p>
                 <p style={{ margin: '2px 0 0', fontSize: '0.95rem', fontWeight: '700', color: '#D97706' }}>{dispatched} Mtr</p>
               </div>
               {item.gsm && (
                 <div className="stat-item">
-                  <p style={{ margin: 0, fontSize: '0.6rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>GSM</p>
-                  <p style={{ margin: '2px 0 0', fontSize: '0.95rem', fontWeight: '700', color: '#1E293B' }}>{item.gsm}</p>
+                  <p style={{ margin: 0, fontSize: '0.6rem', color: 'var(--muted)', fontWeight: '700', textTransform: 'uppercase' }}>GSM</p>
+                  <p style={{ margin: '2px 0 0', fontSize: '0.95rem', fontWeight: '700', color: 'var(--text)' }}>{item.gsm}</p>
                 </div>
               )}
               {item.width && (
                 <div className="stat-item">
-                  <p style={{ margin: 0, fontSize: '0.6rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>Width</p>
-                  <p style={{ margin: '2px 0 0', fontSize: '0.95rem', fontWeight: '700', color: '#1E293B' }}>{item.width}</p>
+                  <p style={{ margin: 0, fontSize: '0.6rem', color: 'var(--muted)', fontWeight: '700', textTransform: 'uppercase' }}>Width</p>
+                  <p style={{ margin: '2px 0 0', fontSize: '0.95rem', fontWeight: '700', color: 'var(--text)' }}>{item.width}</p>
                 </div>
               )}
             </div>
           )}
           
-          {/* Audit Info */}
-          <div style={{ marginTop: '14px', paddingTop: '10px', borderTop: '1px dashed #E2E8F0', display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+          <div style={{ marginTop: '14px', paddingTop: '10px', borderTop: '1px dashed var(--border)', display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
             {item.createdBy && (
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <p style={{ margin: 0, fontSize: '0.6rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>Added By:</p>
-                <p style={{ margin: 0, fontSize: '0.75rem', fontWeight: '600', color: '#64748B' }}>{item.createdBy.name}</p>
+                <p style={{ margin: 0, fontSize: '0.6rem', color: 'var(--muted)', fontWeight: '700', textTransform: 'uppercase' }}>Added By:</p>
+                <p style={{ margin: 0, fontSize: '0.75rem', fontWeight: '600', color: 'var(--muted)' }}>{item.createdBy.name}</p>
               </div>
             )}
             {item.lastEditedBy && (
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <p style={{ margin: 0, fontSize: '0.6rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>Edited By:</p>
-                <p style={{ margin: '2px 0 0', fontSize: '0.75rem', fontWeight: '600', color: '#64748B' }}>{item.lastEditedBy.name}</p>
+                <p style={{ margin: 0, fontSize: '0.6rem', color: 'var(--muted)', fontWeight: '700', textTransform: 'uppercase' }}>Edited By:</p>
+                <p style={{ margin: '2px 0 0', fontSize: '0.75rem', fontWeight: '600', color: 'var(--muted)' }}>{item.lastEditedBy.name}</p>
               </div>
             )}
           </div>
@@ -656,27 +655,26 @@ const Inventory = () => {
             </button>
           </div>
         ) : loading ? (
-          <div className="inventory-grid">
-            {[1, 2, 3, 4, 5, 6].map(i => (
+             {[1, 2, 3, 4, 5, 6].map(i => (
               <div key={i} className="inventory-card skeleton-card" style={{ 
                 minHeight: '160px', 
-                background: 'rgba(255,255,255,0.6)', 
+                background: 'var(--surface-glass-heavy)', 
                 overflow: 'hidden', 
                 position: 'relative' 
               }}>
                 <div className="shimmer-sweep" />
                 <div style={{ padding: '16px' }}>
                   <div style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}>
-                    <div style={{ width: '48px', height: '48px', borderRadius: '14px', backgroundColor: '#F1F5F9' }} />
+                    <div style={{ width: '48px', height: '48px', borderRadius: '14px', backgroundColor: 'var(--bg)' }} />
                     <div style={{ flex: 1 }}>
-                      <div style={{ width: '70%', height: '14px', borderRadius: '4px', backgroundColor: '#F1F5F9', marginBottom: '8px' }} />
-                      <div style={{ width: '40%', height: '10px', borderRadius: '4px', backgroundColor: '#F1F5F9' }} />
+                      <div style={{ width: '70%', height: '14px', borderRadius: '4px', backgroundColor: 'var(--bg)', marginBottom: '8px' }} />
+                      <div style={{ width: '40%', height: '10px', borderRadius: '4px', backgroundColor: 'var(--bg)' }} />
                     </div>
                   </div>
                   <div style={{ display: 'flex', gap: '12px' }}>
-                    <div style={{ flex: 1, height: '32px', borderRadius: '8px', backgroundColor: '#F8FAFC' }} />
-                    <div style={{ flex: 1, height: '32px', borderRadius: '8px', backgroundColor: '#F8FAFC' }} />
-                    <div style={{ flex: 1, height: '32px', borderRadius: '8px', backgroundColor: '#F8FAFC' }} />
+                    <div style={{ flex: 1, height: '32px', borderRadius: '8px', backgroundColor: 'var(--bg)' }} />
+                    <div style={{ flex: 1, height: '32px', borderRadius: '8px', backgroundColor: 'var(--bg)' }} />
+                    <div style={{ flex: 1, height: '32px', borderRadius: '8px', backgroundColor: 'var(--bg)' }} />
                   </div>
                 </div>
               </div>
@@ -698,11 +696,11 @@ const Inventory = () => {
       {(activeTab === 'STOCK' || activeTab === 'SAMPLE' || activeTab === 'MILL_DEFECT') && soldItems.length > 0 && (
         <div className="inv-section">
           <div className="inv-section-head">
-            <div className="inv-section-accent" style={{ backgroundColor: '#16A34A' }} />
+            <div className="inv-section-accent" style={{ backgroundColor: 'var(--status-success-text)' }} />
             <h3 className="inv-section-title">
               {activeTab === 'STOCK' ? 'Sold Stock' : activeTab === 'MILL_DEFECT' ? 'Sold Defects' : 'Sold Samples'}
             </h3>
-            <span className="inv-section-badge" style={{ backgroundColor: '#F0FDF4', color: '#16A34A' }}>
+            <span className="inv-section-badge" style={{ backgroundColor: 'var(--status-success-bg)', color: 'var(--status-success-text)' }}>
               {soldItems.length}
             </span>
           </div>
@@ -718,9 +716,9 @@ const Inventory = () => {
         <div className="modal-overlay" onClick={(e) => { if (e.target === e.currentTarget) setShowAddModal(false); }}>
           <div className="modal-content">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-              <h2 style={{ margin: 0, fontSize: '1.2rem', fontWeight: '800', color: '#1E293B' }}>{addLabel[activeTab]}</h2>
-              <button onClick={() => setShowAddModal(false)} style={{ background: '#F1F5F9', border: 'none', borderRadius: '12px', padding: '8px', cursor: 'pointer' }}>
-                <X size={20} color="#64748B" />
+              <h2 style={{ margin: 0, fontSize: '1.2rem', fontWeight: '800', color: 'var(--text)' }}>{addLabel[activeTab]}</h2>
+              <button onClick={() => setShowAddModal(false)} style={{ background: 'var(--bg)', border: 'none', borderRadius: '12px', padding: '8px', cursor: 'pointer' }}>
+                <X size={20} color="var(--muted)" />
               </button>
             </div>
 
@@ -793,7 +791,7 @@ const Inventory = () => {
               )}
               <button type="submit" disabled={submitting} style={{
                 padding: '16px', borderRadius: '16px', border: 'none',
-                backgroundColor: submitting ? '#94A3B8' : currentTab.color, color: 'white', fontWeight: '700',
+                backgroundColor: submitting ? 'var(--muted)' : currentTab.color, color: 'white', fontWeight: '700',
                 fontSize: '1rem', cursor: submitting ? 'not-allowed' : 'pointer', marginTop: '8px',
                 boxShadow: submitting ? 'none' : `0 8px 20px ${currentTab.color}33`,
                 opacity: submitting ? 0.7 : 1, transition: 'all 0.2s'
@@ -812,10 +810,10 @@ const Inventory = () => {
   );
 };
 
-const labelStyle = { display: 'block', marginBottom: '6px', fontSize: '0.85rem', fontWeight: '600', color: '#475569' };
+const labelStyle = { display: 'block', marginBottom: '6px', fontSize: '0.85rem', fontWeight: '600', color: 'var(--muted)' };
 const inputStyle = {
-  width: '100%', padding: '12px 14px', borderRadius: '14px', border: '1px solid #E2E8F0',
-  fontSize: '0.95rem', outline: 'none', backgroundColor: '#F8FAFC', color: '#1E293B', boxSizing: 'border-box'
+  width: '100%', padding: '12px 14px', borderRadius: '14px', border: '1px solid var(--border)',
+  fontSize: '0.95rem', outline: 'none', backgroundColor: 'var(--bg)', color: 'var(--text)', boxSizing: 'border-box'
 };
 
 export default Inventory;

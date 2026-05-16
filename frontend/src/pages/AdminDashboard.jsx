@@ -14,9 +14,9 @@ import Toast from '../components/Toast';
 
 /* ─── Status helpers ─── */
 const STATUS_MAP = {
-  completed: { bg: '#ECFDF5', color: '#16A34A', Icon: CheckCircle },
-  canceled:  { bg: '#FEF2F2', color: '#EF4444', Icon: XCircle },
-  ongoing:   { bg: '#FFF7ED', color: '#EA580C', Icon: Clock },
+  completed: { bg: 'var(--status-success-bg)', color: 'var(--status-success-text)', Icon: CheckCircle },
+  canceled:  { bg: 'var(--status-danger-bg)', color: 'var(--status-danger-text)', Icon: XCircle },
+  ongoing:   { bg: 'var(--status-warning-bg)', color: 'var(--status-warning-text)', Icon: Clock },
 };
 const getStatus = (s) => STATUS_MAP[(s || '').toLowerCase()] || STATUS_MAP.ongoing;
 
@@ -273,7 +273,7 @@ const AdminDashboard = () => {
     <div style={{ minHeight: '100%', background: 'var(--bg)' }}>
 
       {/* ── Admin Top Bar ── */}
-      <div className="page-header" style={{ background: 'white' }}>
+      <div className="page-header" style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <div style={{
             width: 40, height: 40, borderRadius: 12, overflow: 'hidden',
@@ -298,10 +298,10 @@ const AdminDashboard = () => {
         <div style={{ display: 'flex', gap: 8 }}>
           <div style={{
             display: 'flex', alignItems: 'center', gap: 6,
-            background: '#ECFDF5', borderRadius: 10, padding: '6px 12px'
+            background: 'var(--status-success-bg)', borderRadius: 10, padding: '6px 12px'
           }}>
-            <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#16A34A' }} />
-            <span style={{ fontSize: '0.68rem', fontWeight: 800, color: '#16A34A', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+            <div style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--status-success-text)' }} />
+            <span style={{ fontSize: '0.68rem', fontWeight: 800, color: 'var(--status-success-text)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
               Live
             </span>
           </div>
@@ -372,7 +372,7 @@ const AdminDashboard = () => {
                 fontWeight: 800, fontSize: '0.82rem',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
                 transition: 'all 0.2s',
-                background: activeTab === key ? 'white' : 'transparent',
+                background: activeTab === key ? 'var(--surface)' : 'transparent',
                 color: activeTab === key ? 'var(--primary)' : 'var(--muted)',
                 boxShadow: activeTab === key ? 'var(--shadow-sm)' : 'none',
                 position: 'relative'
@@ -395,7 +395,7 @@ const AdminDashboard = () => {
         {/* ── Search ── */}
         <div style={{
           display: 'flex', alignItems: 'center', gap: 12,
-          background: 'white', borderRadius: 16, padding: '13px 18px',
+          background: 'var(--surface)', borderRadius: 16, padding: '13px 18px',
           border: '1px solid var(--border)', boxShadow: 'var(--shadow-sm)',
           marginBottom: activeTab === 'inquiries' ? 12 : 20
         }}>
@@ -430,7 +430,7 @@ const AdminDashboard = () => {
                   padding: '8px 18px', borderRadius: 20,
                   cursor: 'pointer', fontWeight: 800, fontSize: '0.8rem',
                   whiteSpace: 'nowrap', flexShrink: 0,
-                  background: filterStatus === s ? 'var(--primary)' : 'white',
+                  background: filterStatus === s ? 'var(--primary)' : 'var(--surface)',
                   color: filterStatus === s ? 'white' : 'var(--muted)',
                   border: filterStatus === s ? 'none' : '1px solid var(--border)',
                   boxShadow: filterStatus === s ? '0 4px 12px var(--primary-glow)' : 'var(--shadow-sm)',
@@ -456,7 +456,7 @@ const AdminDashboard = () => {
                 marginLeft: 'auto', padding: '8px 16px', borderRadius: 20,
                 border: '1px solid var(--border)', cursor: 'pointer',
                 fontWeight: 800, fontSize: '0.78rem',
-                background: 'white', color: 'var(--text)',
+                background: 'var(--surface)', color: 'var(--text)',
                 display: 'flex', alignItems: 'center', gap: 6,
                 flexShrink: 0, boxShadow: 'var(--shadow-sm)'
               }}
@@ -498,9 +498,9 @@ const AdminDashboard = () => {
                 return (
                   <motion.div key={u.id} variants={pop} layout
                     style={{
-                      background: 'white', borderRadius: 20,
-                      padding: '18px 20px', border: '1px solid #FEF3C7',
-                      boxShadow: '0 2px 8px rgba(234,179,8,0.1)',
+                      background: 'var(--surface)', borderRadius: 20,
+                      padding: '18px 20px', border: '1px solid var(--border)',
+                      boxShadow: 'var(--shadow-sm)',
                       display: 'flex', gap: 14, alignItems: 'center'
                     }}
                   >
@@ -515,7 +515,7 @@ const AdminDashboard = () => {
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3 }}>
                         <h3 style={{ margin: 0, fontWeight: 800, fontSize: '0.95rem', color: 'var(--text)' }}>{u.name || 'Unnamed'}</h3>
-                        <span style={{ background: '#FEF9C3', color: '#A16207', fontSize: '0.6rem', fontWeight: 800, padding: '2px 8px', borderRadius: 6, textTransform: 'uppercase' }}>Pending</span>
+                        <span style={{ background: 'var(--status-warning-bg)', color: 'var(--status-warning-text)', fontSize: '0.6rem', fontWeight: 800, padding: '2px 8px', borderRadius: 6, textTransform: 'uppercase' }}>Pending</span>
                       </div>
                       <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--muted)', fontWeight: 600 }}>{u.phoneNumber}</p>
                       <p style={{ margin: '2px 0 0', fontSize: '0.72rem', color: '#94A3B8', fontWeight: 600 }}>
@@ -531,7 +531,7 @@ const AdminDashboard = () => {
                         style={{
                           display: 'flex', alignItems: 'center', gap: 6,
                           padding: '8px 14px', borderRadius: 10, border: 'none',
-                          background: '#DCFCE7', color: '#16A34A',
+                          background: 'var(--status-success-bg)', color: 'var(--status-success-text)',
                           fontWeight: 800, fontSize: '0.78rem', cursor: isProcessing ? 'not-allowed' : 'pointer',
                           opacity: isProcessing ? 0.6 : 1, transition: 'all 0.2s'
                         }}
@@ -544,7 +544,7 @@ const AdminDashboard = () => {
                         style={{
                           display: 'flex', alignItems: 'center', gap: 6,
                           padding: '8px 14px', borderRadius: 10, border: 'none',
-                          background: '#FEE2E2', color: '#DC2626',
+                          background: 'var(--status-danger-bg)', color: 'var(--status-danger-text)',
                           fontWeight: 800, fontSize: '0.78rem', cursor: isProcessing ? 'not-allowed' : 'pointer',
                           opacity: isProcessing ? 0.6 : 1, transition: 'all 0.2s'
                         }}
@@ -576,7 +576,7 @@ const AdminDashboard = () => {
                 return (
                   <motion.div key={u.id} variants={pop} layout
                     style={{
-                      background: 'white', borderRadius: 20,
+                      background: 'var(--surface)', borderRadius: 20,
                       padding: '18px 20px', border: '1px solid var(--border)',
                       boxShadow: 'var(--shadow-sm)', display: 'flex', gap: 16, alignItems: 'flex-start'
                     }}
@@ -601,8 +601,8 @@ const AdminDashboard = () => {
                           <span style={{
                             padding: '3px 10px', borderRadius: 8,
                             fontSize: '0.65rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.5px',
-                            background: u.role === 'ADMIN' ? '#FEF2F2' : '#EEF2FF',
-                            color: u.role === 'ADMIN' ? '#DC2626' : '#4F46E5',
+                            background: u.role === 'ADMIN' ? 'var(--status-danger-bg)' : 'var(--status-warning-bg)',
+                            color: u.role === 'ADMIN' ? 'var(--status-danger-text)' : 'var(--status-warning-text)',
                           }}>
                             {u.role}
                           </span>
@@ -613,14 +613,14 @@ const AdminDashboard = () => {
                                 padding: '6px',
                                 borderRadius: '8px',
                                 border: 'none',
-                                background: '#FEE2E2',
-                                color: '#DC2626',
+                                background: 'var(--status-danger-bg)',
+                                color: 'var(--status-danger-text)',
                                 cursor: 'pointer',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 transition: 'all 0.2s',
-                                boxShadow: '0 2px 4px rgba(220, 38, 38, 0.1)'
+                                boxShadow: 'var(--shadow-sm)'
                               }}
                               title="Delete User"
                             >
@@ -668,7 +668,7 @@ const AdminDashboard = () => {
                 return (
                   <motion.div key={inq.id} variants={pop} layout whileHover={{ y: -2 }}
                     onClick={() => navigate(`/inquiry/${inq.id}`)}
-                    style={{ background: 'white', borderRadius: 20, padding: '18px 20px', border: '1px solid var(--border)', boxShadow: 'var(--shadow-sm)', cursor: 'pointer' }}
+                    style={{ background: 'var(--surface)', borderRadius: 20, padding: '18px 20px', border: '1px solid var(--border)', boxShadow: 'var(--shadow-sm)', cursor: 'pointer' }}
                   >
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
                       <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
@@ -688,7 +688,7 @@ const AdminDashboard = () => {
                       <button
                         onClick={(e) => handleDeleteInquiry(e, inq.id)}
                         style={{
-                          background: '#FEE2E2', color: '#DC2626', border: 'none',
+                          background: 'var(--status-danger-bg)', color: 'var(--status-danger-text)', border: 'none',
                           padding: '6px 10px', borderRadius: 8, fontSize: '0.7rem',
                           fontWeight: 800, display: 'flex', alignItems: 'center', gap: 4,
                           cursor: 'pointer'
@@ -720,10 +720,10 @@ const AdminDashboard = () => {
 
               const mapStatusStyles = o => {
                 const s = mapOrderStatus(o).toLowerCase();
-                if (s === 'completed') return { label:'Completed', bg:'#DCFCE7', color:'#166534' };
-                if (s === 'canceled') return { label:'Canceled', bg:'#FEE2E2', color:'#B91C1C' };
-                if (s === 'delayed') return { label:'Delayed', bg:'#FEF2F2', color:'#EF4444' };
-                return { label:'Ongoing', bg:'#EEF2FF', color:'#4F46E5' };
+                if (s === 'completed') return { label:'Completed', bg:'var(--status-success-bg)', color:'var(--status-success-text)' };
+                if (s === 'canceled') return { label:'Canceled', bg:'var(--status-danger-bg)', color:'var(--status-danger-text)' };
+                if (s === 'delayed') return { label:'Delayed', bg:'var(--status-danger-bg)', color:'var(--status-danger-text)' };
+                return { label:'Ongoing', bg:'var(--status-warning-bg)', color:'var(--status-warning-text)' };
               };
 
               return (
@@ -738,7 +738,7 @@ const AdminDashboard = () => {
                           padding: '8px 18px', borderRadius: 20,
                           cursor: 'pointer', fontWeight: 800, fontSize: '0.8rem',
                           whiteSpace: 'nowrap', flexShrink: 0,
-                          background: orderSubTab === s ? 'var(--primary)' : 'white',
+                          background: orderSubTab === s ? 'var(--primary)' : 'var(--surface)',
                           color: orderSubTab === s ? 'white' : 'var(--muted)',
                           border: orderSubTab === s ? 'none' : '1px solid var(--border)',
                           boxShadow: orderSubTab === s ? '0 4px 12px var(--primary-glow)' : 'var(--shadow-sm)',
@@ -760,7 +760,7 @@ const AdminDashboard = () => {
                     return (
                       <motion.div key={order.id} variants={pop} layout whileHover={{ y: -2 }}
                         onClick={() => navigate(`/deal-detail/${order.id}`)}
-                        style={{ background: 'white', borderRadius: 20, padding: '18px 20px', border: '1px solid var(--border)', boxShadow: 'var(--shadow-sm)', cursor: 'pointer' }}
+                        style={{ background: 'var(--surface)', borderRadius: 20, padding: '18px 20px', border: '1px solid var(--border)', boxShadow: 'var(--shadow-sm)', cursor: 'pointer' }}
                       >
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
                           <div>
@@ -769,15 +769,15 @@ const AdminDashboard = () => {
                           </div>
                           <div style={{ background: st.bg, color: st.color, padding: '4px 10px', borderRadius: 8, fontSize: '0.65rem', fontWeight: 800 }}>{st.label}</div>
                         </div>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, background: '#F8FAFC', borderRadius: 12, padding: '10px 14px', marginBottom: 10 }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, background: 'var(--bg)', borderRadius: 12, padding: '10px 14px', marginBottom: 10 }}>
                           {[
                             { label: 'Booking', value: `${order.bookingQuantity||0} mtr` },
                             { label: 'Dispatch', value: `${dispatchTotal} mtr` },
                             { label: 'Delivery', value: order.completionDate ? new Date(order.completionDate).toLocaleDateString('en-GB') : '—' },
                           ].map(({ label, value }) => (
                             <div key={label}>
-                              <p style={{ margin: 0, fontSize: '0.58rem', color: '#94A3B8', fontWeight: 700, textTransform: 'uppercase' }}>{label}</p>
-                              <p style={{ margin: '3px 0 0', fontSize: '0.85rem', fontWeight: 800, color: '#1E293B' }}>{value}</p>
+                              <p style={{ margin: 0, fontSize: '0.58rem', color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase' }}>{label}</p>
+                              <p style={{ margin: '3px 0 0', fontSize: '0.85rem', fontWeight: 800, color: 'var(--text)' }}>{value}</p>
                             </div>
                           ))}
                         </div>
@@ -785,7 +785,7 @@ const AdminDashboard = () => {
                           <button
                             onClick={(e) => handleDeleteOrder(e, order.id)}
                             style={{
-                              background: '#FEE2E2', color: '#DC2626', border: 'none',
+                              background: 'var(--status-danger-bg)', color: 'var(--status-danger-text)', border: 'none',
                               padding: '6px 10px', borderRadius: 8, fontSize: '0.7rem',
                               fontWeight: 800, display: 'flex', alignItems: 'center', gap: 4,
                               cursor: 'pointer'
@@ -817,8 +817,8 @@ const AdminDashboard = () => {
                 return matchesSubTab && matchesSearch;
               });
 
-              const catColor = { STOCK:'#4F46E5', SAMPLE:'#0D9488', FABRIC_ENTRY:'#D97706', MILL_DEFECT:'#DC2626' };
-              const catBg    = { STOCK:'#EEF2FF', SAMPLE:'#F0FDFA', FABRIC_ENTRY:'#FFFBEB', MILL_DEFECT:'#FEF2F2' };
+              const catColor = { STOCK:'var(--primary)', SAMPLE:'var(--secondary)', FABRIC_ENTRY:'var(--warning)', MILL_DEFECT:'var(--danger)' };
+              const catBg    = { STOCK:'var(--primary-soft)', SAMPLE:'rgba(13, 148, 136, 0.1)', FABRIC_ENTRY:'var(--warning-soft)', MILL_DEFECT:'var(--danger-soft)' };
               const subTabLabels = { STOCK: 'Stock', SAMPLE: 'Sample', FABRIC_ENTRY: 'Fabric Entry', MILL_DEFECT: 'Mill Defect' };
 
               return (
@@ -833,7 +833,7 @@ const AdminDashboard = () => {
                           padding: '8px 18px', borderRadius: 20,
                           cursor: 'pointer', fontWeight: 800, fontSize: '0.8rem',
                           whiteSpace: 'nowrap', flexShrink: 0,
-                          background: inventorySubTab === s ? catColor[s] : 'white',
+                          background: inventorySubTab === s ? catColor[s] : 'var(--surface)',
                           color: inventorySubTab === s ? 'white' : 'var(--muted)',
                           border: inventorySubTab === s ? 'none' : '1px solid var(--border)',
                           boxShadow: inventorySubTab === s ? `0 4px 12px ${catColor[s]}33` : 'var(--shadow-sm)',
@@ -857,7 +857,7 @@ const AdminDashboard = () => {
                       const cb = catBg[itemCatKey]||'#EEF2FF';
                       return (
                         <motion.div key={item.id} variants={pop} layout whileHover={{ y: -2 }}
-                          style={{ background: 'white', borderRadius: 20, padding: '18px 20px', border: '1px solid var(--border)', boxShadow: 'var(--shadow-sm)' }}
+                          style={{ background: 'var(--surface)', borderRadius: 20, padding: '18px 20px', border: '1px solid var(--border)', boxShadow: 'var(--shadow-sm)' }}
                         >
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
                             <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
@@ -872,14 +872,14 @@ const AdminDashboard = () => {
                             <span style={{ background: cb, color: cc, padding: '4px 10px', borderRadius: 8, fontSize: '0.65rem', fontWeight: 800 }}>{subTabLabels[itemCatKey]}</span>
                           </div>
                           {itemCatKey !== 'FABRIC_ENTRY' && (
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, background: '#F8FAFC', borderRadius: 12, padding: '10px 14px' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, background: 'var(--bg)', borderRadius: 12, padding: '10px 14px' }}>
                               {[
                                 { label: 'Available', value: `${available} Mtr`, highlight: available > 0 ? '#16A34A' : '#EF4444' },
-                                { label: 'Total', value: `${item.stockQuantity||0} Mtr`, highlight: '#1E293B' },
+                                { label: 'Total', value: `${item.stockQuantity||0} Mtr`, highlight: 'var(--text)' },
                                 { label: 'Dispatched', value: `${item.soldQuantity||0} Mtr`, highlight: '#D97706' },
                               ].map(({ label, value, highlight }) => (
                                 <div key={label}>
-                                  <p style={{ margin: 0, fontSize: '0.58rem', color: '#94A3B8', fontWeight: 700, textTransform: 'uppercase' }}>{label}</p>
+                                  <p style={{ margin: 0, fontSize: '0.58rem', color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase' }}>{label}</p>
                                   <p style={{ margin: '3px 0 0', fontSize: '0.85rem', fontWeight: 800, color: highlight }}>{value}</p>
                                 </div>
                               ))}

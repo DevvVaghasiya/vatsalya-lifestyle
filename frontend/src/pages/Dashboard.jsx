@@ -128,9 +128,9 @@ const Dashboard = () => {
 
       <div className="page-header" style={{
         padding: '18px 24px',
-        background: 'rgba(255,255,255,0.7)',
+        background: 'var(--surface-glass)',
         backdropFilter: 'blur(16px)',
-        borderBottom: '1px solid rgba(255,255,255,0.3)',
+        borderBottom: '1px solid var(--border)',
         boxShadow: '0 4px 30px rgba(0,0,0,0.03)'
       }}>
         <div className="flex items-center gap-4">
@@ -147,7 +147,7 @@ const Dashboard = () => {
             whileTap={{ scale: 0.95 }}
             className="profile-avatar-small"
             onClick={() => navigate('/profile')}
-            style={{ border: '2px solid white', boxShadow: 'var(--shadow-sm)', width: '52px', height: '52px' }}
+            style={{ border: '2px solid var(--surface)', boxShadow: 'var(--shadow-sm)', width: '52px', height: '52px' }}
           >
             <img src={user.profilePictureUrl || 'https://i.pravatar.cc/150?img=11'} alt="User" />
           </motion.div>
@@ -161,9 +161,9 @@ const Dashboard = () => {
         animate="show"
       >
         <motion.div variants={item} className="hero-card" style={{
-          background: 'rgba(255,255,255,0.5)',
+          background: 'var(--surface-glass-heavy)',
           backdropFilter: 'blur(24px)',
-          border: '1px solid rgba(255,255,255,0.5)',
+          border: '1px solid var(--border)',
           borderRadius: '32px',
           padding: '24px', // Reduced padding for better mobile fit
           boxShadow: '0 20px 40px rgba(0,0,0,0.05)'
@@ -171,16 +171,16 @@ const Dashboard = () => {
           <div className="flex justify-between items-start mb-6">
             <div>
               <p className="text-[10px] font-black uppercase tracking-[2px] text-primary mb-1">Authenticated Access</p>
-              <h1 style={{ fontSize: '2rem', fontWeight: '900', color: '#1E293B', margin: 0, letterSpacing: '-1px' }}>Hi, {firstName} 👋</h1>
+              <h1 style={{ fontSize: '2rem', fontWeight: '900', color: 'var(--text)', margin: 0, letterSpacing: '-1px' }}>Hi, {firstName} 👋</h1>
             </div>
             <div className="pill" style={{
-              background: 'transparent',
-              color: '#1E293B',
+              background: 'var(--surface)',
+              color: 'var(--text)',
               fontWeight: '800',
               fontSize: '10px',
               padding: '6px 10px',
               borderRadius: '8px',
-              border: '1px solid rgba(0,0,0,0.05)',
+              border: '1px solid var(--border)',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
@@ -197,7 +197,7 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-          <p className="mb-8 font-semibold text-[#64748B]" style={{ fontSize: '0.95rem', lineHeight: 1.5, maxWidth: '300px' }}>
+          <p className="mb-8 font-semibold text-muted" style={{ fontSize: '0.95rem', lineHeight: 1.5, maxWidth: '300px' }}>
              Textiles That Define Your Vision.
           </p>
 
@@ -240,7 +240,7 @@ const Dashboard = () => {
               style={{
                 flex: 1,
                 padding: '24px 20px',
-                background: 'white',
+                background: 'var(--surface)',
                 borderRadius: '28px',
                 cursor: 'pointer',
                 display: 'flex',
@@ -248,15 +248,15 @@ const Dashboard = () => {
                 alignItems: 'center',
                 gap: '12px',
                 boxShadow: '0 12px 30px rgba(0,0,0,0.04)',
-                border: '1px solid rgba(0,0,0,0.05)'
+                border: '1px solid var(--border)'
               }}
             >
-              <div style={{ width: '52px', height: '52px', borderRadius: '16px', background: '#F8FAFC', color: '#1E293B', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #E2E8F0' }}>
+              <div style={{ width: '52px', height: '52px', borderRadius: '16px', background: 'var(--bg)', color: 'var(--text)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--border)' }}>
                 <UserPlus size={24} />
               </div>
               <div style={{ textAlign: 'center' }}>
-                <p style={{ margin: 0, fontWeight: '900', fontSize: '1rem', color: '#1E293B', letterSpacing: '-0.3px' }}>Add Client</p>
-                <p style={{ margin: '4px 0 0', fontWeight: '600', fontSize: '0.7rem', color: '#94A3B8' }}>Register partner</p>
+                <p style={{ margin: 0, fontWeight: '900', fontSize: '1rem', color: 'var(--text)', letterSpacing: '-0.3px' }}>Add Client</p>
+                <p style={{ margin: '4px 0 0', fontWeight: '600', fontSize: '0.7rem', color: 'var(--muted)' }}>Register partner</p>
               </div>
             </motion.div>
           </div>
@@ -270,9 +270,9 @@ const Dashboard = () => {
               <div key={i} style={{
                 borderRadius: '24px',
                 padding: '20px',
-                background: 'rgba(255,255,255,0.7)',
+                background: 'var(--surface-glass)',
                 backdropFilter: 'blur(10px)',
-                border: '1px solid rgba(255,255,255,0.5)',
+                border: '1px solid var(--border)',
                 boxShadow: '0 10px 25px rgba(0,0,0,0.02)',
                 overflow: 'hidden',
                 position: 'relative',
@@ -285,19 +285,19 @@ const Dashboard = () => {
                   zIndex: 1,
                 }} />
                 <div style={{ display:'flex', justifyContent:'space-between', marginBottom:16 }}>
-                  <div style={{ width:40, height:40, borderRadius:12, background:'#E2E8F0' }} />
-                  <div style={{ width:48, height:20, borderRadius:6, background:'#E2E8F0' }} />
+                  <div style={{ width:40, height:40, borderRadius:12, background:'var(--bg)' }} />
+                  <div style={{ width:48, height:20, borderRadius:6, background:'var(--bg)' }} />
                 </div>
-                <div style={{ width:'60%', height:12, borderRadius:6, background:'#E2E8F0', marginBottom:8 }} />
-                <div style={{ width:'40%', height:28, borderRadius:6, background:'#E2E8F0' }} />
+                <div style={{ width:'60%', height:12, borderRadius:6, background:'var(--bg)', marginBottom:8 }} />
+                <div style={{ width:'40%', height:28, borderRadius:6, background:'var(--bg)' }} />
               </div>
             ))
           ) : (
             [
-              { label: 'Completed Orders',   value: stats.completedOrders,    icon: FileCheck,   color: '#10B981', bg: '#ECFDF5', path: '/deals',     tab: 'completed' },
-              { label: 'Delayed Orders',     value: stats.delayedOrders,      icon: Clock,       color: '#EF4444', bg: '#FEF2F2', path: '/deals',     tab: 'delayed'   },
-              { label: 'Ongoing Inquiries',  value: stats.ongoingInquiries,   icon: Activity,    color: '#4F46E5', bg: '#EEF2FF', path: '/inquiries', tab: 'ongoing'   },
-              { label: 'Completed Inquiries',value: stats.completedInquiries, icon: CheckCircle, color: '#06B6D4', bg: '#ECFEFF', path: '/inquiries', tab: 'completed' },
+              { label: 'Completed Orders',   value: stats.completedOrders,    icon: FileCheck,   color: '#10B981', bg: 'var(--status-success-bg)', path: '/deals',     tab: 'completed' },
+              { label: 'Delayed Orders',     value: stats.delayedOrders,      icon: Clock,       color: '#EF4444', bg: 'var(--status-danger-bg)', path: '/deals',     tab: 'delayed'   },
+              { label: 'Ongoing Inquiries',  value: stats.ongoingInquiries,   icon: Activity,    color: '#4F46E5', bg: 'var(--status-warning-bg)', path: '/inquiries', tab: 'ongoing'   },
+              { label: 'Completed Inquiries',value: stats.completedInquiries, icon: CheckCircle, color: '#06B6D4', bg: 'var(--status-success-bg)', path: '/inquiries', tab: 'completed' },
             ].map((stat, i) => (
               <motion.div
                 key={i}
@@ -310,9 +310,9 @@ const Dashboard = () => {
                 onClick={() => navigate(stat.path, { state: { tab: stat.tab } })}
                 className="card"
                 style={{
-                  border: '1px solid rgba(255,255,255,0.5)',
+                  border: '1px solid var(--border)',
                   boxShadow: '0 10px 25px rgba(0,0,0,0.02)',
-                  background: 'rgba(255,255,255,0.7)',
+                  background: 'var(--surface-glass)',
                   backdropFilter: 'blur(10px)',
                   borderRadius: '24px',
                   padding: '20px',
@@ -326,8 +326,8 @@ const Dashboard = () => {
                   <div style={{ fontSize: '10px', fontWeight: '800', color: stat.color, background: `${stat.color}15`, padding: '4px 8px', borderRadius: '6px' }} />
                 </div>
                 <div>
-                  <p style={{ fontSize: '11px', fontWeight: '800', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.5px', margin: 0 }}>{stat.label}</p>
-                  <h3 style={{ fontSize: '1.5rem', fontWeight: '900', color: '#1E293B', margin: '4px 0 0' }}>{stat.value}</h3>
+                  <p style={{ fontSize: '11px', fontWeight: '800', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px', margin: 0 }}>{stat.label}</p>
+                  <h3 style={{ fontSize: '1.5rem', fontWeight: '900', color: 'var(--text)', margin: '4px 0 0' }}>{stat.value}</h3>
                 </div>
               </motion.div>
             ))
@@ -338,16 +338,16 @@ const Dashboard = () => {
           <div className="card" style={{
             padding: '32px 0',
             borderRadius: '32px',
-            border: '1px solid rgba(255,255,255,0.5)',
+            border: '1px solid var(--border)',
             boxShadow: '0 20px 40px rgba(0,0,0,0.03)',
-            background: 'rgba(255,255,255,0.7)',
+            background: 'var(--surface-glass)',
             backdropFilter: 'blur(10px)',
             overflow: 'hidden',
             position: 'relative'
           }}>
             {/* Fade effect at edges */}
-            <div style={{ position: 'absolute', top: 0, left: 0, width: '120px', height: '100%', background: 'linear-gradient(to right, rgba(255,255,255,0.9), transparent)', zIndex: 10 }}></div>
-            <div style={{ position: 'absolute', top: 0, right: 0, width: '120px', height: '100%', background: 'linear-gradient(to left, rgba(255,255,255,0.9), transparent)', zIndex: 10 }}></div>
+            <div className="carousel-fade-left" style={{ position: 'absolute', top: 0, left: 0, width: '120px', height: '100%', background: 'linear-gradient(to right, var(--surface), transparent)', zIndex: 10 }}></div>
+            <div className="carousel-fade-right" style={{ position: 'absolute', top: 0, right: 0, width: '120px', height: '100%', background: 'linear-gradient(to left, var(--surface), transparent)', zIndex: 10 }}></div>
 
             <div style={{ position: 'relative' }}>
               {/* Row 1: Moving Right to Left */}
@@ -368,7 +368,7 @@ const Dashboard = () => {
                         borderRadius: '24px',
                         overflow: 'hidden',
                         boxShadow: '0 12px 24px rgba(0,0,0,0.1)',
-                        border: '4px solid white',
+                        border: '4px solid var(--surface)',
                         cursor: 'pointer'
                       }}
                     >
@@ -402,7 +402,7 @@ const Dashboard = () => {
                         borderRadius: '24px',
                         overflow: 'hidden',
                         boxShadow: '0 12px 24px rgba(0,0,0,0.1)',
-                        border: '4px solid white',
+                        border: '4px solid var(--surface)',
                         cursor: 'pointer'
                       }}
                     >
@@ -440,9 +440,9 @@ const Dashboard = () => {
             whileHover={{ scale: 1.02, y: -4 }}
             transition={{ type: 'spring', stiffness: 260, damping: 20 }}
             style={{
-              background: 'rgba(255,255,255,0.6)',
+              background: 'var(--surface-glass-heavy)',
               backdropFilter: 'blur(20px)',
-              border: '1px solid rgba(255,255,255,0.7)',
+              border: '1px solid var(--border)',
               borderRadius: '28px',
               padding: '28px 40px 20px',
               boxShadow: '0 20px 60px rgba(79,70,229,0.08), 0 4px 16px rgba(0,0,0,0.04)',
@@ -531,19 +531,19 @@ const Dashboard = () => {
             alignItems: 'center',
             gap: 8,
             padding: '20px 32px',
-            background: 'rgba(255,255,255,0.4)',
+            background: 'var(--surface-glass)',
             backdropFilter: 'blur(10px)',
             borderRadius: '24px',
-            border: '1px solid rgba(255,255,255,0.4)',
+            border: '1px solid var(--border)',
           }}>
-            <p style={{ fontSize: '11px', fontWeight: '900', color: '#64748B', margin: 0, textTransform: 'uppercase', letterSpacing: '1.5px' }}>
+            <p style={{ fontSize: '11px', fontWeight: '900', color: 'var(--muted)', margin: 0, textTransform: 'uppercase', letterSpacing: '1.5px' }}>
               Developed by — <span style={{ color: 'var(--primary)' }}>Dev Vaghasiya</span>
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '20px', marginTop: '4px' }}>
-              <a href="tel:9408146236" style={{ fontSize: '12px', fontWeight: '800', color: '#1E293B', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6 }}>
+              <a href="tel:9408146236" style={{ fontSize: '12px', fontWeight: '800', color: 'var(--text)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6 }}>
                 <span style={{ fontSize: '14px' }}>📞</span> 9408146236
               </a>
-              <a href="mailto:devvaghasiya8047@gmail.com" style={{ fontSize: '12px', fontWeight: '800', color: '#1E293B', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6 }}>
+              <a href="mailto:devvaghasiya8047@gmail.com" style={{ fontSize: '12px', fontWeight: '800', color: 'var(--text)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6 }}>
                 <span style={{ fontSize: '14px' }}>✉️</span> devvaghasiya8047@gmail.com
               </a>
             </div>

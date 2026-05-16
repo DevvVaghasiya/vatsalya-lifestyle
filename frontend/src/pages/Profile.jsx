@@ -201,7 +201,7 @@ const Profile = () => {
             <img
               src={user.profilePictureUrl || 'https://i.pravatar.cc/150?img=11'}
               alt="Profile"
-              style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover', border: '4px solid white', boxShadow: '0 8px 24px rgba(79,70,229,0.18)' }}
+              style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover', border: '4px solid var(--surface)', boxShadow: 'var(--shadow-lg)' }}
             />
 
             {/* Uploading spinner overlay */}
@@ -210,7 +210,7 @@ const Profile = () => {
                 <Loader2 size={28} color="white" style={{ animation: 'spin 1s linear infinite' }} />
               </div>
             ) : (
-              <div style={{ position: 'absolute', bottom: 4, right: 4, width: 30, height: 30, borderRadius: '50%', background: 'linear-gradient(135deg, var(--primary), var(--accent))', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid white', boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}>
+              <div style={{ position: 'absolute', bottom: 4, right: 4, width: 30, height: 30, borderRadius: '50%', background: 'linear-gradient(135deg, var(--primary), var(--accent))', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid var(--surface)', boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}>
                 <Camera size={14} color="white" />
               </div>
             )}
@@ -223,18 +223,18 @@ const Profile = () => {
                 initial={{ opacity: 0, scale: 0.9, y: -8 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9 }}
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, background: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: 10, padding: '8px 16px', marginBottom: 12 }}
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, background: 'var(--status-success-bg)', border: '1px solid var(--status-success-text)33', borderRadius: 10, padding: '8px 16px', marginBottom: 12 }}
               >
-                <CheckCircle2 size={16} color="#16A34A" />
-                <span style={{ fontSize: '0.82rem', fontWeight: 700, color: '#16A34A' }}>Profile picture saved to cloud ✓</span>
+                <CheckCircle2 size={16} color="var(--status-success-text)" />
+                <span style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--status-success-text)' }}>Profile picture saved to cloud ✓</span>
               </motion.div>
             )}
             {uploadError && (
               <motion.div
                 initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-                style={{ background: '#FEF2F2', border: '1px solid #FECACA', borderRadius: 10, padding: '8px 16px', marginBottom: 12 }}
+                style={{ background: 'var(--status-danger-bg)', border: '1px solid var(--status-danger-text)33', borderRadius: 10, padding: '8px 16px', marginBottom: 12 }}
               >
-                <span style={{ fontSize: '0.82rem', fontWeight: 700, color: '#DC2626' }}>{uploadError}</span>
+                <span style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--status-danger-text)' }}>{uploadError}</span>
               </motion.div>
             )}
           </AnimatePresence>
@@ -260,7 +260,7 @@ const Profile = () => {
         </motion.div>
 
         {/* ── Menu Section ── */}
-        <p style={{ fontSize: '0.68rem', fontWeight: 800, textTransform: 'uppercase', color: '#94A3B8', letterSpacing: '1px', marginBottom: 12, marginLeft: 4 }}>
+        <p style={{ fontSize: '0.68rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--muted)', letterSpacing: '1px', marginBottom: 12, marginLeft: 4 }}>
           Administration &amp; Security
         </p>
 
