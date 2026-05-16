@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import {
   ArrowLeft, Clock, CheckCircle, XCircle,
   User, Package, Calendar, Info, Hash, Palette,
-  Briefcase, Edit3, Save, X, Truck, Layers, Ruler, DollarSign, FileCheck, Download
+  Briefcase, Edit3, Save, X, Truck, Layers, Ruler, DollarSign, FileCheck, Download, Trash2
 } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import api from '../utils/api';
@@ -1188,6 +1188,45 @@ const OrderDetails = () => {
               }}
             >
               <Save size={22} /> Save Changes
+            </button>
+          </div>
+        )}
+        
+        {/* Admin Delete Action */}
+        {!isEditing && JSON.parse(localStorage.getItem('user') || '{}').role === 'ADMIN' && (
+          <div style={{ marginTop: '24px' }}>
+            <button
+              onClick={async () => {
+                if (window.confirm("Are you sure you want to delete this order? This action cannot be undone and it will be completely removed from the database.")) {
+                  try {
+                    await api.delete(`/api/orders/${id}`);
+                    alert("Order deleted successfully.");
+                    navigate('/admin-dashboard');
+                  } catch (err) {
+                    console.error('Error deleting order:', err);
+                    alert("Failed to delete order.");
+                  }
+                }
+              }}
+              style={{
+                width: '100%',
+                backgroundColor: '#FEF2F2',
+                color: '#DC2626',
+                border: '1px solid #FEE2E2',
+                padding: '16px',
+                borderRadius: '20px',
+                fontWeight: '700',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '10px',
+                cursor: 'pointer',
+                transition: 'all 0.2s'
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FEE2E2'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(220, 38, 38, 0.1)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FEF2F2'; e.currentTarget.style.boxShadow = 'none'; }}
+            >
+              <Trash2 size={20} /> Delete Order (Admin Only)
             </button>
           </div>
         )}

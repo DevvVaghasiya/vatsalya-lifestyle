@@ -85,6 +85,8 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('All');
+  const [orderSubTab, setOrderSubTab] = useState('ongoing');
+  const [inventorySubTab, setInventorySubTab] = useState('STOCK');
   const [approvingId, setApprovingId] = useState(null);
 
   const adminUser = JSON.parse(localStorage.getItem('user') || '{}');
@@ -162,6 +164,48 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleDeleteInquiry = async (e, inqId) => {
+    e.stopPropagation(); // Don't navigate to details
+    if (!window.confirm("Are you sure you want to delete this inquiry? This action cannot be undone and it will be completely removed from the database.")) return;
+    
+    try {
+      await api.delete(`/api/inquiries/${inqId}`);
+      setInquiries(prev => prev.filter(i => i.id !== inqId));
+      alert("Inquiry deleted successfully.");
+    } catch (err) {
+      console.error('Error deleting inquiry:', err);
+      alert("Failed to delete inquiry.");
+    }
+  };
+
+  const handleDeleteOrder = async (e, orderId) => {
+    e.stopPropagation(); // Don't navigate to details
+    if (!window.confirm("Are you sure you want to delete this order? This action cannot be undone and it will be completely removed from the database.")) return;
+    
+    try {
+      await api.delete(`/api/orders/${orderId}`);
+      setOrders(prev => prev.filter(o => o.id !== orderId));
+      alert("Order deleted successfully.");
+    } catch (err) {
+      console.error('Error deleting order:', err);
+      alert("Failed to delete order. It may have associated records.");
+    }
+  };
+
+  const handleDeleteInventory = async (e, itemId) => {
+    e.stopPropagation();
+    if (!window.confirm("Are you sure you want to delete this inventory item? This action cannot be undone.")) return;
+    
+    try {
+      await api.delete(`/api/inventory/${itemId}`);
+      setInventory(prev => prev.filter(i => i.id !== itemId));
+      alert("Inventory item deleted successfully.");
+    } catch (err) {
+      console.error('Error deleting inventory item:', err);
+      alert("Failed to delete inventory item.");
+    }
+  };
+
   const filteredUsers = users.filter(u =>
     (u.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
     (u.phoneNumber || '').includes(searchTerm) ||
@@ -175,6 +219,28 @@ const AdminDashboard = () => {
     const matchFilter = filterStatus === 'All' || (inq.status || 'Ongoing') === filterStatus;
     return matchSearch && matchFilter;
   });
+
+  const mapOrderStatus = (item) => {
+    const status = item.status;
+    if (!status) return 'Ongoing';
+    const normalized = status.toLowerCase();
+
+    if (normalized === 'completed') return 'Completed';
+    if (normalized === 'canceled' || normalized === 'cancelled') return 'Canceled';
+    if (normalized === 'delayed') return 'Delayed';
+
+    // Check if Ongoing but Date passed
+    if (item.completionDate) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const completion = new Date(item.completionDate);
+      if (completion < today && (['pending', 'processing', 'ongoing'].includes(normalized))) {
+        return 'Delayed';
+      }
+    }
+
+    return 'Ongoing';
+  };
 
   const stagger = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.07 } } };
   const pop    = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } };
@@ -594,9 +660,22 @@ const AdminDashboard = () => {
                         <StatusIcon size={10} /> {inq.status || 'Ongoing'}
                       </div>
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 4 }}>
-                      <span style={{ fontSize: '0.7rem', fontWeight: 800, color: 'var(--primary)' }}>View Details</span>
-                      <ChevronRight size={13} color="var(--primary)" />
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <button
+                        onClick={(e) => handleDeleteInquiry(e, inq.id)}
+                        style={{
+                          background: '#FEE2E2', color: '#DC2626', border: 'none',
+                          padding: '6px 10px', borderRadius: 8, fontSize: '0.7rem',
+                          fontWeight: 800, display: 'flex', alignItems: 'center', gap: 4,
+                          cursor: 'pointer'
+                        }}
+                      >
+                        <Trash2 size={12} /> Delete
+                      </button>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                        <span style={{ fontSize: '0.7rem', fontWeight: 800, color: 'var(--primary)' }}>View Details</span>
+                        <ChevronRight size={13} color="var(--primary)" />
+                      </div>
                     </div>
                   </motion.div>
                 );
@@ -606,24 +685,52 @@ const AdminDashboard = () => {
           ) : activeTab === 'orders' ? (
             /* ── Orders List ── */
             (() => {
-              const filtered = orders.filter(o =>
-                (o.client?.name||'').toLowerCase().includes(searchTerm.toLowerCase()) ||
-                (o.styleNo||'').toLowerCase().includes(searchTerm.toLowerCase())
-              );
-              const mapStatus = o => {
-                const s = (o.status||'').toLowerCase();
+              const filtered = orders.filter(o => {
+                const statusGroup = mapOrderStatus(o);
+                const matchesSubTab = orderSubTab === 'all' ? true : statusGroup.toLowerCase() === orderSubTab;
+                const matchesSearch = (o.client?.name||'').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                     (o.styleNo||'').toLowerCase().includes(searchTerm.toLowerCase());
+                return matchesSubTab && matchesSearch;
+              });
+
+              const mapStatusStyles = o => {
+                const s = mapOrderStatus(o).toLowerCase();
                 if (s === 'completed') return { label:'Completed', bg:'#DCFCE7', color:'#166534' };
-                if (s === 'canceled' || s === 'cancelled') return { label:'Canceled', bg:'#FEE2E2', color:'#B91C1C' };
+                if (s === 'canceled') return { label:'Canceled', bg:'#FEE2E2', color:'#B91C1C' };
                 if (s === 'delayed') return { label:'Delayed', bg:'#FEF2F2', color:'#EF4444' };
                 return { label:'Ongoing', bg:'#EEF2FF', color:'#4F46E5' };
               };
+
               return (
                 <motion.div key="orders" variants={stagger} initial="hidden" animate="show" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                  <p style={{ margin: '0 0 4px 2px', fontSize: '0.7rem', fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{filtered.length} orders</p>
+                  {/* Order Sub-Tabs */}
+                  <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 10, marginBottom: 8, scrollbarWidth: 'none' }}>
+                    {['ongoing', 'delayed', 'completed', 'canceled'].map(s => (
+                      <button
+                        key={s}
+                        onClick={() => setOrderSubTab(s)}
+                        style={{
+                          padding: '8px 18px', borderRadius: 20,
+                          cursor: 'pointer', fontWeight: 800, fontSize: '0.8rem',
+                          whiteSpace: 'nowrap', flexShrink: 0,
+                          background: orderSubTab === s ? 'var(--primary)' : 'white',
+                          color: orderSubTab === s ? 'white' : 'var(--muted)',
+                          border: orderSubTab === s ? 'none' : '1px solid var(--border)',
+                          boxShadow: orderSubTab === s ? '0 4px 12px var(--primary-glow)' : 'var(--shadow-sm)',
+                          transition: 'all 0.2s'
+                        }}
+                      >
+                        {s.charAt(0).toUpperCase() + s.slice(1)}
+                      </button>
+                    ))}
+                  </div>
+
+                  <p style={{ margin: '0 0 4px 2px', fontSize: '0.7rem', fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{filtered.length} {orderSubTab} orders</p>
+                  
                   {filtered.length === 0 ? (
-                    <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--muted)', fontWeight: 700, opacity: 0.5 }}>No orders found.</div>
+                    <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--muted)', fontWeight: 700, opacity: 0.5 }}>No {orderSubTab} orders found.</div>
                   ) : filtered.map(order => {
-                    const st = mapStatus(order);
+                    const st = mapStatusStyles(order);
                     const dispatchTotal = (order.dispatchQuantityReceivedEntries||[]).reduce((s,e)=>s+(e.quantity||0),0);
                     return (
                       <motion.div key={order.id} variants={pop} layout whileHover={{ y: -2 }}
@@ -649,9 +756,22 @@ const AdminDashboard = () => {
                             </div>
                           ))}
                         </div>
-                        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 4 }}>
-                          <span style={{ fontSize: '0.7rem', fontWeight: 800, color: 'var(--primary)' }}>View Order</span>
-                          <ChevronRight size={13} color="var(--primary)" />
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <button
+                            onClick={(e) => handleDeleteOrder(e, order.id)}
+                            style={{
+                              background: '#FEE2E2', color: '#DC2626', border: 'none',
+                              padding: '6px 10px', borderRadius: 8, fontSize: '0.7rem',
+                              fontWeight: 800, display: 'flex', alignItems: 'center', gap: 4,
+                              cursor: 'pointer'
+                            }}
+                          >
+                            <Trash2 size={12} /> Delete
+                          </button>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                            <span style={{ fontSize: '0.7rem', fontWeight: 800, color: 'var(--primary)' }}>View Order</span>
+                            <ChevronRight size={13} color="var(--primary)" />
+                          </div>
                         </div>
                       </motion.div>
                     );
@@ -663,21 +783,50 @@ const AdminDashboard = () => {
           ) : (
             /* ── Inventory List ── */
             (() => {
-              const filtered = inventory.filter(i =>
-                (i.fabricName||'').toLowerCase().includes(searchTerm.toLowerCase()) ||
-                (i.referenceNo||'').toLowerCase().includes(searchTerm.toLowerCase())
-              );
-              const catColor = { Stock:'#4F46E5', Sample:'#0D9488', 'Fabric Entry':'#D97706' };
-              const catBg    = { Stock:'#EEF2FF', Sample:'#F0FDFA', 'Fabric Entry':'#FFFBEB' };
+              const filtered = inventory.filter(i => {
+                const matchesSubTab = i.category.toUpperCase() === inventorySubTab.replace(' ', '_');
+                const matchesSearch = (i.fabricName||'').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                     (i.referenceNo||'').toLowerCase().includes(searchTerm.toLowerCase());
+                return matchesSubTab && matchesSearch;
+              });
+
+              const catColor = { STOCK:'#4F46E5', SAMPLE:'#0D9488', FABRIC_ENTRY:'#D97706' };
+              const catBg    = { STOCK:'#EEF2FF', SAMPLE:'#F0FDFA', FABRIC_ENTRY:'#FFFBEB' };
+              const subTabLabels = { STOCK: 'Stock', SAMPLE: 'Sample', FABRIC_ENTRY: 'Fabric Entry' };
+
               return (
                 <motion.div key="inventory" variants={stagger} initial="hidden" animate="show" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                  <p style={{ margin: '0 0 4px 2px', fontSize: '0.7rem', fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{filtered.length} items</p>
+                  {/* Inventory Sub-Tabs */}
+                  <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 10, marginBottom: 8, scrollbarWidth: 'none' }}>
+                    {['STOCK', 'SAMPLE', 'FABRIC_ENTRY'].map(s => (
+                      <button
+                        key={s}
+                        onClick={() => setInventorySubTab(s)}
+                        style={{
+                          padding: '8px 18px', borderRadius: 20,
+                          cursor: 'pointer', fontWeight: 800, fontSize: '0.8rem',
+                          whiteSpace: 'nowrap', flexShrink: 0,
+                          background: inventorySubTab === s ? catColor[s] : 'white',
+                          color: inventorySubTab === s ? 'white' : 'var(--muted)',
+                          border: inventorySubTab === s ? 'none' : '1px solid var(--border)',
+                          boxShadow: inventorySubTab === s ? `0 4px 12px ${catColor[s]}33` : 'var(--shadow-sm)',
+                          transition: 'all 0.2s'
+                        }}
+                      >
+                        {subTabLabels[s]}
+                      </button>
+                    ))}
+                  </div>
+
+                  <p style={{ margin: '0 0 4px 2px', fontSize: '0.7rem', fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{filtered.length} {subTabLabels[inventorySubTab]} items</p>
+                  
                   {filtered.length === 0 ? (
-                    <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--muted)', fontWeight: 700, opacity: 0.5 }}>No inventory items found.</div>
+                    <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--muted)', fontWeight: 700, opacity: 0.5 }}>No {subTabLabels[inventorySubTab]} items found.</div>
                   ) : filtered.map(item => {
                     const available = (item.stockQuantity||0) - (item.soldQuantity||0);
-                    const cc = catColor[item.category]||'#4F46E5';
-                    const cb = catBg[item.category]||'#EEF2FF';
+                    const itemCatKey = item.category.toUpperCase().replace(' ', '_');
+                    const cc = catColor[itemCatKey]||'#4F46E5';
+                    const cb = catBg[itemCatKey]||'#EEF2FF';
                     return (
                       <motion.div key={item.id} variants={pop} layout whileHover={{ y: -2 }}
                         style={{ background: 'white', borderRadius: 20, padding: '18px 20px', border: '1px solid var(--border)', boxShadow: 'var(--shadow-sm)' }}
@@ -692,9 +841,9 @@ const AdminDashboard = () => {
                               {item.referenceNo && <p style={{ margin: '2px 0 0', fontSize: '0.7rem', fontWeight: 700, color: 'var(--muted)' }}>Ref: {item.referenceNo}</p>}
                             </div>
                           </div>
-                          <span style={{ background: cb, color: cc, padding: '4px 10px', borderRadius: 8, fontSize: '0.65rem', fontWeight: 800 }}>{item.category}</span>
+                          <span style={{ background: cb, color: cc, padding: '4px 10px', borderRadius: 8, fontSize: '0.65rem', fontWeight: 800 }}>{subTabLabels[itemCatKey]}</span>
                         </div>
-                        {item.category !== 'Fabric Entry' && (
+                        {itemCatKey !== 'FABRIC_ENTRY' && (
                           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, background: '#F8FAFC', borderRadius: 12, padding: '10px 14px' }}>
                             {[
                               { label: 'Available', value: `${available} Mtr`, highlight: available > 0 ? '#16A34A' : '#EF4444' },
@@ -708,7 +857,7 @@ const AdminDashboard = () => {
                             ))}
                           </div>
                         )}
-                        {item.category === 'Fabric Entry' && (
+                        {itemCatKey === 'FABRIC_ENTRY' && (
                           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                             {[['Composition', item.composition], ['GSM', item.gsm], ['Width', item.width], ['Type', item.fabricType]].filter(([,v])=>v).map(([k,v]) => (
                               <div key={k} style={{ background: '#FFFBEB', padding: '4px 10px', borderRadius: 8 }}>
@@ -718,6 +867,19 @@ const AdminDashboard = () => {
                             ))}
                           </div>
                         )}
+                        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 12 }}>
+                          <button
+                            onClick={(e) => handleDeleteInventory(e, item.id)}
+                            style={{
+                              background: '#FEE2E2', color: '#DC2626', border: 'none',
+                              padding: '6px 10px', borderRadius: 8, fontSize: '0.7rem',
+                              fontWeight: 800, display: 'flex', alignItems: 'center', gap: 4,
+                              cursor: 'pointer'
+                            }}
+                          >
+                            <Trash2 size={12} /> Delete Item
+                          </button>
+                        </div>
                       </motion.div>
                     );
                   })}

@@ -372,10 +372,12 @@ const Inventory = () => {
                   <Printer size={16} />
                 </button>
               )}
-              <button onClick={() => handleDelete(item.id)}
-                style={{ background: '#FEF2F2', border: 'none', borderRadius: '10px', padding: '8px', cursor: 'pointer', color: '#EF4444' }}>
-                <Trash2 size={16} />
-              </button>
+              {JSON.parse(localStorage.getItem('user') || '{}').role === 'ADMIN' && (
+                <button onClick={() => handleDelete(item.id)}
+                  style={{ background: '#FEF2F2', border: 'none', borderRadius: '10px', padding: '8px', cursor: 'pointer', color: '#EF4444' }}>
+                  <Trash2 size={16} />
+                </button>
+              )}
             </div>
           </div>
 
@@ -577,18 +579,20 @@ const Inventory = () => {
       </div>
 
       {/* ── Add Button ── */}
-      <button
-        onClick={() => setShowAddModal(true)}
-        className="inv-add-btn"
-        style={{
-          border: `2px dashed ${currentTab.color}`,
-          backgroundColor: currentTab.bg,
-          color: currentTab.color,
-        }}
-      >
-        <Plus size={20} />
-        {addLabel[activeTab]}
-      </button>
+      {JSON.parse(localStorage.getItem('user') || '{}').role === 'ADMIN' && (
+        <button
+          onClick={() => setShowAddModal(true)}
+          className="inv-add-btn"
+          style={{
+            border: `2px dashed ${currentTab.color}`,
+            backgroundColor: currentTab.bg,
+            color: currentTab.color,
+          }}
+        >
+          <Plus size={20} />
+          {addLabel[activeTab]}
+        </button>
+      )}
 
       {/* ── Available Items ── */}
       <div className="inv-section">

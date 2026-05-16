@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import {
   ArrowLeft, Clock, CheckCircle, XCircle,
   User, Package, Calendar, Info, Hash, Palette,
-  Briefcase, FileCheck, Edit3, Save, X, Download
+  Briefcase, FileCheck, Edit3, Save, X, Download, Trash2
 } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import api from '../utils/api';
@@ -501,16 +501,27 @@ const InquiryDetails = () => {
           </div>
         )}
 
-        {/* PDF Download — always available */}
-        {!isEditing && (
-          <div className="action-buttons" style={{ marginTop: isOngoing ? 0 : 8 }}>
+        {/* Admin Delete Action */}
+        {!isEditing && JSON.parse(localStorage.getItem('user') || '{}').role === 'ADMIN' && (
+          <div className="action-buttons" style={{ marginTop: '16px' }}>
             <button
-              onClick={generatePDF}
-              className="action-btn action-btn-pdf"
-              style={{ flex: 1 }}
+              onClick={async () => {
+                if (window.confirm("Are you sure you want to delete this inquiry? This action cannot be undone and it will be completely removed from the database.")) {
+                  try {
+                    await api.delete(`/api/inquiries/${id}`);
+                    alert("Inquiry deleted successfully.");
+                    navigate('/admin-dashboard');
+                  } catch (err) {
+                    console.error('Error deleting inquiry:', err);
+                    alert("Failed to delete inquiry.");
+                  }
+                }
+              }}
+              className="action-btn"
+              style={{ flex: 1, background: '#FEF2F2', color: '#DC2626', border: '1px solid #FEE2E2' }}
             >
-              <Download size={20} />
-              Download PDF
+              <Trash2 size={20} />
+              Delete Inquiry (Admin Only)
             </button>
           </div>
         )}

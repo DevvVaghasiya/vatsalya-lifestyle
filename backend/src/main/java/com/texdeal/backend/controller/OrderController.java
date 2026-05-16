@@ -147,4 +147,14 @@ public class OrderController {
             return orderRepository.save(order);
         }).orElseThrow(() -> new RuntimeException("Order not found with id " + id));
     }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public ResponseEntity<?> deleteOrder(@PathVariable Long id) {
+        System.out.println("--- ORDER DELETION --- ID: " + id);
+        return orderRepository.findById(id).map(order -> {
+            orderRepository.delete(order);
+            return ResponseEntity.ok().build();
+        }).orElse(ResponseEntity.notFound().build());
+    }
 }
