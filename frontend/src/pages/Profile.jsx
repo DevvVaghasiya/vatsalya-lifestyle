@@ -11,13 +11,13 @@ import { uploadToCloudinary } from '../utils/cloudinary';
 
 /**
  * Persist profile picture URL to:
- *   1. sessionStorage (user object) — for immediate UI updates everywhere
+ *   1. localStorage (user object) — for immediate UI updates everywhere
  *   2. Backend DB via PUT /api/users/:id — so it survives across devices/logins
  */
 const saveProfilePicture = async (user, url) => {
-  // 1. Update sessionStorage
+  // 1. Update localStorage
   const updatedUser = { ...user, profilePictureUrl: url };
-  sessionStorage.setItem('user', JSON.stringify(updatedUser));
+  localStorage.setItem('user', JSON.stringify(updatedUser));
 
   // 2. Dispatch event so Navbar / other components re-read the updated user
   window.dispatchEvent(new Event('userProfileUpdated'));
@@ -31,7 +31,7 @@ const saveProfilePicture = async (user, url) => {
       );
     } catch (err) {
       console.warn('Could not sync profile picture to backend:', err.message);
-      // Not fatal — sessionStorage already updated
+      // Not fatal — localStorage already updated
     }
   }
 
@@ -42,15 +42,15 @@ const Profile = () => {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
   const timerRef = useRef(null);
-  const [user, setUser] = useState(JSON.parse(sessionStorage.getItem('user') || '{}'));
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('user') || '{}'));
   const [uploading, setUploading] = useState(false);
   const [uploadDone, setUploadDone] = useState(false);
   const [uploadError, setUploadError] = useState('');
 
-  // Re-read user from sessionStorage whenever another device/tab syncs it
+  // Re-read user from localStorage whenever another device/tab syncs it
   // Note: only update user state — never touch uploadDone here
   useEffect(() => {
-    const refresh = () => setUser(JSON.parse(sessionStorage.getItem('user') || '{}'));
+    const refresh = () => setUser(JSON.parse(localStorage.getItem('user') || '{}'));
     window.addEventListener('userProfileUpdated', refresh);
     return () => {
       window.removeEventListener('userProfileUpdated', refresh);
@@ -76,9 +76,9 @@ const Profile = () => {
 
   const handleMenuClick = (item) => {
     if (item.isLogout) {
-      sessionStorage.removeItem('isAuthenticated');
-      sessionStorage.removeItem('token');
-      sessionStorage.removeItem('user');
+      localStorage.removeItem('isAuthenticated');
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
       navigate('/login');
     } else if (item.path) {
       navigate(item.path, { state: { tab: item.tab } });

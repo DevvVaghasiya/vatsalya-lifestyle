@@ -99,7 +99,7 @@ const AdminDashboard = () => {
   const [inventorySubTab, setInventorySubTab] = useState('STOCK');
   const [approvingId, setApprovingId] = useState(null);
 
-  const adminUser = JSON.parse(sessionStorage.getItem('user') || '{}');
+  const adminUser = JSON.parse(localStorage.getItem('user') || '{}');
 
   useEffect(() => {
     const fetchData = async () => {

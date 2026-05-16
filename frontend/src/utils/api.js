@@ -26,6 +26,20 @@ const api = axios.create({
   timeout: 90000, // 90 seconds for cold-start tolerance
 });
 
+// Request interceptor for API calls
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 // Simple retry interceptor
 api.interceptors.response.use(
   (response) => response,

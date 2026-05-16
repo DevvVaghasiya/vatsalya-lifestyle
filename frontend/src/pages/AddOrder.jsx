@@ -203,7 +203,7 @@ const AddOrder = () => {
       return;
     }
 
-    const currentUser = JSON.parse(sessionStorage.getItem('user') || '{}');
+    const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
     const payload = {
       client: { id: formData.customerId },
       user: { id: currentUser.id },

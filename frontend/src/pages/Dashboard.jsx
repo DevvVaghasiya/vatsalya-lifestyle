@@ -27,7 +27,7 @@ import fabric16 from '../assets/fabric16.webp';
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState(JSON.parse(sessionStorage.getItem('user') || '{}'));
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('user') || '{}'));
   const firstName = user.name ? user.name.split(' ')[0] : 'Partner';
 
   const [fabricImages, setFabricImages] = useState([]);
@@ -65,7 +65,7 @@ const Dashboard = () => {
 
   // Sync avatar when profile picture is changed on Profile page
   useEffect(() => {
-    const sync = () => setUser(JSON.parse(sessionStorage.getItem('user') || '{}'));
+    const sync = () => setUser(JSON.parse(localStorage.getItem('user') || '{}'));
     window.addEventListener('userProfileUpdated', sync);
     return () => window.removeEventListener('userProfileUpdated', sync);
   }, []);

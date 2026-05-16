@@ -247,7 +247,7 @@ const Inventory = () => {
       }
     }
     setSubmitting(true);
-    const currentUser = JSON.parse(sessionStorage.getItem('user') || '{}');
+    const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
     try {
       await api.post(API_PATH, {
         ...formData,
@@ -293,7 +293,7 @@ const Inventory = () => {
       alert(`Cannot add ${dispatchQty}. Only ${available} Mtr available.`);
       return;
     }
-    const currentUser = JSON.parse(sessionStorage.getItem('user') || '{}');
+    const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
     try {
       await api.post(`${API_PATH}/${item.id}/dispatch`, {
         entryDate: dispatchDate.toISOString().split('T')[0],

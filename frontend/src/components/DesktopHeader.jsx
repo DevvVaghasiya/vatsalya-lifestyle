@@ -7,7 +7,7 @@ import logo from '../assets/logo.jpeg';
 const DesktopHeader = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [user, setUser] = useState(JSON.parse(sessionStorage.getItem('user') || '{}'));
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('user') || '{}'));
   const [isDark, setIsDark] = useState(localStorage.getItem('theme') === 'dark');
 
   // Sync theme with body class and localStorage
@@ -23,15 +23,15 @@ const DesktopHeader = () => {
 
   // Re-read user whenever Profile.jsx dispatches a picture update
   useEffect(() => {
-    const sync = () => setUser(JSON.parse(sessionStorage.getItem('user') || '{}'));
+    const sync = () => setUser(JSON.parse(localStorage.getItem('user') || '{}'));
     window.addEventListener('userProfileUpdated', sync);
     return () => window.removeEventListener('userProfileUpdated', sync);
   }, []);
 
   const handleLogout = () => {
-    sessionStorage.removeItem('isAuthenticated');
-    sessionStorage.removeItem('token');
-    sessionStorage.removeItem('user');
+    localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
     navigate('/login');
   };
 
@@ -95,24 +95,27 @@ const DesktopHeader = () => {
 
           <div className="header-divider"></div>
 
-          {/* Theme Toggle Button */}
-          <motion.button
-            whileHover={{ scale: 1.1, rotate: 15 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={toggleTheme}
-            className="header-icon-btn"
-            title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
-            style={{ 
-              background: isDark ? 'rgba(56, 189, 248, 0.1)' : 'var(--bg)',
-              color: isDark ? 'var(--primary)' : 'var(--muted)',
-              border: isDark ? '1px solid var(--primary-soft)' : '1px solid var(--border)'
-            }}
-          >
-            {isDark ? <Sun size={18} strokeWidth={2.5} /> : <Moon size={18} strokeWidth={2.5} />}
-          </motion.button>
-
-          {/* User Profile / Logout */}
+          {/* User Profile / Logout Group */}
           <div className="header-profile-group">
+            {/* Theme Toggle Button Moved Here */}
+            <motion.button
+              whileHover={{ scale: 1.1, rotate: 15 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={toggleTheme}
+              title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+              style={{ 
+                background: isDark ? 'rgba(56, 189, 248, 0.1)' : 'rgba(0,0,0,0.03)',
+                color: isDark ? 'var(--primary)' : 'var(--muted)',
+                width: '32px', height: '32px', 
+                borderRadius: '10px',
+                border: 'none',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                cursor: 'pointer'
+              }}
+            >
+              {isDark ? <Sun size={16} strokeWidth={2.5} /> : <Moon size={16} strokeWidth={2.5} />}
+            </motion.button>
+
             <motion.div 
               whileHover={{ scale: 1.05 }}
               onClick={() => navigate('/profile')}
