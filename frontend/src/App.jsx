@@ -1,6 +1,7 @@
 import { useEffect, lazy, Suspense } from 'react';
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import DesktopHeader from './components/DesktopHeader';
+import Sidebar from './components/Sidebar';
 
 // Lazy load pages for better performance
 const Dashboard = lazy(() => import('./pages/Dashboard'));
@@ -100,47 +101,54 @@ function App() {
   const isAuthPage = ['/login', '/signup'].some(path => location.pathname.includes(path));
   // Public pages that don't need header
   const isPublicPage = location.pathname.startsWith('/public/') || location.pathname.startsWith('/f/');
-  const showHeader = !isAuthPage && !isPublicPage;
+  const showNav = !isAuthPage && !isPublicPage;
 
   return (
     <div className="app-root-wrapper">
-      {showHeader && <DesktopHeader />}
-      
-      <Suspense fallback={<PageLoader />}>
-        {isAuthPage || isPublicPage ? (
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/public/fabric-entry/:id" element={<FabricEntryPublic />} />
-            <Route path="/public/fabric-entry/:id/pdf" element={<FabricEntryPublicPdf />} />
-            <Route path="/f/:id/p" element={<FabricEntryPublicPdf />} />
-            <Route path="/public/inventory/:id" element={<PublicInventoryView />} />
-            <Route path="*" element={<Navigate to="/login" replace />} />
-          </Routes>
-        ) : (
-          <div className="page-container">
-            <div className="main-content">
+      <div className={showNav ? "app-main-layout" : ""}>
+        {showNav && <Sidebar />}
+        
+        <div className={showNav ? "content-wrapper" : ""}>
+          {showNav && <DesktopHeader />}
+          
+          <Suspense fallback={<PageLoader />}>
+            {isAuthPage || isPublicPage ? (
               <Routes>
-                <Route path="/" element={<ProtectedRoute><HomeRoute /></ProtectedRoute>} />
-                <Route path="/deals" element={<ProtectedRoute><Deals /></ProtectedRoute>} />
-                <Route path="/deal-detail/:id" element={<ProtectedRoute><OrderDetails /></ProtectedRoute>} />
-                <Route path="/add-order" element={<ProtectedRoute><AddOrder /></ProtectedRoute>} />
-                <Route path="/add-deal" element={<Navigate to="/add-order" replace />} />
-                <Route path="/inventory" element={<ProtectedRoute><Inventory /></ProtectedRoute>} />
-                <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-                <Route path="/profile/edit" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
-                <Route path="/profile/change-password" element={<ProtectedRoute><ChangePassword /></ProtectedRoute>} />
-                <Route path="/inquiries" element={<ProtectedRoute><Inquiries /></ProtectedRoute>} />
-                <Route path="/add-inquiry" element={<ProtectedRoute><AddInquiry /></ProtectedRoute>} />
-                <Route path="/inquiry/:id" element={<ProtectedRoute><InquiryDetails /></ProtectedRoute>} />
-                <Route path="/clients" element={<ProtectedRoute><Clients /></ProtectedRoute>} />
-                <Route path="/add-client" element={<ProtectedRoute><AddClient /></ProtectedRoute>} />
-                <Route path="*" element={<Navigate to="/" replace />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/public/fabric-entry/:id" element={<FabricEntryPublic />} />
+                <Route path="/public/fabric-entry/:id/pdf" element={<FabricEntryPublicPdf />} />
+                <Route path="/f/:id/p" element={<FabricEntryPublicPdf />} />
+                <Route path="/public/inventory/:id" element={<PublicInventoryView />} />
+                <Route path="*" element={<Navigate to="/login" replace />} />
               </Routes>
-            </div>
-          </div>
-        )}
-      </Suspense>
+            ) : (
+              <div className="page-container">
+                <div className="main-content">
+                  <Routes>
+                    <Route path="/" element={<ProtectedRoute><HomeRoute /></ProtectedRoute>} />
+                    <Route path="/admin-dashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+                    <Route path="/deals" element={<ProtectedRoute><Deals /></ProtectedRoute>} />
+                    <Route path="/deal-detail/:id" element={<ProtectedRoute><OrderDetails /></ProtectedRoute>} />
+                    <Route path="/add-order" element={<ProtectedRoute><AddOrder /></ProtectedRoute>} />
+                    <Route path="/add-deal" element={<Navigate to="/add-order" replace />} />
+                    <Route path="/inventory" element={<ProtectedRoute><Inventory /></ProtectedRoute>} />
+                    <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+                    <Route path="/profile/edit" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
+                    <Route path="/profile/change-password" element={<ProtectedRoute><ChangePassword /></ProtectedRoute>} />
+                    <Route path="/inquiries" element={<ProtectedRoute><Inquiries /></ProtectedRoute>} />
+                    <Route path="/add-inquiry" element={<ProtectedRoute><AddInquiry /></ProtectedRoute>} />
+                    <Route path="/inquiry/:id" element={<ProtectedRoute><InquiryDetails /></ProtectedRoute>} />
+                    <Route path="/clients" element={<ProtectedRoute><Clients /></ProtectedRoute>} />
+                    <Route path="/add-client" element={<ProtectedRoute><AddClient /></ProtectedRoute>} />
+                    <Route path="*" element={<Navigate to="/" replace />} />
+                  </Routes>
+                </div>
+              </div>
+            )}
+          </Suspense>
+        </div>
+      </div>
     </div>
   );
 }
