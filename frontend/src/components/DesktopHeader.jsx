@@ -7,20 +7,20 @@ import logo from '../assets/logo.jpeg';
 const DesktopHeader = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [user, setUser] = useState(JSON.parse(sessionStorage.getItem('user') || '{}'));
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('user') || '{}'));
   const isAdmin = user.role === 'ADMIN';
 
   // Re-read user whenever Profile.jsx dispatches a picture update
   useEffect(() => {
-    const sync = () => setUser(JSON.parse(sessionStorage.getItem('user') || '{}'));
+    const sync = () => setUser(JSON.parse(localStorage.getItem('user') || '{}'));
     window.addEventListener('userProfileUpdated', sync);
     return () => window.removeEventListener('userProfileUpdated', sync);
   }, []);
 
   const handleLogout = () => {
-    sessionStorage.removeItem('isAuthenticated');
-    sessionStorage.removeItem('token');
-    sessionStorage.removeItem('user');
+    localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
     navigate('/login');
   };
 

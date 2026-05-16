@@ -43,6 +43,15 @@ const Dashboard = () => {
   }, []);
 
 
+  const [stats, setStats] = useState({
+    totalDeals: 0,
+    pendingDues: 0,
+    sales: 0,
+    lowStock: 0,
+  });
+  const [loading, setLoading] = useState(true);
+  const [now, setNow] = useState(new Date());
+
   useEffect(() => {
     const timer = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(timer);

@@ -102,6 +102,16 @@ public class Order {
     
     private Double rate; // Custom rate for this deal
     
+    private Double totalAmount;
+    private Double extraExpense;
+    private Double discount;
+    private Double grandTotal;
+
+    private Double advancePaid;
+    private LocalDate dueDate;
+    private String paymentMethod;
+    private Integer creditDays;
+
     private String transportName;
     private String lrNumber;
     private String vehicleNumber;
@@ -281,6 +291,30 @@ public class Order {
 
     public Double getRate() { return rate; }
     public void setRate(Double rate) { this.rate = rate; }
+
+    public Double getTotalAmount() { return totalAmount; }
+    public void setTotalAmount(Double totalAmount) { this.totalAmount = totalAmount; }
+
+    public Double getExtraExpense() { return extraExpense; }
+    public void setExtraExpense(Double extraExpense) { this.extraExpense = extraExpense; }
+
+    public Double getDiscount() { return discount; }
+    public void setDiscount(Double discount) { this.discount = discount; }
+
+    public Double getGrandTotal() { return grandTotal; }
+    public void setGrandTotal(Double grandTotal) { this.grandTotal = grandTotal; }
+
+    public Double getAdvancePaid() { return advancePaid; }
+    public void setAdvancePaid(Double advancePaid) { this.advancePaid = advancePaid; }
+
+    public LocalDate getDueDate() { return dueDate; }
+    public void setDueDate(LocalDate dueDate) { this.dueDate = dueDate; }
+
+    public String getPaymentMethod() { return paymentMethod; }
+    public void setPaymentMethod(String paymentMethod) { this.paymentMethod = paymentMethod; }
+
+    public Integer getCreditDays() { return creditDays; }
+    public void setCreditDays(Integer creditDays) { this.creditDays = creditDays; }
 
     public String getTransportName() { return transportName; }
     public void setTransportName(String transportName) { this.transportName = transportName; }

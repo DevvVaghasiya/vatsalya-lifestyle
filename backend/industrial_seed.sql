@@ -1,6 +1,10 @@
 USE texdeal;
 
--- Cleared legacy customers
+INSERT INTO customers (name, phone, email, address, gst_in, total_deals, total_purchase, pending_due, created_at)
+VALUES 
+('Shree Ram Textiles', '9876543210', 'shreeram@example.com', 'Surat, Gujarat', '24ABCDE1234F1Z5', 18, 1245000, 45000, NOW()),
+('Mahalaxmi Fabrics', '9876543211', 'mahalaxmi@example.com', 'Ahmedabad, Gujarat', '24XYZDE1234F1Z6', 5, 500000, 0, NOW()),
+('Shyam Textiles', '9876543212', 'shyam@example.com', 'Mumbai, Maharashtra', '27ABCDE1234F1Z7', 12, 1020000, 120000, NOW());
 
 INSERT INTO inventories (fabric_name, stock_quantity, rate_per_meter, color_code)
 VALUES 

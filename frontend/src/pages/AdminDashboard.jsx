@@ -118,18 +118,14 @@ const AdminDashboard = () => {
           const res = await api.get(`/api/orders`);
           setOrders(res.data || []);
         } else if (activeTab === 'inventory') {
-          const [s1, s2, s3, s4] = await Promise.all([
+          const [s1, s2, s3] = await Promise.all([
             api.get('/api/inventory/category/STOCK'),
             api.get('/api/inventory/category/SAMPLE'),
-            api.get('/api/inventory/category/MILL_DEFECT'),
             api.get('/api/inventory/category/FABRIC_ENTRY'),
           ]);
           setInventory([
-            ...(s1.data||[]).map(i=>({...i,category:'STOCK'})),
-            ...(s2.data||[]).map(i=>({...i,category:'SAMPLE'})),
-            ...(s3.data||[]).map(i=>({...i,category:'MILL_DEFECT'})),
-            ...(s4.data||[]).map(i=>({...i,category:'FABRIC_ENTRY'})),
-          ]);
+            ...(s1.data||[]).map(i=>({...i,category:'Stock'})),
+            ...(s2.data||[]).map(i=>({...i,category:'Sample'})),
         } else if (activeTab === 'assets') {
           const res = await api.get(`/api/assets`);
           setAssets(res.data);
@@ -818,15 +814,15 @@ const AdminDashboard = () => {
                 return matchesSubTab && matchesSearch;
               });
 
-              const catColor = { STOCK:'#4F46E5', SAMPLE:'#0D9488', MILL_DEFECT: '#DC2626', FABRIC_ENTRY:'#D97706' };
-              const catBg    = { STOCK:'#EEF2FF', SAMPLE:'#F0FDFA', MILL_DEFECT: '#FEF2F2', FABRIC_ENTRY:'#FFFBEB' };
-              const subTabLabels = { STOCK: 'Stock', SAMPLE: 'Sample', MILL_DEFECT: 'Mill Defect', FABRIC_ENTRY: 'Fabric Entry' };
+              const catColor = { STOCK:'#4F46E5', SAMPLE:'#0D9488', FABRIC_ENTRY:'#D97706' };
+              const catBg    = { STOCK:'#EEF2FF', SAMPLE:'#F0FDFA', FABRIC_ENTRY:'#FFFBEB' };
+              const subTabLabels = { STOCK: 'Stock', SAMPLE: 'Sample', FABRIC_ENTRY: 'Fabric Entry' };
 
               return (
                 <motion.div key="inventory" variants={stagger} initial="hidden" animate="show" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                   {/* Inventory Sub-Tabs */}
                   <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 10, marginBottom: 8, scrollbarWidth: 'none' }}>
-                    {['STOCK', 'SAMPLE', 'MILL_DEFECT', 'FABRIC_ENTRY'].map(s => (
+                    {['STOCK', 'SAMPLE', 'FABRIC_ENTRY'].map(s => (
                       <button
                         key={s}
                         onClick={() => setInventorySubTab(s)}
@@ -900,8 +896,8 @@ const AdminDashboard = () => {
                         </div>
                       </motion.div>
                     );
-                  })}
-                </motion.div>
+                  })
+                )
               );
             })()
           ) : (
