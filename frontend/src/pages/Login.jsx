@@ -45,19 +45,36 @@ const Login = () => {
       padding: '24px', fontFamily: '"Inter", sans-serif',
       position: 'relative', overflow: 'hidden'
     }}>
-      {/* Decorative orbs */}
+      {/* Dynamic Background Elements */}
       <div style={{
-        position: 'absolute', top: '10%', left: '5%',
-        width: 300, height: 300, borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(79,70,229,0.3) 0%, transparent 70%)',
-        pointerEvents: 'none'
+        position: 'absolute', top: '-10%', left: '-10%',
+        width: '50vw', height: '50vw', borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(79,70,229,0.15) 0%, transparent 70%)',
+        filter: 'blur(60px)', pointerEvents: 'none',
+        animation: 'float 20s infinite alternate'
       }} />
       <div style={{
-        position: 'absolute', bottom: '10%', right: '5%',
-        width: 250, height: 250, borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(139,92,246,0.25) 0%, transparent 70%)',
-        pointerEvents: 'none'
+        position: 'absolute', bottom: '-10%', right: '-10%',
+        width: '40vw', height: '40vw', borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(139,92,246,0.1) 0%, transparent 70%)',
+        filter: 'blur(60px)', pointerEvents: 'none',
+        animation: 'float 25s infinite alternate-reverse'
       }} />
+      <div style={{
+        position: 'absolute', top: '40%', right: '10%',
+        width: '30vw', height: '30vw', borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(6,182,212,0.08) 0%, transparent 70%)',
+        filter: 'blur(60px)', pointerEvents: 'none',
+        animation: 'float 30s infinite alternate'
+      }} />
+
+      <style>{`
+        @keyframes float {
+          0% { transform: translate(0, 0) scale(1); }
+          100% { transform: translate(20px, 40px) scale(1.1); }
+        }
+        input::placeholder { color: rgba(255,255,255,0.2); }
+      `}</style>
 
       <motion.div
         initial={{ opacity: 0, y: 28, scale: 0.96 }}
@@ -96,12 +113,17 @@ const Login = () => {
         </div>
 
         {/* Title */}
-        <div style={{ marginBottom: 28 }}>
-          <h1 style={{ margin: '0 0 8px', fontSize: '2rem', fontWeight: 900, color: 'white', letterSpacing: '-0.5px' }}>
+        <div style={{ marginBottom: 32 }}>
+          <motion.h1 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
+            style={{ margin: '0 0 10px', fontSize: '2.4rem', fontWeight: 900, color: 'white', letterSpacing: '-1px', lineHeight: 1 }}
+          >
             Welcome Back
-          </h1>
-          <p style={{ margin: 0, fontSize: '0.9rem', color: 'rgba(255,255,255,0.5)', fontWeight: 500 }}>
-            Sign in to access the management console
+          </motion.h1>
+          <p style={{ margin: 0, fontSize: '1rem', color: 'rgba(255,255,255,0.5)', fontWeight: 500, letterSpacing: '0.2px' }}>
+            Enter your credentials to access the console
           </p>
         </div>
 

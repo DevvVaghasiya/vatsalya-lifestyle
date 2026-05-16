@@ -144,9 +144,29 @@ const Signup = () => {
       padding: '24px', fontFamily: '"Inter", sans-serif',
       position: 'relative', overflow: 'hidden'
     }}>
-      {/* Orbs */}
-      <div style={{ position: 'absolute', top: '-10%', right: '10%', width: 320, height: 320, borderRadius: '50%', background: 'radial-gradient(circle, rgba(124,58,237,0.25) 0%, transparent 70%)', pointerEvents: 'none' }} />
-      <div style={{ position: 'absolute', bottom: '-5%', left: '5%', width: 220, height: 220, borderRadius: '50%', background: 'radial-gradient(circle, rgba(79,70,229,0.2) 0%, transparent 70%)', pointerEvents: 'none' }} />
+      {/* Dynamic Background Elements */}
+      <div style={{
+        position: 'absolute', top: '-15%', right: '-10%',
+        width: '55vw', height: '55vw', borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 70%)',
+        filter: 'blur(60px)', pointerEvents: 'none',
+        animation: 'float 22s infinite alternate'
+      }} />
+      <div style={{
+        position: 'absolute', bottom: '-10%', left: '-5%',
+        width: '45vw', height: '45vw', borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(79,70,229,0.12) 0%, transparent 70%)',
+        filter: 'blur(60px)', pointerEvents: 'none',
+        animation: 'float 28s infinite alternate-reverse'
+      }} />
+
+      <style>{`
+        @keyframes float {
+          0% { transform: translate(0, 0) scale(1); }
+          100% { transform: translate(30px, -50px) scale(1.05); }
+        }
+        input::placeholder { color: rgba(255,255,255,0.2); }
+      `}</style>
 
       <motion.div
         initial={{ opacity: 0, y: 28, scale: 0.96 }}
@@ -178,11 +198,11 @@ const Signup = () => {
             <ArrowLeft size={18} />
           </button>
           <div>
-            <h1 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 900, color: 'white', letterSpacing: '-0.4px' }}>
+            <h1 style={{ margin: 0, fontSize: '1.8rem', fontWeight: 900, color: 'white', letterSpacing: '-0.8px', lineHeight: 1.1 }}>
               Partner Registration
             </h1>
-            <p style={{ margin: '3px 0 0', fontSize: '0.75rem', fontWeight: 600, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.8px' }}>
-              Vatsalya Lifestyle Network
+            <p style={{ margin: '6px 0 0', fontSize: '0.8rem', fontWeight: 600, color: 'rgba(255,255,255,0.45)', textTransform: 'uppercase', letterSpacing: '1px' }}>
+              Create your enterprise account
             </p>
           </div>
         </div>
