@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import {
   ArrowLeft, User, Edit3, Lock,
   LogOut, ChevronRight, Camera, Users, ClipboardList, ShieldCheck,
-  Loader2, CheckCircle2, Package, Layers
+  Loader2, CheckCircle2, Package, Layers, Sun, Moon
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -43,7 +43,19 @@ const Profile = () => {
   const fileInputRef = useRef(null);
   const timerRef = useRef(null);
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user') || '{}'));
+  const [isDark, setIsDark] = useState(localStorage.getItem('theme') === 'dark');
   const [uploading, setUploading] = useState(false);
+
+  // Sync theme with body class and localStorage
+  useEffect(() => {
+    if (isDark) {
+      document.body.classList.add('dark-mode');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.body.classList.remove('dark-mode');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [isDark]);
   const [uploadDone, setUploadDone] = useState(false);
   const [uploadError, setUploadError] = useState('');
 
@@ -62,6 +74,13 @@ const Profile = () => {
   const menuItems = user.role === 'ADMIN' ? [
     { icon: Users, label: 'User Management', path: '/', tab: 'users', desc: 'Manage all platform users', color: '#4F46E5' },
     { icon: ClipboardList, label: 'Platform Inquiries', path: '/', tab: 'inquiries', desc: 'View all business inquiries', color: '#0D9488' },
+    { 
+      icon: isDark ? Sun : Moon, 
+      label: isDark ? 'Light Mode' : 'Dark Mode', 
+      isTheme: true, 
+      desc: isDark ? 'Switch to clear visibility' : 'Switch to eye-comfort view', 
+      color: isDark ? '#F59E0B' : '#6366F1' 
+    },
     { icon: Layers, label: 'Platform Orders', path: '/', tab: 'orders', desc: 'Track all production orders', color: '#6366F1' },
     { icon: Package, label: 'Global Inventory', path: '/', tab: 'inventory', desc: 'Manage warehouse stock', color: '#F59E0B' },
     { icon: Edit3, label: 'Edit Profile', path: '/profile/edit', desc: 'Update admin details', color: '#7C3AED' },
@@ -69,6 +88,13 @@ const Profile = () => {
     { icon: LogOut, label: 'Sign Out', isLogout: true, desc: 'Exit admin panel', color: '#EF4444' },
   ] : [
     { icon: User, label: 'My Clients', path: '/clients', desc: 'Browse your client list', color: '#4F46E5' },
+    { 
+      icon: isDark ? Sun : Moon, 
+      label: isDark ? 'Light Mode' : 'Dark Mode', 
+      isTheme: true, 
+      desc: isDark ? 'Switch to clear visibility' : 'Switch to eye-comfort view', 
+      color: isDark ? '#F59E0B' : '#6366F1' 
+    },
     { icon: Edit3, label: 'Edit Profile', path: '/profile/edit', desc: 'Update authorized details', color: '#7C3AED' },
     { icon: Lock, label: 'Security Settings', path: '/profile/change-password', desc: 'Secure your login credentials', color: '#D97706' },
     { icon: LogOut, label: 'Sign Out', isLogout: true, desc: 'Terminate current session', color: '#EF4444' },
@@ -80,6 +106,8 @@ const Profile = () => {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       navigate('/login');
+    } else if (item.isTheme) {
+      setIsDark(!isDark);
     } else if (item.path) {
       navigate(item.path, { state: { tab: item.tab } });
     }

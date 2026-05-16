@@ -97,24 +97,6 @@ const DesktopHeader = () => {
 
           {/* User Profile / Logout Group */}
           <div className="header-profile-group">
-            {/* Theme Toggle Button Moved Here */}
-            <motion.button
-              whileHover={{ scale: 1.1, rotate: 15 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={toggleTheme}
-              title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
-              style={{ 
-                background: isDark ? 'rgba(56, 189, 248, 0.1)' : 'rgba(0,0,0,0.03)',
-                color: isDark ? 'var(--primary)' : 'var(--muted)',
-                width: '32px', height: '32px', 
-                borderRadius: '10px',
-                border: 'none',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                cursor: 'pointer'
-              }}
-            >
-              {isDark ? <Sun size={16} strokeWidth={2.5} /> : <Moon size={16} strokeWidth={2.5} />}
-            </motion.button>
 
             <motion.div 
               whileHover={{ scale: 1.05 }}
