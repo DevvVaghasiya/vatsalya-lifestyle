@@ -655,9 +655,31 @@ const Inventory = () => {
             </button>
           </div>
         ) : loading ? (
-          <div style={{ textAlign: 'center', padding: '40px 0' }}>
-            <div className="spinner" />
-            <p style={{ marginTop: 12, color: 'var(--muted)', fontWeight: 600 }}>Loading...</p>
+          <div className="inventory-grid">
+            {[1, 2, 3, 4, 5, 6].map(i => (
+              <div key={i} className="inventory-card skeleton-card" style={{ 
+                minHeight: '160px', 
+                background: 'rgba(255,255,255,0.6)', 
+                overflow: 'hidden', 
+                position: 'relative' 
+              }}>
+                <div className="shimmer-sweep" />
+                <div style={{ padding: '16px' }}>
+                  <div style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}>
+                    <div style={{ width: '48px', height: '48px', borderRadius: '14px', backgroundColor: '#F1F5F9' }} />
+                    <div style={{ flex: 1 }}>
+                      <div style={{ width: '70%', height: '14px', borderRadius: '4px', backgroundColor: '#F1F5F9', marginBottom: '8px' }} />
+                      <div style={{ width: '40%', height: '10px', borderRadius: '4px', backgroundColor: '#F1F5F9' }} />
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', gap: '12px' }}>
+                    <div style={{ flex: 1, height: '32px', borderRadius: '8px', backgroundColor: '#F8FAFC' }} />
+                    <div style={{ flex: 1, height: '32px', borderRadius: '8px', backgroundColor: '#F8FAFC' }} />
+                    <div style={{ flex: 1, height: '32px', borderRadius: '8px', backgroundColor: '#F8FAFC' }} />
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         ) : availableItems.length === 0 ? (
           <div className="inv-empty">

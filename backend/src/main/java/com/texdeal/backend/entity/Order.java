@@ -12,7 +12,14 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-@Table(name = "orders")
+@Table(name = "orders", indexes = {
+    @Index(name = "idx_orders_client_id", columnList = "client_id"),
+    @Index(name = "idx_orders_user_id", columnList = "user_id"),
+    @Index(name = "idx_orders_status", columnList = "order_status"),
+    @Index(name = "idx_orders_created_at", columnList = "createdAt"),
+    @Index(name = "idx_orders_style_no", columnList = "styleNo"),
+    @Index(name = "idx_orders_reference_no", columnList = "referenceNo")
+})
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"}, ignoreUnknown = true)
@@ -22,15 +29,15 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id")
     private Client client;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private AppUser user;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "inventory_id")
     private Inventory inventory;
 
@@ -79,15 +86,15 @@ public class Order {
     private String dispatchMeter;
     private String dispatchDesignColour;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "order_dye_quantity_received", joinColumns = @JoinColumn(name = "order_id"))
     private List<QuantityReceivedEntry> dyeQuantityReceivedEntries = new ArrayList<>();
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "order_digital_quantity_received", joinColumns = @JoinColumn(name = "order_id"))
     private List<QuantityReceivedEntry> digitalQuantityReceivedEntries = new ArrayList<>();
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "order_dispatch_quantity_received", joinColumns = @JoinColumn(name = "order_id"))
     private List<QuantityReceivedEntry> dispatchQuantityReceivedEntries = new ArrayList<>();
 
@@ -121,7 +128,7 @@ public class Order {
     @Column(name = "order_status", length = 20)
     private OrderStatus status;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "last_edited_by_id")
     private AppUser lastEditedBy;
 

@@ -11,7 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "inventories")
+@Table(name = "inventories", indexes = {
+    @Index(name = "idx_inventories_category", columnList = "category"),
+    @Index(name = "idx_inventories_status", columnList = "status"),
+    @Index(name = "idx_inventories_reference_no", columnList = "referenceNo")
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -54,11 +58,11 @@ public class Inventory {
     @JoinColumn(name = "inventory_id")
     private List<StockDispatchEntry> dispatchEntries = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by_id")
     private AppUser createdBy;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "last_edited_by_id")
     private AppUser lastEditedBy;
 

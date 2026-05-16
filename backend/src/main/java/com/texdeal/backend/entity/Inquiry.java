@@ -8,7 +8,11 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "inquiries")
+@Table(name = "inquiries", indexes = {
+    @Index(name = "idx_inquiries_client_id", columnList = "client_id"),
+    @Index(name = "idx_inquiries_status", columnList = "status"),
+    @Index(name = "idx_inquiries_created_at", columnList = "createdAt")
+})
 @NoArgsConstructor
 @AllArgsConstructor
 public class Inquiry {
@@ -17,7 +21,7 @@ public class Inquiry {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 
@@ -46,11 +50,11 @@ public class Inquiry {
     private String composition;
     private String feedback;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by_id")
     private AppUser createdBy;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "last_edited_by_id")
     private AppUser lastEditedBy;
 
