@@ -1,10 +1,8 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { User, Phone, Lock, Eye, EyeOff, ArrowLeft, Loader2, ShieldCheck, CheckCircle2, Clock, Check } from 'lucide-react';
+import { User, Phone, Lock, Eye, EyeOff, ArrowLeft, Loader2, ShieldCheck, CheckCircle2, Clock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '../utils/api';
-import { auth } from '../utils/firebase';
-import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 
 const fieldStyle = {
   width: '100%', padding: '14px 16px 14px 44px',
