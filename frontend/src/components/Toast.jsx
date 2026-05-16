@@ -6,12 +6,12 @@ const Toast = ({ show, message, onClose, type = 'success' }) => {
     <AnimatePresence>
       {show && (
         <motion.div
-          initial={{ opacity: 0, y: 50, scale: 0.9 }}
+          initial={{ opacity: 0, y: -50, scale: 0.9 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
           style={{
             position: 'fixed',
-            bottom: '24px',
+            top: '24px',
             left: '50%',
             transform: 'translateX(-50%)',
             zIndex: 9999,
