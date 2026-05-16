@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 import { useState, useEffect, useCallback } from 'react';
-import { ArrowLeft, Search, Plus, Package, Layers, FileText, X, Trash2, Printer, ChevronDown, ChevronUp, RefreshCw } from 'lucide-react';
+import { ArrowLeft, Search, Plus, Package, Layers, FileText, X, Trash2, Printer, ChevronDown, ChevronUp, RefreshCw, AlertTriangle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import api from '../utils/api';
 import DatePicker from "react-datepicker";
@@ -334,10 +334,11 @@ const Inventory = () => {
   const tabs = [
     { key: 'STOCK', label: 'Stock', icon: Package, color: '#4F46E5', bg: '#EEF2FF' },
     { key: 'SAMPLE', label: 'Sample & Yardage', icon: Layers, color: '#0D9488', bg: '#F0FDFA' },
+    { key: 'MILL_DEFECT', label: 'Mill Defect', icon: AlertTriangle, color: '#DC2626', bg: '#FEF2F2' },
     { key: 'FABRIC_ENTRY', label: 'Fabric Entry', icon: FileText, color: '#D97706', bg: '#FFFBEB' },
   ];
   const currentTab = tabs.find(t => t.key === activeTab);
-  const addLabel = { STOCK: 'Add New Stock', SAMPLE: 'Add New Sample', FABRIC_ENTRY: 'Add New Entry' };
+  const addLabel = { STOCK: 'Add New Stock', SAMPLE: 'Add New Sample', MILL_DEFECT: 'Add New Defect', FABRIC_ENTRY: 'Add New Entry' };
 
   const renderCard = (item) => {
     const isExpanded = expandedCard === item.id;
@@ -622,7 +623,7 @@ const Inventory = () => {
         <div className="inv-section-head">
           <div className="inv-section-accent" style={{ backgroundColor: currentTab.color }} />
           <h3 className="inv-section-title">
-            {activeTab === 'STOCK' ? 'Available Stock' : activeTab === 'SAMPLE' ? 'Available Samples' : 'Fabric Entries'}
+            {activeTab === 'STOCK' ? 'Available Stock' : activeTab === 'SAMPLE' ? 'Available Samples' : activeTab === 'MILL_DEFECT' ? 'Defected Items' : 'Fabric Entries'}
           </h3>
           <span className="inv-section-badge" style={{ backgroundColor: currentTab.bg, color: currentTab.color }}>
             {availableItems.length}
@@ -699,7 +700,7 @@ const Inventory = () => {
           <div className="inv-section-head">
             <div className="inv-section-accent" style={{ backgroundColor: '#16A34A' }} />
             <h3 className="inv-section-title">
-              {activeTab === 'STOCK' ? 'Sold Stock' : 'Sold Samples'}
+              {activeTab === 'STOCK' ? 'Sold Stock' : activeTab === 'MILL_DEFECT' ? 'Sold Defects' : 'Sold Samples'}
             </h3>
             <span className="inv-section-badge" style={{ backgroundColor: '#F0FDF4', color: '#16A34A' }}>
               {soldItems.length}

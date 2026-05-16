@@ -25,7 +25,7 @@ public class Inventory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // "STOCK", "SAMPLE", "FABRIC_ENTRY"
+    // "STOCK", "SAMPLE", "MILL_DEFECT", "FABRIC_ENTRY"
     private String category;
 
     private String referenceNo;

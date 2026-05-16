@@ -814,15 +814,15 @@ const AdminDashboard = () => {
                 return matchesSubTab && matchesSearch;
               });
 
-              const catColor = { STOCK:'#4F46E5', SAMPLE:'#0D9488', FABRIC_ENTRY:'#D97706' };
-              const catBg    = { STOCK:'#EEF2FF', SAMPLE:'#F0FDFA', FABRIC_ENTRY:'#FFFBEB' };
-              const subTabLabels = { STOCK: 'Stock', SAMPLE: 'Sample', FABRIC_ENTRY: 'Fabric Entry' };
+              const catColor = { STOCK:'#4F46E5', SAMPLE:'#0D9488', MILL_DEFECT: '#DC2626', FABRIC_ENTRY:'#D97706' };
+              const catBg    = { STOCK:'#EEF2FF', SAMPLE:'#F0FDFA', MILL_DEFECT: '#FEF2F2', FABRIC_ENTRY:'#FFFBEB' };
+              const subTabLabels = { STOCK: 'Stock', SAMPLE: 'Sample', MILL_DEFECT: 'Mill Defect', FABRIC_ENTRY: 'Fabric Entry' };
 
               return (
                 <motion.div key="inventory" variants={stagger} initial="hidden" animate="show" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                   {/* Inventory Sub-Tabs */}
                   <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 10, marginBottom: 8, scrollbarWidth: 'none' }}>
-                    {['STOCK', 'SAMPLE', 'FABRIC_ENTRY'].map(s => (
+                    {['STOCK', 'SAMPLE', 'MILL_DEFECT', 'FABRIC_ENTRY'].map(s => (
                       <button
                         key={s}
                         onClick={() => setInventorySubTab(s)}
