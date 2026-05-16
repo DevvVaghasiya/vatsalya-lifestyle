@@ -203,8 +203,13 @@ const OrderDetails = () => {
   }, [fetchOrderDetails]);
 
   const handleUpdate = async () => {
+    const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
     try {
-      await api.put(`/api/orders/${id}`, editData);
+      const payload = { ...editData };
+      if (currentUser && currentUser.id) {
+        payload.lastEditedBy = { id: currentUser.id };
+      }
+      await api.put(`/api/orders/${id}`, payload);
       alert('Order updated successfully!');
       setIsEditing(false);
       fetchOrderDetails();
@@ -653,6 +658,45 @@ const OrderDetails = () => {
             )}
           </div>
         </SectionWrapper>
+        
+        {/* Audit Info Section */}
+        <div style={{
+          backgroundColor: 'white',
+          borderRadius: '24px',
+          padding: '20px',
+          boxShadow: '0 4px 15px rgba(0,0,0,0.03)',
+          border: '1px solid rgba(0,0,0,0.05)',
+          marginBottom: '20px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '12px'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{ backgroundColor: '#F1F5F9', padding: '8px', borderRadius: '10px', color: '#64748B' }}>
+              <User size={16} />
+            </div>
+            <div>
+              <p style={{ margin: 0, fontSize: '0.65rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Added By</p>
+              <p style={{ margin: '2px 0 0 0', fontSize: '0.85rem', fontWeight: '600', color: '#1E293B' }}>
+                {order.user?.name || 'System'}
+              </p>
+            </div>
+          </div>
+
+          {order.lastEditedBy && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div style={{ backgroundColor: '#F1F5F9', padding: '8px', borderRadius: '10px', color: '#64748B' }}>
+                <Edit3 size={16} />
+              </div>
+              <div>
+                <p style={{ margin: 0, fontSize: '0.65rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Last Edited By</p>
+                <p style={{ margin: '2px 0 0 0', fontSize: '0.85rem', fontWeight: '600', color: '#1E293B' }}>
+                  {order.lastEditedBy?.name}
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
 
         <SectionWrapper title="Fabric Booking" icon={Layers} color="#0D9488" onDownload={() => generatePDF('booking')}>
           <div style={{ display: 'flex', gap: '16px' }}>

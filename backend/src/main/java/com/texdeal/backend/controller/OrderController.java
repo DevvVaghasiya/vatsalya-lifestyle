@@ -50,6 +50,7 @@ public class OrderController {
         }
         if (order.getUser() != null && order.getUser().getId() != null) {
             order.setUser(userRepository.getReferenceById(order.getUser().getId()));
+            order.setLastEditedBy(order.getUser());
         }
         if (order.getInventory() != null && order.getInventory().getId() != null) {
             order.setInventory(inventoryRepository.getReferenceById(order.getInventory().getId()));
@@ -133,6 +134,10 @@ public class OrderController {
             order.setCreditDays(orderDetails.getCreditDays());
             order.setDispatchDate(orderDetails.getDispatchDate());
             order.setDeliveryDate(orderDetails.getDeliveryDate());
+
+            if (orderDetails.getLastEditedBy() != null && orderDetails.getLastEditedBy().getId() != null) {
+                order.setLastEditedBy(userRepository.getReferenceById(orderDetails.getLastEditedBy().getId()));
+            }
 
             return orderRepository.save(order);
         }).orElseThrow(() -> new RuntimeException("Order not found with id " + id));

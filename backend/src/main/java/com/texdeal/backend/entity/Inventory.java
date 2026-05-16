@@ -54,6 +54,14 @@ public class Inventory {
     @JoinColumn(name = "inventory_id")
     private List<StockDispatchEntry> dispatchEntries = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name = "created_by_id")
+    private AppUser createdBy;
+
+    @ManyToOne
+    @JoinColumn(name = "last_edited_by_id")
+    private AppUser lastEditedBy;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 }

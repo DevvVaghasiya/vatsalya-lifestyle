@@ -18,6 +18,9 @@ public class InventoryController {
     @Autowired
     private InventoryRepository inventoryRepository;
 
+    @Autowired
+    private com.texdeal.backend.repository.UserRepository userRepository;
+
     private static final double EPS = 1e-9;
 
     private void recalcStatus(Inventory inv) {
@@ -56,6 +59,11 @@ public class InventoryController {
         if (inventory.getCategory() == null) inventory.setCategory("STOCK");
         inventory.setCategory(inventory.getCategory().toUpperCase());
         if (inventory.getSoldQuantity() == null) inventory.setSoldQuantity(0.0);
+        
+        if (inventory.getCreatedBy() != null && inventory.getCreatedBy().getId() != null) {
+            inventory.setCreatedBy(userRepository.findById(inventory.getCreatedBy().getId()).orElse(null));
+        }
+        
         recalcStatus(inventory);
         return inventoryRepository.save(inventory);
     }
@@ -84,6 +92,11 @@ public class InventoryController {
                 existing.getDispatchEntries().clear();
                 existing.getDispatchEntries().addAll(updated.getDispatchEntries());
             }
+            
+            if (updated.getLastEditedBy() != null && updated.getLastEditedBy().getId() != null) {
+                existing.setLastEditedBy(userRepository.findById(updated.getLastEditedBy().getId()).orElse(null));
+            }
+            
             recalcStatus(existing);
             return ResponseEntity.ok(inventoryRepository.save(existing));
         }).orElse(ResponseEntity.notFound().build());

@@ -247,6 +247,7 @@ const Inventory = () => {
       }
     }
     setSubmitting(true);
+    const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
     try {
       await api.post(API_PATH, {
         ...formData,
@@ -254,7 +255,9 @@ const Inventory = () => {
         stockQuantity: activeTab === 'FABRIC_ENTRY' ? null : toNumberOrNull(formData.stockQuantity),
         category: activeTab,
         status: 'available',
-        soldQuantity: 0
+        soldQuantity: 0,
+        createdBy: currentUser.id ? { id: currentUser.id } : null,
+        lastEditedBy: currentUser.id ? { id: currentUser.id } : null
       });
       setShowAddModal(false);
       setFormData({
@@ -290,12 +293,20 @@ const Inventory = () => {
       alert(`Cannot add ${dispatchQty}. Only ${available} Mtr available.`);
       return;
     }
+    const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
     try {
       await api.post(`${API_PATH}/${item.id}/dispatch`, {
         entryDate: dispatchDate.toISOString().split('T')[0],
         quantity: Number(dispatchQty),
         remark: dispatchRemark
       });
+      
+      // Update lastEditedBy for the inventory item
+      if (currentUser.id) {
+        await api.put(`${API_PATH}/${item.id}`, {
+          lastEditedBy: { id: currentUser.id }
+        });
+      }
       setDispatchQty('');
       setDispatchRemark('');
       setDispatchDate(new Date());
@@ -448,6 +459,22 @@ const Inventory = () => {
               )}
             </div>
           )}
+          
+          {/* Audit Info */}
+          <div style={{ marginTop: '14px', paddingTop: '10px', borderTop: '1px dashed #E2E8F0', display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+            {item.createdBy && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <p style={{ margin: 0, fontSize: '0.6rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>Added By:</p>
+                <p style={{ margin: 0, fontSize: '0.75rem', fontWeight: '600', color: '#64748B' }}>{item.createdBy.name}</p>
+              </div>
+            )}
+            {item.lastEditedBy && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <p style={{ margin: 0, fontSize: '0.6rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase' }}>Edited By:</p>
+                <p style={{ margin: '2px 0 0', fontSize: '0.75rem', fontWeight: '600', color: '#64748B' }}>{item.lastEditedBy.name}</p>
+              </div>
+            )}
+          </div>
         </div>
 
         {!isFabricEntry && isExpanded && (

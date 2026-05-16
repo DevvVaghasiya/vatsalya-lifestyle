@@ -121,6 +121,10 @@ public class Order {
     @Column(name = "order_status", length = 20)
     private OrderStatus status;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "last_edited_by_id")
+    private AppUser lastEditedBy;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
     
@@ -328,6 +332,9 @@ public class Order {
 
     public OrderStatus getStatus() { return status; }
     public void setStatus(OrderStatus status) { this.status = status; }
+
+    public AppUser getLastEditedBy() { return lastEditedBy; }
+    public void setLastEditedBy(AppUser lastEditedBy) { this.lastEditedBy = lastEditedBy; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
